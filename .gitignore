@@ -1,0 +1,5 @@
+# file to be ignored
+temp_gccflags.c
+.sl64_gcc447/
+StRoot/AMPT_resolution/.consign
+StRoot/AMPT_v3v2/.consign
