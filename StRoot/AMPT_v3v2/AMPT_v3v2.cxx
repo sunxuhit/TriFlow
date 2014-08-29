@@ -126,6 +126,7 @@ void AMPT_v3v2::Init()
       TString ProName;
       TString HistName;
 
+      // v2 relative to event plane
       ProName = Form("Flow_pi_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
       p_mFlow_pi_plus[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
       HistName = Form("Pt_pi_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
@@ -170,6 +171,34 @@ void AMPT_v3v2::Init()
       p_mFlow_K0s[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
       HistName = Form("Pt_K0s_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
       h_mPt_K0s[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),500,0.0,10.0);
+
+      // v2 relative to Reaction Plane
+      ProName = Form("Flow_pi_plus_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
+      p_mFlow_pi_plus_RP[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
+
+      ProName = Form("Flow_pi_minus_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // pi_minus
+      p_mFlow_pi_minus_RP[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
+
+      ProName = Form("Flow_K_plus_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // K_plus
+      p_mFlow_K_plus_RP[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
+
+      ProName = Form("Flow_K_minus_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // K_minus
+      p_mFlow_K_minus_RP[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
+
+      ProName = Form("Flow_p_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // p
+      p_mFlow_p_RP[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
+
+      ProName = Form("Flow_pbar_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // pbar
+      p_mFlow_pbar_RP[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
+
+      ProName = Form("Flow_Lambda_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // Lambda
+      p_mFlow_Lambda_RP[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
+
+      ProName = Form("Flow_Lambdabar_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // Lambdabar
+      p_mFlow_Lambdabar_RP[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
+
+      ProName = Form("Flow_K0s_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // K0s
+      p_mFlow_K0s_RP[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
     }
   }
 
@@ -369,6 +398,7 @@ void AMPT_v3v2::Make()
 	    if(eta_track < 0.0) // east track => west event plane
 	    {
 	      Float_t v2 = TMath::Cos(2.0*(phi_track-Psi2_West))/res2;
+	      Float_t v2_RP = TMath::Cos(2.0*phi_track);
 	      // Centrality bin selection
 	      for(Int_t i_cent = AMPT_v3v2::Centrality_start; i_cent < AMPT_v3v2::Centrality_stop; i_cent++)
 	      {
@@ -378,46 +408,55 @@ void AMPT_v3v2::Make()
 		  if(PID[i_track] == 211) // pi_plus
 		  {
 		    p_mFlow_pi_plus[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_pi_plus_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_pi_plus[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -211) // pi_minus
 		  {
 		    p_mFlow_pi_minus[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_pi_minus_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_pi_minus[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 321) // K_plus
 		  {
 		    p_mFlow_K_plus[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_K_plus_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_K_plus[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -321) // K_minus
 		  {
 		    p_mFlow_K_minus[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_K_minus_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_K_minus[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 2212) // p
 		  {
 		    p_mFlow_p[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_p_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_p[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -2212) // pbar
 		  {
 		    p_mFlow_pbar[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_pbar_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_pbar[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 3122) // Lambda
 		  {
 		    p_mFlow_Lambda[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_Lambda_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_Lambda[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -3122) // Lambdabar
 		  {
 		    p_mFlow_Lambdabar[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_Lambdabar_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_Lambdabar[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 310) // K0s
 		  {
 		    p_mFlow_K0s[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_K0s_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_K0s[0][i_cent]->Fill(pt_track);
 		  }
 		}
@@ -426,6 +465,7 @@ void AMPT_v3v2::Make()
 	    if(eta_track > 0.0) // west track => east event plane
 	    {
 	      Float_t v2 = TMath::Cos(2.0*(phi_track-Psi2_East))/res2;
+	      Float_t v2_RP = TMath::Cos(2.0*phi_track);
 	      // Centrality bin selection
 	      for(Int_t i_cent = AMPT_v3v2::Centrality_start; i_cent < AMPT_v3v2::Centrality_stop; i_cent++)
 	      {
@@ -435,46 +475,55 @@ void AMPT_v3v2::Make()
 		  if(PID[i_track] == 211) // pi_plus
 		  {
 		    p_mFlow_pi_plus[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_pi_plus_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_pi_plus[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -211) // pi_minus
 		  {
 		    p_mFlow_pi_minus[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_pi_minus_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_pi_minus[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 321) // K_plus
 		  {
 		    p_mFlow_K_plus[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_K_plus_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_K_plus[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -321) // K_minus
 		  {
 		    p_mFlow_K_minus[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_K_minus_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_K_minus[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 2212) // p
 		  {
 		    p_mFlow_p[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_p_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_p[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -2212) // pbar
 		  {
 		    p_mFlow_pbar[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_pbar_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_pbar[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 3122) // Lambda
 		  {
 		    p_mFlow_Lambda[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_Lambda_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_Lambda[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -3122) // Lambdabar
 		  {
 		    p_mFlow_Lambdabar[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_Lambdabar_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_Lambdabar[0][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 310) // K0s
 		  {
 		    p_mFlow_K0s[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_K0s_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_K0s[0][i_cent]->Fill(pt_track);
 		  }
 		}
@@ -510,6 +559,7 @@ void AMPT_v3v2::Make()
 	    if(eta_track < 0.0) // east track => west event plane
 	    {
 	      Float_t v3 = TMath::Cos(3.0*(phi_track-Psi3_West))/res3;
+	      Float_t v3_RP = TMath::Cos(3.0*phi_track);
 	      // Centrality bin selection
 	      for(Int_t i_cent = AMPT_v3v2::Centrality_start; i_cent < AMPT_v3v2::Centrality_stop; i_cent++)
 	      {
@@ -519,46 +569,55 @@ void AMPT_v3v2::Make()
 		  if(PID[i_track] == 211) // pi_plus
 		  {
 		    p_mFlow_pi_plus[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_pi_plus_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_pi_plus[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -211) // pi_minus
 		  {
 		    p_mFlow_pi_minus[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_pi_minus_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_pi_minus[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 321) // K_plus
 		  {
 		    p_mFlow_K_plus[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_K_plus_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_K_plus[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -321) // K_minus
 		  {
 		    p_mFlow_K_minus[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_K_minus_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_K_minus[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 2212) // p
 		  {
 		    p_mFlow_p[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_p_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_p[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -2212) // pbar
 		  {
 		    p_mFlow_pbar[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_pbar_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_pbar[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 3122) // Lambda
 		  {
 		    p_mFlow_Lambda[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_Lambda_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_Lambda[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -3122) // Lambdabar
 		  {
 		    p_mFlow_Lambdabar[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_Lambdabar_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_Lambdabar[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 310) // K0s
 		  {
 		    p_mFlow_K0s[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_K0s_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_K0s[1][i_cent]->Fill(pt_track);
 		  }
 		}
@@ -567,6 +626,7 @@ void AMPT_v3v2::Make()
 	    if(eta_track > 0.0) // west track => east event plane
 	    {
 	      Float_t v3 = TMath::Cos(3.0*(phi_track-Psi3_East))/res3;
+	      Float_t v3_RP = TMath::Cos(3.0*phi_track);
 	      // Centrality bin selection
 	      for(Int_t i_cent = AMPT_v3v2::Centrality_start; i_cent < AMPT_v3v2::Centrality_stop; i_cent++)
 	      {
@@ -576,46 +636,55 @@ void AMPT_v3v2::Make()
 		  if(PID[i_track] == 211) // K_plus
 		  {
 		    p_mFlow_pi_plus[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_pi_plus_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_pi_plus[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -211) // pi_minus
 		  {
 		    p_mFlow_pi_minus[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_pi_minus_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_pi_minus[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 321) // K_plus
 		  {
 		    p_mFlow_K_plus[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_K_plus_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_K_plus[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -321) // K_minus
 		  {
 		    p_mFlow_K_minus[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_K_minus_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_K_minus[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 2212) // p
 		  {
 		    p_mFlow_p[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_p_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_p[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -2212) // pbar
 		  {
 		    p_mFlow_pbar[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_pbar_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_pbar[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 3122) // Lambda
 		  {
 		    p_mFlow_Lambda[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_Lambda_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_Lambda[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == -3122) // Lambdabar
 		  {
 		    p_mFlow_Lambdabar[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_Lambdabar_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_Lambdabar[1][i_cent]->Fill(pt_track);
 		  }
 		  if(PID[i_track] == 310) // K0s
 		  {
 		    p_mFlow_K0s[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_K0s_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_K0s[1][i_cent]->Fill(pt_track);
 		  }
 		}
@@ -653,6 +722,7 @@ void AMPT_v3v2::Finish()
   {
     for(Int_t i_cent = 0; i_cent < 4; i_cent++)
     {
+      // v2 relative to Event Plane
       p_mFlow_pi_plus[i_order][i_cent]->Write();
       p_mFlow_pi_minus[i_order][i_cent]->Write();
       p_mFlow_K_plus[i_order][i_cent]->Write();
@@ -662,6 +732,18 @@ void AMPT_v3v2::Finish()
       p_mFlow_Lambda[i_order][i_cent]->Write();
       p_mFlow_Lambdabar[i_order][i_cent]->Write();
       p_mFlow_K0s[i_order][i_cent]->Write();
+
+      // v2 relative to Reaction Plane
+      p_mFlow_pi_plus_RP[i_order][i_cent]->Write();
+      p_mFlow_pi_minus_RP[i_order][i_cent]->Write();
+      p_mFlow_K_plus_RP[i_order][i_cent]->Write();
+      p_mFlow_K_minus_RP[i_order][i_cent]->Write();
+      p_mFlow_p_RP[i_order][i_cent]->Write();
+      p_mFlow_pbar_RP[i_order][i_cent]->Write();
+      p_mFlow_Lambda_RP[i_order][i_cent]->Write();
+      p_mFlow_Lambdabar_RP[i_order][i_cent]->Write();
+      p_mFlow_K0s_RP[i_order][i_cent]->Write();
+
       h_mPt_pi_plus[i_order][i_cent]->Write();
       h_mPt_pi_minus[i_order][i_cent]->Write();
       h_mPt_K_plus[i_order][i_cent]->Write();

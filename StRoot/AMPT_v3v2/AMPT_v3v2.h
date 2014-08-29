@@ -62,7 +62,7 @@ class AMPT_v3v2 // TODO: change the Tree structure
     // resolution
     TProfile *p_mRes[2];
 
-    // flow for pi, K, p, Lambda, K0s
+    // flow for pi, K, p, Lambda, K0s by using eta_sub event plane method
     TProfile *p_mFlow_pi_plus[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
     TProfile *p_mFlow_pi_minus[2][4];
     TProfile *p_mFlow_K_plus[2][4];
@@ -72,6 +72,18 @@ class AMPT_v3v2 // TODO: change the Tree structure
     TProfile *p_mFlow_Lambda[2][4];
     TProfile *p_mFlow_Lambdabar[2][4];
     TProfile *p_mFlow_K0s[2][4];
+
+
+    // flow for pi, K, p, Lambda, K0s by using reaction plane
+    TProfile *p_mFlow_pi_plus_RP[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
+    TProfile *p_mFlow_pi_minus_RP[2][4];
+    TProfile *p_mFlow_K_plus_RP[2][4];
+    TProfile *p_mFlow_K_minus_RP[2][4];
+    TProfile *p_mFlow_p_RP[2][4];
+    TProfile *p_mFlow_pbar_RP[2][4];
+    TProfile *p_mFlow_Lambda_RP[2][4];
+    TProfile *p_mFlow_Lambdabar_RP[2][4];
+    TProfile *p_mFlow_K0s_RP[2][4];
 
     // pt spectra for pi, K, p, Lambda, K0s
     TH1F *h_mPt_pi_plus[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
