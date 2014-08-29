@@ -15,28 +15,39 @@ ClassImp(AMPT_resolution)
 
 Int_t AMPT_resolution::mInput_flag = 1;
 TString AMPT_resolution::mBeamEnergy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
-Int_t AMPT_resolution::mCentrality[7][10] = {
-                                              {0,0,0,0,0,0,0,0,0,0}, //  7GeV
-					      {0,0,0,0,0,0,0,0,0,0}, // 11GeV
-					      {0,0,0,0,0,0,0,0,0,0}, // 19GeV
-					      {0,0,0,0,0,0,0,0,0,0}, // 27GeV
-					      {15,26,43,68,100,143,198,273,321,457}, // 39GeV
-//					      {12,24,40,68,97,139,200,271,318,1000}, // 39GeV
-					      {0,0,0,0,0,0,0,0,0,0},  // 62GeV
-					      {0,0,0,0,0,0,0,0,0,0}  // 200GeV
-                                            };
+TString AMPT_resolution::mMode_AMPT[2] = {"Default","StringMelting"};
+Int_t AMPT_resolution::mCentrality[2][7][10] = {
+						 { // Default
+						   {0,0,0,0,0,0,0,0,0,0}, //  7GeV
+						   {0,0,0,0,0,0,0,0,0,0}, // 11GeV
+						   {0,0,0,0,0,0,0,0,0,0}, // 19GeV
+						   {0,0,0,0,0,0,0,0,0,0}, // 27GeV
+						   {15,26,43,68,100,143,198,273,321,457}, // 39GeV
+						   {0,0,0,0,0,0,0,0,0,0},  // 62GeV
+						   {0,0,0,0,0,0,0,0,0,0}  // 200GeV
+						 },
+						 { // String Melting
+						   {0,0,0,0,0,0,0,0,0,0}, //  7GeV
+						   {0,0,0,0,0,0,0,0,0,0}, // 11GeV
+						   {0,0,0,0,0,0,0,0,0,0}, // 19GeV
+						   {13,24,40,64,95,137,190,261,307,443}, // 27GeV
+						   {0,0,0,0,0,0,0,0,0,0}, // 39GeV
+						   {0,0,0,0,0,0,0,0,0,0},  // 62GeV
+						   {0,0,0,0,0,0,0,0,0,0}  // 200GeV
+						 }
+					       }; // 80%,70%,60%,50%,40%,30%,20%,10%,5%,0%
 Int_t AMPT_resolution::mList_start[10] = {  1,101,201,301,401,501,601,701,801, 901};
 Int_t AMPT_resolution::mList_stop[10]  = {100,200,300,400,500,600,700,800,900,1000};
 //------------------------------------------------------------
-AMPT_resolution::AMPT_resolution(Int_t Energy, Int_t List, Long64_t StartEvent, Long64_t StopEvent)
+AMPT_resolution::AMPT_resolution(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Long64_t StopEvent)
 {
   mEnergy = Energy;
-  TString InPutList = Form("/project/projectdirs/star/xusun/OutPut/AMPT_Default/List/%s_List/Split_%s_%d_%d.list",mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
-//  /project/projectdirs/star/xusun/OutPut/AMPT_Default/List/39GeV_List/Split_39GeV_601_700.list
+  mMode = Mode;
+  TString InPutList = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/List/%s_List/Split_%s_%d_%d.list",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
   SetInPutList(InPutList);
   SetStartEvent(StartEvent);
   SetStopEvent(StopEvent);
-  TString OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_Default/Resolution/%s_Resolution/Resolution_%s_%d_%d.root",mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+  TString OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Resolution/%s_Resolution/Resolution_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
   SetOutPutFile(OutPutFile);
 }
 
@@ -90,7 +101,8 @@ void AMPT_resolution::Init()
   // initialize the TChain
   if (!mInPutList.IsNull())   // if input file is ok
   {
-    cout << "Open AMPT Default file list " << mInPutList << endl;
+    TString COUT = Form("Open AMPT %s file list ",mMode_AMPT[mMode].Data());
+    cout << COUT.Data() << mInPutList.Data() << endl;
     ifstream in(mInPutList);  // input stream
     if(in)
     {
@@ -244,7 +256,7 @@ void AMPT_resolution::Make()
     Int_t cent9 = -1;;
     for(Int_t i_cent = 0; i_cent < 10; i_cent++)
     {
-      if(refMult >= mCentrality[mEnergy][i_cent] && refMult < mCentrality[mEnergy][i_cent+1])
+      if(refMult >= mCentrality[mMode][mEnergy][i_cent] && refMult < mCentrality[mMode][mEnergy][i_cent+1])
       {
 	cent9 = i_cent;
       }

@@ -13,7 +13,7 @@ class TH1F;
 class AMPT_v3v2 // TODO: change the Tree structure
 {
   public:
-    AMPT_v3v2(Int_t Energy, Int_t List, Long64_t StartEvent, Long64_t StopEvent); // read in energy, data list, StartEvent and StopEvent
+    AMPT_v3v2(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Long64_t StopEvent); // read in energy, AMPT mode, data list, StartEvent and StopEvent
     ~AMPT_v3v2();
 
     void SetInPutList(const TString inputlist);
@@ -31,6 +31,7 @@ class AMPT_v3v2 // TODO: change the Tree structure
 
   private:
     Int_t   mEnergy;
+    Int_t mMode; // 0 for default, 1 for string melting
     TString mInPutList;
     TString mOutPutFile;
     TString mInPutRes;
@@ -38,7 +39,8 @@ class AMPT_v3v2 // TODO: change the Tree structure
     Long64_t mStopEvent;
     static Int_t mInput_flag;
     static TString mBeamEnergy[7];
-    static Int_t mRefMult[7][10]; // centrality definition
+    static TString mMode_AMPT[2];
+    static Int_t mRefMult[2][7][10]; // centrality definition
     static Int_t mList_start[10];
     static Int_t mList_stop[10];
     static Int_t cent_low[4];

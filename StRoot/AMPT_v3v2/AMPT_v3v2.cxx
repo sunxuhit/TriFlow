@@ -13,16 +13,27 @@ ClassImp(AMPT_v3v2)
 
 Int_t AMPT_v3v2::mInput_flag = 1;
 TString AMPT_v3v2::mBeamEnergy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
-Int_t AMPT_v3v2::mRefMult[7][10] = { 
-                                         {0,0,0,0,0,0,0,0,0,0}, //  7GeV
-				         {0,0,0,0,0,0,0,0,0,0}, // 11GeV
-				         {0,0,0,0,0,0,0,0,0,0}, // 19GeV
-				         {0,0,0,0,0,0,0,0,0,0}, // 27GeV
-				         {15,26,43,68,100,143,198,273,321,457}, // 39GeV
-//				         {12,24,40,68,97,139,200,271,318,1000}, // 39GeV
-				         {0,0,0,0,0,0,0,0,0,0},  // 62GeV
-				         {0,0,0,0,0,0,0,0,0,0}  // 200GeV
-                                       }; // 80%,70%,60%,50%,40%,30%,20%,10%,5%,0%
+TString AMPT_v3v2::mMode_AMPT[2] = {"Default","StringMelting"};
+Int_t AMPT_v3v2::mRefMult[2][7][10] = {
+			 	        { // Default
+			 	          {0,0,0,0,0,0,0,0,0,0}, //  7GeV
+			 	          {0,0,0,0,0,0,0,0,0,0}, // 11GeV
+			 	          {0,0,0,0,0,0,0,0,0,0}, // 19GeV
+			 	          {0,0,0,0,0,0,0,0,0,0}, // 27GeV
+			 	          {15,26,43,68,100,143,198,273,321,457}, // 39GeV
+			 	          {0,0,0,0,0,0,0,0,0,0},  // 62GeV
+			 	          {0,0,0,0,0,0,0,0,0,0}  // 200GeV
+			 	        },
+			 	        { // String Melting
+			 	          {0,0,0,0,0,0,0,0,0,0}, //  7GeV
+			 	          {0,0,0,0,0,0,0,0,0,0}, // 11GeV
+			 	          {0,0,0,0,0,0,0,0,0,0}, // 19GeV
+			 	          {13,24,40,64,95,137,190,261,307,443}, // 27GeV
+			 	          {0,0,0,0,0,0,0,0,0,0}, // 39GeV
+			 	          {0,0,0,0,0,0,0,0,0,0},  // 62GeV
+			 	          {0,0,0,0,0,0,0,0,0,0}  // 200GeV
+			 	        }
+			 	      }; // 80%,70%,60%,50%,40%,30%,20%,10%,5%,0%
 // Centrality bin
 Int_t AMPT_v3v2::cent_low[4] = {0,7,4,0}; // 0 = 0-80%, 1 = 0-10%, 2 = 10-40%, 3 = 40-80%
 Int_t AMPT_v3v2::cent_up[4]  = {8,8,6,3}; // 0 = 0-80%, 1 = 0-10%, 2 = 10-40%, 3 = 40-80%
@@ -31,19 +42,20 @@ Int_t AMPT_v3v2::mList_stop[10]  = {100,200,300,400,500,600,700,800,900,1000};
 Int_t AMPT_v3v2::Centrality_start = 0;
 Int_t AMPT_v3v2::Centrality_stop  = 4;
 //------------------------------------------------------------
-AMPT_v3v2::AMPT_v3v2(Int_t Energy, Int_t List, Long64_t StartEvent, Long64_t StopEvent)
+AMPT_v3v2::AMPT_v3v2(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Long64_t StopEvent)
 {
   mEnergy = Energy;
-  TString InPutList = Form("/project/projectdirs/star/xusun/OutPut/AMPT_Default/List/%s_List/Split_%s_%d_%d.list",mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+  mMode = Mode;
+  TString InPutList = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/List/%s_List/Split_%s_%d_%d.list",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
   SetInPutList(InPutList); // set input list
 
   SetStartEvent(StartEvent); // set start event
   SetStopEvent(StopEvent); // set stop event
 
-  TString InPutRes = Form("/project/projectdirs/star/xusun/OutPut/AMPT_Default/Resolution/%s_Resolution/Resolution_%s.root",mBeamEnergy[Energy].Data(),mBeamEnergy[Energy].Data());
+  TString InPutRes = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Resolution/%s_Resolution/Resolution_%s.root",mMode_AMPT[Mode].Data(),mBeamEnergy[Energy].Data(),mBeamEnergy[Energy].Data());
   SetInPutRes(InPutRes); // set input resolution
 
-  TString OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_Default/Flow/%s_Default/Flow_%s_%d_%d.root",mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+  TString OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Flow/%s_%s/Flow_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
   SetOutPutFile(OutPutFile); // set output file
 }
 
@@ -98,7 +110,7 @@ Int_t AMPT_v3v2::getCentrality(Int_t refMult)
   // Centrality defination
   for(Int_t i_cent = 0; i_cent < 10; i_cent++)
   {
-    if(refMult >= mRefMult[mEnergy][i_cent] && refMult < mRefMult[mEnergy][i_cent+1])
+    if(refMult >= mRefMult[mMode][mEnergy][i_cent] && refMult < mRefMult[mMode][mEnergy][i_cent+1])
     {
       cent9 = i_cent;
     }
@@ -216,7 +228,8 @@ void AMPT_v3v2::Init()
   // initialize the TChain
   if (!mInPutList.IsNull())   // if input file is ok
   {
-    cout << "Open AMPT Default file list " << mInPutList << endl;
+    TString COUT = Form("Open AMPT %s file list ",mMode_AMPT[mMode].Data());
+    cout << COUT.Data() << mInPutList.Data() << endl;
     ifstream in(mInPutList);  // input stream
     if(in)
     {
