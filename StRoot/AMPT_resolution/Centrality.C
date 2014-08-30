@@ -62,7 +62,7 @@ void Centrality(Int_t i_Energy,Int_t Mode) // 0: 7GeV, 1: 11GeV, 2: 19GeV, 3: 27
   c_play->SetBottomMargin(0.15);
   c_play->SetTicks(1,1);
   c_play->SetGrid(0,0);
-  h_refMult->GetXaxis()->SetRangeUser(0,500);
+  h_refMult->GetXaxis()->SetRangeUser(0,700);
   h_refMult->SetTitle("");
   h_refMult->SetStats(0);
   h_refMult->GetXaxis()->SetTitle("refMult");
