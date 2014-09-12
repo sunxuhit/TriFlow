@@ -8,7 +8,7 @@ if [ $# -eq 0 ]
 #    counter=0
     Name="_Flow_StringMelting_"
     suffix=".root"
-    for((counter=0;counter<=0;counter=counter+1))
+    for((counter=0;counter<=11;counter=counter+1))
     do
       cp ./run.csh ./run$Name$counter.csh
 
@@ -19,7 +19,7 @@ if [ $# -eq 0 ]
 #      echo -n 2',' >> run$Name$counter.csh  # 19GeV
 #      echo -n 3',' >> run$Name$counter.csh  # 27GeV
 #      echo -n 4',' >> run$Name$counter.csh  # 39GeV
-      echo -n 5',' >> run$Name$counter.csh  # 62GeV
+#      echo -n 5',' >> run$Name$counter.csh  # 62GeV
 #      echo -n 6',' >> run$Name$counter.csh  # 200GeV
 ###############################energy###################################
 

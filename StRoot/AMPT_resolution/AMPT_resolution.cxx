@@ -36,8 +36,8 @@ Int_t AMPT_resolution::mCentrality[2][7][10] = {
 						   {0,0,0,0,0,0,0,0,0,0}  // 200GeV
 						 }
 					       }; // 80%,70%,60%,50%,40%,30%,20%,10%,5%,0%
-Int_t AMPT_resolution::mList_start[10] = {  1,101,201,301,401,501,601,701,801, 901};
-Int_t AMPT_resolution::mList_stop[10]  = {100,200,300,400,500,600,700,800,900,1000};
+Int_t AMPT_resolution::mList_start[15] = {  1,101,201,301,401,501,601,701,801, 901,1001,1101,1201,1301,1401};
+Int_t AMPT_resolution::mList_stop[15]  = {100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500};
 //------------------------------------------------------------
 AMPT_resolution::AMPT_resolution(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Long64_t StopEvent)
 {
