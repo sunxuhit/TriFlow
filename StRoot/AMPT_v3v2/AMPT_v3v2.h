@@ -41,8 +41,8 @@ class AMPT_v3v2 // TODO: change the Tree structure
     static TString mBeamEnergy[7];
     static TString mMode_AMPT[2];
     static Int_t mRefMult[2][7][10]; // centrality definition
-    static Int_t mList_start[10];
-    static Int_t mList_stop[10];
+    static Int_t mList_start[15];
+    static Int_t mList_stop[15];
     static Int_t cent_low[4];
     static Int_t cent_up[4];
     static Int_t Centrality_start;
