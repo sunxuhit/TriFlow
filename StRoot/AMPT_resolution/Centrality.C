@@ -19,9 +19,9 @@ void PlotLine(Double_t x1_val, Double_t x2_val, Double_t y1_val, Double_t y2_val
   //delete Zero_line;
 }
 
-void Centrality(Int_t i_Energy,Int_t Mode) // 0: 7GeV, 1: 11GeV, 2: 19GeV, 3: 27GeV, 4: 39GeV, 5: 62GeV
+void Centrality(Int_t i_Energy,Int_t Mode) // 0: 7GeV, 1: 11GeV, 2: 19GeV, 3: 27GeV, 4: 39GeV, 5: 62GeV, 6: 200GeV
 {
-  TString Energy[6] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV"};
+  TString Energy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
   TString Mode_AMPT[2] ={"Default","StringMelting"};
   Float_t Centrality_start[9] = {0.7,0.6,0.5,0.4,0.3,0.2,0.1,0.05, 0.0};
   Float_t Centrality_stop[9]  = {0.8,0.7,0.6,0.5,0.4,0.3,0.2, 0.1,0.05};
@@ -62,7 +62,7 @@ void Centrality(Int_t i_Energy,Int_t Mode) // 0: 7GeV, 1: 11GeV, 2: 19GeV, 3: 27
   c_play->SetBottomMargin(0.15);
   c_play->SetTicks(1,1);
   c_play->SetGrid(0,0);
-  h_refMult->GetXaxis()->SetRangeUser(0,700);
+  h_refMult->GetXaxis()->SetRangeUser(0,1000);
   h_refMult->SetTitle("");
   h_refMult->SetStats(0);
   h_refMult->GetXaxis()->SetTitle("refMult");
