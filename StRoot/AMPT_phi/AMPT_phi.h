@@ -13,8 +13,8 @@ class TH1F;
 class AMPT_phi
 {
   public:
-    AMPT_v3v2(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Long64_t StopEvent); // read in energy, AMPT mode, data list, StartEvent and StopEvent
-    ~AMPT_v3v2();
+    AMPT_phi(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Long64_t StopEvent); // read in energy, AMPT mode, data list, StartEvent and StopEvent
+    ~AMPT_phi();
 
     void SetInPutList(const TString inputlist);
     void SetOutPutFile(const TString outputfile);
@@ -64,13 +64,13 @@ class AMPT_phi
     // resolution
     TProfile *p_mRes[2];
 
-    // flow for pi, K, p, Lambda, K0s by using eta_sub event plane method
+    // flow for phi by using eta_sub event plane method
     TH1F *h_mFlow_phi[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
 
-    // flow for pi, K, p, Lambda, K0s by using reaction plane
+    // flow for phi by using reaction plane
     TH1F *h_mFlow_phi_RP[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
 
-    // pt spectra for pi, K, p, Lambda, K0s
+    // pt spectra for phi
     TH1F *h_mPt_phi[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
 
     //---------------------------------------------------------------
