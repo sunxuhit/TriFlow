@@ -8,6 +8,7 @@
 #include "TVector2.h"
 #include "TVector3.h"
 #include "TMath.h"
+#include "TLorentzVector.h"
 
 ClassImp(AMPT_phi)
 
@@ -41,6 +42,7 @@ Int_t AMPT_phi::mList_start[10] = {  1,101,201,301,401,501,601,701,801, 901};
 Int_t AMPT_phi::mList_stop[10]  = {100,200,300,400,500,600,700,800,900,1000};
 Int_t AMPT_phi::Centrality_start = 0;
 Int_t AMPT_phi::Centrality_stop  = 4;
+Float_t AMPT_phi::mMassKaon = 0.49368;
 //------------------------------------------------------------
 AMPT_phi::AMPT_phi(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Long64_t StopEvent)
 {
@@ -327,7 +329,26 @@ void AMPT_phi::Make()
 
     if(cent9 > -1.0)
     {
-      if( // 2nd track loop for v2 calculation
+      for(Int_t i_track = 0; i_track < Mult; i_track++) // 2nd track loop for K+ and K- selection
+      {
+	if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
+	track.SetXYZ(Px[i_track],Py[i_track],Pz[i_track]);
+	//	  Float_t p_track = track.Mag();
+	Float_t pt_track = track.Perp();
+	Float_t phi_track = track.Phi(); // -pi to pi
+	Float_t eta_track = track.Eta();
+
+	// phi reconstruction
+
+	if(PID[i_track] == 321) // K_plus
+	{
+	}
+	if(PID[i_track] == -321) // K_minus
+	{
+	}
+      }
+
+      if( // reconstruct phi for 2nd flow
 	  !(Q2x_east == 0.0 && Q2y_east == 0.0) 
        && !(Q2x_west == 0.0 && Q2y_west == 0.0)
        && res2 > 0.0
@@ -343,6 +364,17 @@ void AMPT_phi::Make()
 	  Float_t phi_track = track.Phi(); // -pi to pi
 	  Float_t eta_track = track.Eta();
 
+	  // phi reconstruction
+
+	  if(PID[i_track] == 321) // K_plus
+	  {
+	    TLorentzVector lTrackA(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
+	    if(PID[i_track] == -321) // K_minus
+	    {
+	      TLorentzVector lTrackB(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
+	    }
+	  }
+
 	  // track selection
 	  if(TMath::Abs(eta_track) <= 1.0) // eta cut
 	  {
@@ -355,61 +387,6 @@ void AMPT_phi::Make()
 	      {
 		if(cent9 >= AMPT_phi::cent_low[i_cent] && cent9 <= AMPT_phi::cent_up[i_cent])
 		{
-		  // PID
-		  if(PID[i_track] == 211) // pi_plus
-		  {
-		    p_mFlow_pi_plus[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_pi_plus_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_pi_plus[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -211) // pi_minus
-		  {
-		    p_mFlow_pi_minus[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_pi_minus_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_pi_minus[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 321) // K_plus
-		  {
-		    p_mFlow_K_plus[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_K_plus_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_K_plus[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -321) // K_minus
-		  {
-		    p_mFlow_K_minus[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_K_minus_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_K_minus[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 2212) // p
-		  {
-		    p_mFlow_p[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_p_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_p[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -2212) // pbar
-		  {
-		    p_mFlow_pbar[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_pbar_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_pbar[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 3122) // Lambda
-		  {
-		    p_mFlow_Lambda[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_Lambda_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_Lambda[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -3122) // Lambdabar
-		  {
-		    p_mFlow_Lambdabar[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_Lambdabar_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_Lambdabar[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 310) // K0s
-		  {
-		    p_mFlow_K0s[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_K0s_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_K0s[0][i_cent]->Fill(pt_track);
-		  }
 		}
 	      }
 	    }
@@ -422,61 +399,6 @@ void AMPT_phi::Make()
 	      {
 		if(cent9 >= AMPT_phi::cent_low[i_cent] && cent9 <= AMPT_phi::cent_up[i_cent])
 		{
-		  // PID
-		  if(PID[i_track] == 211) // pi_plus
-		  {
-		    p_mFlow_pi_plus[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_pi_plus_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_pi_plus[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -211) // pi_minus
-		  {
-		    p_mFlow_pi_minus[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_pi_minus_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_pi_minus[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 321) // K_plus
-		  {
-		    p_mFlow_K_plus[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_K_plus_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_K_plus[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -321) // K_minus
-		  {
-		    p_mFlow_K_minus[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_K_minus_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_K_minus[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 2212) // p
-		  {
-		    p_mFlow_p[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_p_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_p[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -2212) // pbar
-		  {
-		    p_mFlow_pbar[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_pbar_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_pbar[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 3122) // Lambda
-		  {
-		    p_mFlow_Lambda[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_Lambda_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_Lambda[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -3122) // Lambdabar
-		  {
-		    p_mFlow_Lambdabar[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_Lambdabar_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_Lambdabar[0][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 310) // K0s
-		  {
-		    p_mFlow_K0s[0][i_cent]->Fill(pt_track,v2);
-		    p_mFlow_K0s_RP[0][i_cent]->Fill(pt_track,v2_RP);
-		    h_mPt_K0s[0][i_cent]->Fill(pt_track);
-		  }
 		}
 	      }
 	    }
@@ -516,61 +438,6 @@ void AMPT_phi::Make()
 	      {
 		if(cent9 >= AMPT_phi::cent_low[i_cent] && cent9 <= AMPT_phi::cent_up[i_cent])
 		{
-		  // PID
-		  if(PID[i_track] == 211) // pi_plus
-		  {
-		    p_mFlow_pi_plus[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_pi_plus_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_pi_plus[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -211) // pi_minus
-		  {
-		    p_mFlow_pi_minus[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_pi_minus_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_pi_minus[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 321) // K_plus
-		  {
-		    p_mFlow_K_plus[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_K_plus_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_K_plus[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -321) // K_minus
-		  {
-		    p_mFlow_K_minus[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_K_minus_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_K_minus[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 2212) // p
-		  {
-		    p_mFlow_p[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_p_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_p[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -2212) // pbar
-		  {
-		    p_mFlow_pbar[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_pbar_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_pbar[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 3122) // Lambda
-		  {
-		    p_mFlow_Lambda[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_Lambda_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_Lambda[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -3122) // Lambdabar
-		  {
-		    p_mFlow_Lambdabar[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_Lambdabar_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_Lambdabar[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 310) // K0s
-		  {
-		    p_mFlow_K0s[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_K0s_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_K0s[1][i_cent]->Fill(pt_track);
-		  }
 		}
 	      }
 	    }
@@ -583,61 +450,6 @@ void AMPT_phi::Make()
 	      {
 		if(cent9 >= AMPT_phi::cent_low[i_cent] && cent9 <= AMPT_phi::cent_up[i_cent])
 		{
-		  // PID
-		  if(PID[i_track] == 211) // K_plus
-		  {
-		    p_mFlow_pi_plus[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_pi_plus_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_pi_plus[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -211) // pi_minus
-		  {
-		    p_mFlow_pi_minus[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_pi_minus_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_pi_minus[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 321) // K_plus
-		  {
-		    p_mFlow_K_plus[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_K_plus_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_K_plus[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -321) // K_minus
-		  {
-		    p_mFlow_K_minus[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_K_minus_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_K_minus[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 2212) // p
-		  {
-		    p_mFlow_p[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_p_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_p[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -2212) // pbar
-		  {
-		    p_mFlow_pbar[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_pbar_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_pbar[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 3122) // Lambda
-		  {
-		    p_mFlow_Lambda[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_Lambda_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_Lambda[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == -3122) // Lambdabar
-		  {
-		    p_mFlow_Lambdabar[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_Lambdabar_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_Lambdabar[1][i_cent]->Fill(pt_track);
-		  }
-		  if(PID[i_track] == 310) // K0s
-		  {
-		    p_mFlow_K0s[1][i_cent]->Fill(pt_track,v3);
-		    p_mFlow_K0s_RP[1][i_cent]->Fill(pt_track,v3_RP);
-		    h_mPt_K0s[1][i_cent]->Fill(pt_track);
-		  }
 		}
 	      }
 	    }
@@ -673,37 +485,6 @@ void AMPT_phi::Finish()
   {
     for(Int_t i_cent = 0; i_cent < 4; i_cent++)
     {
-      // v2 relative to Event Plane
-      p_mFlow_pi_plus[i_order][i_cent]->Write();
-      p_mFlow_pi_minus[i_order][i_cent]->Write();
-      p_mFlow_K_plus[i_order][i_cent]->Write();
-      p_mFlow_K_minus[i_order][i_cent]->Write();
-      p_mFlow_p[i_order][i_cent]->Write();
-      p_mFlow_pbar[i_order][i_cent]->Write();
-      p_mFlow_Lambda[i_order][i_cent]->Write();
-      p_mFlow_Lambdabar[i_order][i_cent]->Write();
-      p_mFlow_K0s[i_order][i_cent]->Write();
-
-      // v2 relative to Reaction Plane
-      p_mFlow_pi_plus_RP[i_order][i_cent]->Write();
-      p_mFlow_pi_minus_RP[i_order][i_cent]->Write();
-      p_mFlow_K_plus_RP[i_order][i_cent]->Write();
-      p_mFlow_K_minus_RP[i_order][i_cent]->Write();
-      p_mFlow_p_RP[i_order][i_cent]->Write();
-      p_mFlow_pbar_RP[i_order][i_cent]->Write();
-      p_mFlow_Lambda_RP[i_order][i_cent]->Write();
-      p_mFlow_Lambdabar_RP[i_order][i_cent]->Write();
-      p_mFlow_K0s_RP[i_order][i_cent]->Write();
-
-      h_mPt_pi_plus[i_order][i_cent]->Write();
-      h_mPt_pi_minus[i_order][i_cent]->Write();
-      h_mPt_K_plus[i_order][i_cent]->Write();
-      h_mPt_K_minus[i_order][i_cent]->Write();
-      h_mPt_p[i_order][i_cent]->Write();
-      h_mPt_pbar[i_order][i_cent]->Write();
-      h_mPt_Lambda[i_order][i_cent]->Write();
-      h_mPt_Lambdabar[i_order][i_cent]->Write();
-      h_mPt_K0s[i_order][i_cent]->Write();
     }
   }
   mFile_OutPut->Close();

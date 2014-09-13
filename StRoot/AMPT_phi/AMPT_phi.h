@@ -2,6 +2,7 @@
 #define AMPT_phi_h
 #include "StMessMgr.h"
 #include "TString.h"
+#include <vector>
 
 class TTree;
 class TChain;
@@ -47,6 +48,7 @@ class AMPT_phi
     static Int_t cent_up[4];
     static Int_t Centrality_start;
     static Int_t Centrality_stop;
+    static Float_t mMassKaon;
     TFile *mFile_OutPut;
     TFile *mFile_Res;
 
