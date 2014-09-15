@@ -38,11 +38,30 @@ Int_t AMPT_phi::mRefMult[2][7][10] = {
 // Centrality bin
 Int_t AMPT_phi::cent_low[4] = {0,7,4,0}; // 0 = 0-80%, 1 = 0-10%, 2 = 10-40%, 3 = 40-80%
 Int_t AMPT_phi::cent_up[4]  = {8,8,6,3}; // 0 = 0-80%, 1 = 0-10%, 2 = 10-40%, 3 = 40-80%
-Int_t AMPT_phi::mList_start[10] = {  1,101,201,301,401,501,601,701,801, 901};
-Int_t AMPT_phi::mList_stop[10]  = {100,200,300,400,500,600,700,800,900,1000};
+Int_t AMPT_phi::mList_start[15] = {  1,101,201,301,401,501,601,701,801, 901,1001,1101,1201,1301,1401};
+Int_t AMPT_phi::mList_stop[15]  = {100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500};
 Int_t AMPT_phi::Centrality_start = 0;
 Int_t AMPT_phi::Centrality_stop  = 4;
 Float_t AMPT_phi::mMassKaon = 0.49368;
+
+// pt bin
+//                                       0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 ,10 ,11 ,12 ,13 ,14 ,15 ,16 ,17 ,18 ,19 ,10 ,21 ,22
+Float_t AMPT_phi::pt_low_phi[23] = {0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.4,3.8,4.2,4.6,5.0,5.4,5.8,6.2};
+Float_t AMPT_phi::pt_up_phi[23]  = {0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.4,3.8,4.2,4.6,5.0,5.4,5.8,6.2,6.6};
+
+// phi-Psi bin
+Float_t AMPT_phi::phi_Psi2_low[7] = {0.0,TMath::Pi()/14.0,2.0*TMath::Pi()/14.0,3.0*TMath::Pi()/14.0,4.0*TMath::Pi()/14.0,5.0*TMath::Pi()/14.0,6.0*TMath::Pi()/14.0};
+Float_t AMPT_phi::phi_Psi2_up[7]  = {TMath::Pi()/14.0,2.0*TMath::Pi()/14.0,3.0*TMath::Pi()/14.0,4.0*TMath::Pi()/14.0,5.0*TMath::Pi()/14.0,6.0*TMath::Pi()/14.0,7.0*TMath::Pi()/14.0};
+Float_t AMPT_phi::phi_Psi3_low[7] = {0.0,TMath::Pi()/21.0,2.0*TMath::Pi()/21.0,3.0*TMath::Pi()/21.0,4.0*TMath::Pi()/21.0,5.0*TMath::Pi()/21.0,6.0*TMath::Pi()/21.0};
+Float_t AMPT_phi::phi_Psi3_up[7]  = {TMath::Pi()/21.0,2.0*TMath::Pi()/21.0,3.0*TMath::Pi()/21.0,4.0*TMath::Pi()/21.0,5.0*TMath::Pi()/21.0,6.0*TMath::Pi()/21.0,7.0*TMath::Pi()/21.0};
+
+Float_t AMPT_phi::Psi2_low[3] = {-3.0*TMath::Pi()/2.0,-1.0*TMath::Pi()/2.0,1.0*TMath::Pi()/2.0};
+Float_t AMPT_phi::Psi2_up[3]  = {-1.0*TMath::Pi()/2.0, 1.0*TMath::Pi()/2.0,3.0*TMath::Pi()/2.0};
+Float_t AMPT_phi::Psi3_low[5] = {-4.0*TMath::Pi()/3.0,-3.0*TMath::Pi()/3.0,-1.0*TMath::Pi()/3.0,1.0*TMath::Pi()/3.0,3.0*TMath::Pi()/3.0};
+Float_t AMPT_phi::Psi3_up[5]  = {-3.0*TMath::Pi()/3.0,-1.0*TMath::Pi()/3.0, 1.0*TMath::Pi()/3.0,3.0*TMath::Pi()/3.0,4.0*TMath::Pi()/3.0};
+
+Int_t AMPT_phi::pt_total_phi = 23;
+Int_t AMPT_phi::Phi_Psi_total = 7;
 //------------------------------------------------------------
 AMPT_phi::AMPT_phi(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Long64_t StopEvent)
 {
@@ -120,6 +139,72 @@ Int_t AMPT_phi::getCentrality(Int_t refMult)
 
   return cent9;
 }
+
+void AMPT_phi::FillHist2nd(Float_t pt_track, Int_t cent9, Float_t phi_psi, Float_t res, Float_t InvMass) // fill Histogram for flow calculation
+{
+  for(Int_t i_pt = 0; i_pt < AMPT_phi::pt_total_phi; i_pt++) // pt_bin
+  {
+    if(pt_track > AMPT_phi::pt_low_phi[i_pt] && pt_track < AMPT_phi::pt_up_phi[i_pt])
+    {
+      for(Int_t i_cent = AMPT_phi::Centrality_start; i_cent < AMPT_phi::Centrality_stop; i_cent++) // centrality bin
+      {
+	if(cent9 >= AMPT_phi::cent_low[i_cent] && cent9 <= AMPT_phi::cent_up[i_cent])
+	{
+	  for(Int_t i_psi = 0; i_psi < 3; i_psi++)
+	  {
+	    if(phi_psi >= AMPT_phi::Psi2_low[i_psi] && phi_psi < AMPT_phi::Psi2_up[i_psi])
+	    {
+	      Float_t phi_psi_final = phi_psi - (i_psi-1)*2.0*TMath::Pi()/2.0;
+	      for(Int_t i_phi_psi = 0; i_phi_psi < AMPT_phi::Phi_Psi_total; i_phi_psi++) // phi-psi2 bin
+	      {
+		if(TMath::Abs(phi_psi_final) >= AMPT_phi::phi_Psi2_low[i_phi_psi] && TMath::Abs(phi_psi_final) < AMPT_phi::phi_Psi2_up[i_phi_psi])
+		{
+		  // flow
+		  h_mFlow_phi[0][i_cent][i_pt][i_phi_psi]->Fill(InvMass,(1.0/res));
+		  // raw pt spectra
+		  h_mPt_phi[0][i_cent][i_pt]->Fill(InvMass,1.0);
+		}
+	      }
+	    }
+	  }
+	}
+      }
+    }
+  }
+}
+
+void AMPT_phi::FillHist3rd(Float_t pt_track, Int_t cent9, Float_t phi_psi, Float_t res, Float_t InvMass) // fill Histogram for flow calculation
+{
+  for(Int_t i_pt = 0; i_pt < AMPT_phi::pt_total_phi; i_pt++) // pt_bin
+  {
+    if(pt_track > AMPT_phi::pt_low_phi[i_pt] && pt_track < AMPT_phi::pt_up_phi[i_pt])
+    {
+      for(Int_t i_cent = AMPT_phi::Centrality_start; i_cent < AMPT_phi::Centrality_stop; i_cent++) // centrality bin
+      {
+	if(cent9 >= AMPT_phi::cent_low[i_cent] && cent9 <= AMPT_phi::cent_up[i_cent])
+	{
+	  for(Int_t i_psi = 0; i_psi < 5; i_psi++)
+	  {
+	    if(phi_psi >= AMPT_phi::Psi3_low[i_psi] && phi_psi < AMPT_phi::Psi3_up[i_psi])
+	    {
+	      Float_t phi_psi_final = phi_psi - (i_psi-2)*2.0*TMath::Pi()/3.0;
+	      for(Int_t i_phi_psi = 0; i_phi_psi < AMPT_phi::Phi_Psi_total; i_phi_psi++) // phi-psi3 bin
+	      {
+		if(TMath::Abs(phi_psi_final) >= AMPT_phi::phi_Psi3_low[i_phi_psi] && TMath::Abs(phi_psi_final) < AMPT_phi::phi_Psi3_up[i_phi_psi])
+		{
+		  // flow
+		  h_mFlow_phi[1][i_cent][i_pt][i_phi_psi]->Fill(InvMass,(1.0/res));
+		  // raw pt spectra
+		  h_mPt_phi[1][i_cent][i_pt]->Fill(InvMass,1.0);
+		}
+	      }
+	    }
+	  }
+	}
+      }
+    }
+  }
+}
 //------------------------------------------------------------
 void AMPT_phi::Init()
 {
@@ -137,20 +222,19 @@ void AMPT_phi::Init()
     {
       TString Order[2] = {"2nd","3rd"};
       TString Centrality[4] = {"0080","0010","1040","4080"};
-      TString ProName;
       TString HistName;
-
-      // Flow relative to event plane
-      HistName = Form("Flow_phi_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // phi
-      h_mFlow_phi[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),200,0.98,1.05);; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
-
-      // Flow relative to Reaction Plane
-      HistName = Form("Flow_phi_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // phi
-      h_mFlow_phi_RP[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),200,0.98,1.05);
-
-      // Pt spectra
-      HistName = Form("Pt_phi_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_phi[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),200,0.98,1.05);
+      for(Int_t i_pt = 0; i_pt < AMPT_phi::pt_total_phi; i_pt++)
+      {
+	for(Int_t i_phi_psi = 0; i_phi_psi < AMPT_phi::Phi_Psi_total; i_phi_psi++)
+	{
+	  // Flow relative to event plane
+	  HistName = Form("Flow_phi_%s_%s_pt_%d_phi_Psi_%d",Order[i_order].Data(),Centrality[i_cent].Data(),i_pt,i_phi_psi); // phi
+	  h_mFlow_phi[i_order][i_cent][i_pt][i_phi_psi] = new TH1F(HistName.Data(),HistName.Data(),400,0.98,1.05);; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80% | pt bin | phi-Psi bin
+	}
+	// Pt spectra
+	HistName = Form("Pt_phi_%s_%s_pt_%d",Order[i_order].Data(),Centrality[i_cent].Data(),i_pt);
+	h_mPt_phi[i_order][i_cent][i_pt] = new TH1F(HistName.Data(),HistName.Data(),200,0.98,1.05);
+      }
     }
   }
 
@@ -330,31 +414,33 @@ void AMPT_phi::Make()
 
     if(cent9 > -1.0)
     {
+      for(Int_t i_track = 0; i_track < Mult; i_track++) // 2nd track loop for K+ and K- selection
+      {
+	if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
+
+	// store Kaons
+	if(PID[i_track] == 321) // K_plus
+	{
+	  TLorentzVector ltrack;
+	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
+	  if(ltrack.Pt() > 0.1 && ltrack.Mag() < 10.0) // pt and p cut
+	    mKplus.push_back(static_cast<TLorentzVector>(ltrack));
+	}
+	if(PID[i_track] == -321) // K_minus
+	{
+	  TLorentzVector ltrack;
+	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
+	  if(ltrack.Pt() > 0.1 && ltrack.Mag() < 10.0) // pt and p cut
+	    mKminus.push_back(static_cast<TLorentzVector>(ltrack));
+	}
+      }
+
       if( // reconstruct phi for 2nd flow
 	  !(Q2x_east == 0.0 && Q2y_east == 0.0) 
        && !(Q2x_west == 0.0 && Q2y_west == 0.0)
        && res2 > 0.0
 	)
       {
-	for(Int_t i_track = 0; i_track < Mult; i_track++) // 2nd track loop for K+ and K- selection
-	{
-	  if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
-
-	  // store Kaons
-	  if(PID[i_track] == 321) // K_plus
-	  {
-	    TLorentzVector ltrack;
-	    ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
-	    mKplus.push_back(static_cast<TLorentzVector>(ltrack));
-	  }
-	  if(PID[i_track] == -321) // K_minus
-	  {
-	    TLorentzVector ltrack;
-	    ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
-	    mKminus.push_back(static_cast<TLorentzVector>(ltrack));
-	  }
-	}
-
 	for(Int_t i_kplus = 0; i_kplus < mKplus.size(); i_kplus++) // Kplus loop
 	{
 	  TLorentzVector lKplus = mKplus[i_kplus]; // Kplus
@@ -364,100 +450,69 @@ void AMPT_phi::Make()
 
 	    TLorentzVector lPhi = lKplus + lKminus; // phi candidate
 
-	    h_mPhi->Fill(lPhi.M());
-	  }
-	}
+	    if(lPhi.Px() == 0. && lPhi.Py() == 0.) continue;
 
-#if 0
-	for(Int_t i_track = 0; i_track < Mult; i_track++) // 3rd track loop for phi reconstruction 
-	{
-	  if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
-	  track.SetXYZ(Px[i_track],Py[i_track],Pz[i_track]);
-//	  Float_t p_track = track.Mag();
-	  Float_t pt_track = track.Perp();
-	  Float_t phi_track = track.Phi(); // -pi to pi
-	  Float_t eta_track = track.Eta();
+	    Float_t InvMass = lPhi.M();
+	    Float_t pt_track = lPhi.Perp(); // pt of phi-meson
+	    Float_t phi_track = lPhi.Phi(); // -pi to pi
+	    Float_t eta_track = lPhi.Eta(); // eta of phi-meson
 
-	  // track selection
-	  if(TMath::Abs(eta_track) <= 1.0) // eta cut
-	  {
-	    if(eta_track < 0.0) // east track => west event plane
+	    if(TMath::Abs(eta_track) <= 1.0) // eta cut
 	    {
-	      Float_t v2 = TMath::Cos(2.0*(phi_track-Psi2_West))/res2;
-	      Float_t v2_RP = TMath::Cos(2.0*phi_track);
-	      // Centrality bin selection
-	      for(Int_t i_cent = AMPT_phi::Centrality_start; i_cent < AMPT_phi::Centrality_stop; i_cent++)
+	      if(eta_track < 0.0) // east track => west event plane
 	      {
-		if(cent9 >= AMPT_phi::cent_low[i_cent] && cent9 <= AMPT_phi::cent_up[i_cent])
-		{
-		}
+		Float_t phi_psi2 = phi_track - Psi2_West;
+		FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
+	      }
+	      if(eta_track > 0.0) // west track => east event plane
+	      {
+		Float_t phi_psi2 = phi_track - Psi2_East;
+		FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
 	      }
 	    }
-	    if(eta_track > 0.0) // west track => east event plane
-	    {
-	      Float_t v2 = TMath::Cos(2.0*(phi_track-Psi2_East))/res2;
-	      Float_t v2_RP = TMath::Cos(2.0*phi_track);
-	      // Centrality bin selection
-	      for(Int_t i_cent = AMPT_phi::Centrality_start; i_cent < AMPT_phi::Centrality_stop; i_cent++)
-	      {
-		if(cent9 >= AMPT_phi::cent_low[i_cent] && cent9 <= AMPT_phi::cent_up[i_cent])
-		{
-		}
-	      }
-	    }
+	    h_mPhi->Fill(InvMass); // QA for phi-meson peak
 	  }
 	}
-#endif
 
 	// QA: 2nd event plane and centrality
 	h_mPsi2_East->Fill(Psi2_East);
 	h_mPsi2_West->Fill(Psi2_West);
 	h_mCentrality->Fill(cent9);
-	mKplus.clear();
-	mKminus.clear();
       }
-#if 0
-      if( // 3rd track loop for v3 calculation
+
+      if( // reconstruct phi for 3rd flow
 	  !(Q3x_east == 0.0 && Q3y_east == 0.0) 
        && !(Q3x_west == 0.0 && Q3y_west == 0.0)
        && res3 > 0.0
 	)
       {
-	track.SetXYZ(-999.9,-999.9,-999.9);
-	for(Int_t i_track = 0; i_track < Mult; i_track++) // 2nd track loop for flow calculation
+	for(Int_t i_kplus = 0; i_kplus < mKplus.size(); i_kplus++) // Kplus loop
 	{
-	  if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
-	  track.SetXYZ(Px[i_track],Py[i_track],Pz[i_track]);
-//	  Float_t p_track = track.Mag();
-	  Float_t pt_track = track.Perp();
-	  Float_t phi_track = track.Phi(); // -pi to pi
-	  Float_t eta_track = track.Eta();
-
-	  // track selection
-	  if(TMath::Abs(eta_track) <= 1.0) // eta cut
+	  TLorentzVector lKplus = mKplus[i_kplus]; // Kplus
+	  for(Int_t i_kminus = 0; i_kminus < mKminus.size(); i_kminus++) // Kminus loop
 	  {
-	    if(eta_track < 0.0) // east track => west event plane
+	    TLorentzVector lKminus = mKminus[i_kminus]; // Kminus
+
+	    TLorentzVector lPhi = lKplus + lKminus; // phi candidate
+
+	    if(lPhi.Px() == 0. && lPhi.Py() == 0.) continue;
+
+	    Float_t InvMass = lPhi.M();
+	    Float_t pt_track = lPhi.Perp(); // pt of phi-meson
+	    Float_t phi_track = lPhi.Phi(); // -pi to pi
+	    Float_t eta_track = lPhi.Eta(); // eta of phi-meson
+
+	    if(TMath::Abs(eta_track) <= 1.0) // eta cut
 	    {
-	      Float_t v3 = TMath::Cos(3.0*(phi_track-Psi3_West))/res3;
-	      Float_t v3_RP = TMath::Cos(3.0*phi_track);
-	      // Centrality bin selection
-	      for(Int_t i_cent = AMPT_phi::Centrality_start; i_cent < AMPT_phi::Centrality_stop; i_cent++)
+	      if(eta_track < 0.0) // east track => west event plane
 	      {
-		if(cent9 >= AMPT_phi::cent_low[i_cent] && cent9 <= AMPT_phi::cent_up[i_cent])
-		{
-		}
+		Float_t phi_psi3 = phi_track - Psi3_West;
+		FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
 	      }
-	    }
-	    if(eta_track > 0.0) // west track => east event plane
-	    {
-	      Float_t v3 = TMath::Cos(3.0*(phi_track-Psi3_East))/res3;
-	      Float_t v3_RP = TMath::Cos(3.0*phi_track);
-	      // Centrality bin selection
-	      for(Int_t i_cent = AMPT_phi::Centrality_start; i_cent < AMPT_phi::Centrality_stop; i_cent++)
+	      if(eta_track > 0.0) // west track => east event plane
 	      {
-		if(cent9 >= AMPT_phi::cent_low[i_cent] && cent9 <= AMPT_phi::cent_up[i_cent])
-		{
-		}
+		Float_t phi_psi3 = phi_track - Psi3_East;
+		FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
 	      }
 	    }
 	  }
@@ -467,7 +522,8 @@ void AMPT_phi::Make()
 	h_mPsi3_East->Fill(Psi3_East);
 	h_mPsi3_West->Fill(Psi3_West);
       }
-#endif
+      mKplus.clear();
+      mKminus.clear();
     }
   }
 
@@ -494,6 +550,14 @@ void AMPT_phi::Finish()
   {
     for(Int_t i_cent = 0; i_cent < 4; i_cent++)
     {
+      for(Int_t i_pt = 0; i_pt < AMPT_phi::pt_total_phi; i_pt++)
+      {
+	for(Int_t i_phi_psi = 0; i_phi_psi < 7; i_phi_psi++)
+	{
+	  h_mFlow_phi[i_order][i_cent][i_pt][i_phi_psi]->Write();
+	}
+	h_mPt_phi[i_order][i_cent][i_pt]->Write();
+      }
     }
   }
   mFile_OutPut->Close();

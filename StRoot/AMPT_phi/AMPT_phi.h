@@ -26,6 +26,8 @@ class AMPT_phi
 
     void Init(); // initialize tree structure
     void Make(); // main loop: calculate resolution with eta_sub method
+    void FillHist2nd(Float_t pt, Int_t cent9, Float_t phi, Float_t res, Float_t InvMass); // fill Histogram for flow calculation
+    void FillHist3rd(Float_t pt, Int_t cent9, Float_t phi, Float_t res, Float_t InvMass); // fill Histogram for flow calculation
     void Finish(); // save resolution 
 
     Float_t getResolution(Int_t order, Int_t i_cent); // get Resolution 
@@ -43,8 +45,8 @@ class AMPT_phi
     static TString mBeamEnergy[7];
     static TString mMode_AMPT[2];
     static Int_t mRefMult[2][7][10]; // centrality definition
-    static Int_t mList_start[10];
-    static Int_t mList_stop[10];
+    static Int_t mList_start[15];
+    static Int_t mList_stop[15];
     static Int_t cent_low[4];
     static Int_t cent_up[4];
     static Int_t Centrality_start;
@@ -52,6 +54,25 @@ class AMPT_phi
     static Float_t mMassKaon;
     TFile *mFile_OutPut;
     TFile *mFile_Res;
+
+
+    // pt bin
+    static Float_t pt_low_phi[23];
+    static Float_t pt_up_phi[23];
+
+    // phi-Psi bin
+    static Float_t phi_Psi2_low[7];
+    static Float_t phi_Psi2_up[7];
+    static Float_t phi_Psi3_low[7];
+    static Float_t phi_Psi3_up[7];
+
+    static Float_t Psi2_low[3];
+    static Float_t Psi2_up[3];
+    static Float_t Psi3_low[5];
+    static Float_t Psi3_up[5];
+
+    static Int_t pt_total_phi;
+    static Int_t Phi_Psi_total;
 
     // store daughter particles of phi
     std::vector<TLorentzVector> mKplus;
@@ -74,13 +95,10 @@ class AMPT_phi
     TProfile *p_mRes[2];
 
     // flow for phi by using eta_sub event plane method
-    TH1F *h_mFlow_phi[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
-
-    // flow for phi by using reaction plane
-    TH1F *h_mFlow_phi_RP[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
+    TH1F *h_mFlow_phi[2][4][23][7]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80% | pt bin | phi-Psi bin
 
     // pt spectra for phi
-    TH1F *h_mPt_phi[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
+    TH1F *h_mPt_phi[2][4][23]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80% | pt bin
 
     //---------------------------------------------------------------
     TChain         *mChain_Input;
