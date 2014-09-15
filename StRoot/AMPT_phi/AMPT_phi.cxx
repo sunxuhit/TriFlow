@@ -164,6 +164,7 @@ void AMPT_phi::Init()
   h_mPsi3_East = new TH1F("h_mPsi3_East","h_mPsi3_East",100,-TMath::Pi(),TMath::Pi());
   h_mPsi3_West = new TH1F("h_mPsi3_West","h_mPsi3_West",100,-TMath::Pi(),TMath::Pi());
   h_mCentrality = new TH1F("h_mCentrality","h_mCentrality",9,-0.5,8.5);
+  h_mPhi = new TH1F("h_mPhi","h_mPhi",500,0.98,1.05);
 
   // initialize the TChain
   if (!mInPutList.IsNull())   // if input file is ok
@@ -329,33 +330,46 @@ void AMPT_phi::Make()
 
     if(cent9 > -1.0)
     {
-      for(Int_t i_track = 0; i_track < Mult; i_track++) // 2nd track loop for K+ and K- selection
-      {
-	if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
-	track.SetXYZ(Px[i_track],Py[i_track],Pz[i_track]);
-	//	  Float_t p_track = track.Mag();
-	Float_t pt_track = track.Perp();
-	Float_t phi_track = track.Phi(); // -pi to pi
-	Float_t eta_track = track.Eta();
-
-	// phi reconstruction
-
-	if(PID[i_track] == 321) // K_plus
-	{
-	}
-	if(PID[i_track] == -321) // K_minus
-	{
-	}
-      }
-
       if( // reconstruct phi for 2nd flow
 	  !(Q2x_east == 0.0 && Q2y_east == 0.0) 
        && !(Q2x_west == 0.0 && Q2y_west == 0.0)
        && res2 > 0.0
 	)
       {
-	track.SetXYZ(-999.9,-999.9,-999.9);
-	for(Int_t i_track = 0; i_track < Mult; i_track++) // 2nd track loop for flow calculation
+	for(Int_t i_track = 0; i_track < Mult; i_track++) // 2nd track loop for K+ and K- selection
+	{
+	  if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
+
+	  // store Kaons
+	  if(PID[i_track] == 321) // K_plus
+	  {
+	    TLorentzVector ltrack;
+	    ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
+	    mKplus.push_back(static_cast<TLorentzVector>(ltrack));
+	  }
+	  if(PID[i_track] == -321) // K_minus
+	  {
+	    TLorentzVector ltrack;
+	    ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
+	    mKminus.push_back(static_cast<TLorentzVector>(ltrack));
+	  }
+	}
+
+	for(Int_t i_kplus = 0; i_kplus < mKplus.size(); i_kplus++) // Kplus loop
+	{
+	  TLorentzVector lKplus = mKplus[i_kplus]; // Kplus
+	  for(Int_t i_kminus = 0; i_kminus < mKminus.size(); i_kminus++) // Kminus loop
+	  {
+	    TLorentzVector lKminus = mKminus[i_kminus]; // Kminus
+
+	    TLorentzVector lPhi = lKplus + lKminus; // phi candidate
+
+	    h_mPhi->Fill(lPhi.M());
+	  }
+	}
+
+#if 0
+	for(Int_t i_track = 0; i_track < Mult; i_track++) // 3rd track loop for phi reconstruction 
 	{
 	  if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
 	  track.SetXYZ(Px[i_track],Py[i_track],Pz[i_track]);
@@ -363,17 +377,6 @@ void AMPT_phi::Make()
 	  Float_t pt_track = track.Perp();
 	  Float_t phi_track = track.Phi(); // -pi to pi
 	  Float_t eta_track = track.Eta();
-
-	  // phi reconstruction
-
-	  if(PID[i_track] == 321) // K_plus
-	  {
-	    TLorentzVector lTrackA(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
-	    if(PID[i_track] == -321) // K_minus
-	    {
-	      TLorentzVector lTrackB(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
-	    }
-	  }
 
 	  // track selection
 	  if(TMath::Abs(eta_track) <= 1.0) // eta cut
@@ -404,12 +407,16 @@ void AMPT_phi::Make()
 	    }
 	  }
 	}
+#endif
 
 	// QA: 2nd event plane and centrality
 	h_mPsi2_East->Fill(Psi2_East);
 	h_mPsi2_West->Fill(Psi2_West);
 	h_mCentrality->Fill(cent9);
+	mKplus.clear();
+	mKminus.clear();
       }
+#if 0
       if( // 3rd track loop for v3 calculation
 	  !(Q3x_east == 0.0 && Q3y_east == 0.0) 
        && !(Q3x_west == 0.0 && Q3y_west == 0.0)
@@ -460,6 +467,7 @@ void AMPT_phi::Make()
 	h_mPsi3_East->Fill(Psi3_East);
 	h_mPsi3_West->Fill(Psi3_West);
       }
+#endif
     }
   }
 
@@ -481,6 +489,7 @@ void AMPT_phi::Finish()
   h_mPsi3_East->Write();
   h_mPsi3_West->Write();
   h_mCentrality->Write();
+  h_mPhi->Write();
   for(Int_t i_order = 0; i_order < 2; i_order++)
   {
     for(Int_t i_cent = 0; i_cent < 4; i_cent++)

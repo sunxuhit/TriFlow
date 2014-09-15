@@ -3,6 +3,7 @@
 #include "StMessMgr.h"
 #include "TString.h"
 #include <vector>
+#include "TLorentzVector.h"
 
 class TTree;
 class TChain;
@@ -52,6 +53,10 @@ class AMPT_phi
     TFile *mFile_OutPut;
     TFile *mFile_Res;
 
+    // store daughter particles of phi
+    std::vector<TLorentzVector> mKplus;
+    std::vector<TLorentzVector> mKminus;
+
     // QA Plot
     TH1F *h_mPart;
     TH1F *h_mMult;
@@ -62,6 +67,8 @@ class AMPT_phi
     TH1F *h_mPsi3_East;
     TH1F *h_mPsi3_West;
     TH1F *h_mCentrality;
+    // invariant mass distribution
+    TH1F *h_mPhi; 
 
     // resolution
     TProfile *p_mRes[2];

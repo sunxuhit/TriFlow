@@ -39,8 +39,8 @@ if [ $# -eq 0 ]
 ############################start_event#################################
 
 #############################stop_event#################################
-#      echo  1000000000')'"'" >> run$Name$counter.csh  # stop_event
-      echo  100024')'"'" >> run$Name$counter.csh  # stop_event: test mode
+      echo  1000000000')'"'" >> run$Name$counter.csh  # stop_event
+#      echo  100024')'"'" >> run$Name$counter.csh  # stop_event: test mode
 #############################stop_event#################################
 
       qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G,projectio=1 -o /project/projectdirs/star/xusun/OutPut/AMPT_Default/Log/run$Name$counter.log -e /project/projectdirs/star/xusun/OutPut/AMPT_Default/Log/run$Name$counter.err ./run$Name$counter.csh
