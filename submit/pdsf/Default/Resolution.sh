@@ -8,19 +8,19 @@ if [ $# -eq 0 ]
 #    counter=0
     Name="_Resolution_Default_"
     suffix=".root"
-    for((counter=0;counter<=11;counter=counter+1))
+    for((counter=0;counter<=9;counter=counter+1))
     do
       cp ./run.csh ./run$Name$counter.csh
 
       echo -n "root4star -b -q -x 'Resolution.C(" >> run$Name$counter.csh
 ###############################energy###################################
-#      echo -n 0',' >> run$Name$counter.csh  # 7GeV
+      echo -n 0',' >> run$Name$counter.csh  # 7GeV
 #      echo -n 1',' >> run$Name$counter.csh  # 11GeV
 #      echo -n 2',' >> run$Name$counter.csh  # 19GeV
 #      echo -n 3',' >> run$Name$counter.csh  # 27GeV
 #      echo -n 4',' >> run$Name$counter.csh  # 39GeV
 #      echo -n 5',' >> run$Name$counter.csh  # 62GeV
-      echo -n 6',' >> run$Name$counter.csh  # 200GeV
+#      echo -n 6',' >> run$Name$counter.csh  # 200GeV
 ###############################energy###################################
 
 
