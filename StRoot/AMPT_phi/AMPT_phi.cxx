@@ -414,23 +414,33 @@ void AMPT_phi::Make()
 
     if(cent9 > -1.0)
     {
+//      mKplus.clear();
+//      mKminus.clear();
       for(Int_t i_track = 0; i_track < Mult; i_track++) // 2nd track loop for K+ and K- selection
       {
 	if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
+
+//	track.SetXYZ(Px[i_track],Py[i_track],Pz[i_track]);
+//	Float_t eta_track = track.Eta();
+//	if(TMath::Abs(eta_track) > 1.8) continue; // select partile within TPC Acceptence 
 
 	// store Kaons
 	if(PID[i_track] == 321) // K_plus
 	{
 	  TLorentzVector ltrack;
-	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
+//	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
+	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],Mass[i_track]);
 	  if(ltrack.Pt() > 0.1 && ltrack.Mag() < 10.0) // pt and p cut
+//	  if(ltrack.Pt() > 1.0) // pt and p cut
 	    mKplus.push_back(static_cast<TLorentzVector>(ltrack));
 	}
 	if(PID[i_track] == -321) // K_minus
 	{
 	  TLorentzVector ltrack;
-	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
+//	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
+	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],Mass[i_track]);
 	  if(ltrack.Pt() > 0.1 && ltrack.Mag() < 10.0) // pt and p cut
+//	  if(ltrack.Pt() > 1.0) // pt and p cut
 	    mKminus.push_back(static_cast<TLorentzVector>(ltrack));
 	}
       }
