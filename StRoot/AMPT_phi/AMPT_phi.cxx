@@ -427,6 +427,7 @@ void AMPT_phi::Make()
 	// store Kaons
 	if(PID[i_track] == 321) // K_plus
 	{
+	  if(Mass[i_track] > AMPT_phi::mMassKaon + 0.002) continue;
 	  TLorentzVector ltrack;
 //	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
 	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],Mass[i_track]);
@@ -436,6 +437,7 @@ void AMPT_phi::Make()
 	}
 	if(PID[i_track] == -321) // K_minus
 	{
+	  if(Mass[i_track] > AMPT_phi::mMassKaon + 0.002) continue;
 	  TLorentzVector ltrack;
 //	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
 	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],Mass[i_track]);
