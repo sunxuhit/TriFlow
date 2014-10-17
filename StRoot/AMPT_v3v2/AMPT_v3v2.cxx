@@ -184,6 +184,11 @@ void AMPT_v3v2::Init()
       HistName = Form("Pt_K0s_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
       h_mPt_K0s[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),500,0.0,10.0);
 
+      ProName = Form("Flow_phi_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // phi
+      p_mFlow_phi[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
+      HistName = Form("Pt_phi_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
+      h_mPt_phi[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),500,0.0,10.0);
+
       // v2 relative to Reaction Plane
       ProName = Form("Flow_pi_plus_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
       p_mFlow_pi_plus_RP[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
@@ -211,6 +216,9 @@ void AMPT_v3v2::Init()
 
       ProName = Form("Flow_K0s_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // K0s
       p_mFlow_K0s_RP[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
+
+      ProName = Form("Flow_phi_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // phi 
+      p_mFlow_phi_RP[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),100,0.0,10.0);
     }
   }
 
@@ -472,6 +480,12 @@ void AMPT_v3v2::Make()
 		    p_mFlow_K0s_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_K0s[0][i_cent]->Fill(pt_track);
 		  }
+		  if(PID[i_track] == 333) // phi
+		  {
+		    p_mFlow_phi[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_phi_RP[0][i_cent]->Fill(pt_track,v2_RP);
+		    h_mPt_phi[0][i_cent]->Fill(pt_track);
+		  }
 		}
 	      }
 	    }
@@ -538,6 +552,12 @@ void AMPT_v3v2::Make()
 		    p_mFlow_K0s[0][i_cent]->Fill(pt_track,v2);
 		    p_mFlow_K0s_RP[0][i_cent]->Fill(pt_track,v2_RP);
 		    h_mPt_K0s[0][i_cent]->Fill(pt_track);
+		  }
+		  if(PID[i_track] == 333) // phi
+		  {
+		    p_mFlow_phi[0][i_cent]->Fill(pt_track,v2);
+		    p_mFlow_phi_RP[0][i_cent]->Fill(pt_track,v2_RP);
+		    h_mPt_phi[0][i_cent]->Fill(pt_track);
 		  }
 		}
 	      }
@@ -633,6 +653,12 @@ void AMPT_v3v2::Make()
 		    p_mFlow_K0s_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_K0s[1][i_cent]->Fill(pt_track);
 		  }
+		  if(PID[i_track] == 333) // phi
+		  {
+		    p_mFlow_phi[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_phi_RP[1][i_cent]->Fill(pt_track,v3_RP);
+		    h_mPt_phi[1][i_cent]->Fill(pt_track);
+		  }
 		}
 	      }
 	    }
@@ -700,6 +726,12 @@ void AMPT_v3v2::Make()
 		    p_mFlow_K0s_RP[1][i_cent]->Fill(pt_track,v3_RP);
 		    h_mPt_K0s[1][i_cent]->Fill(pt_track);
 		  }
+		  if(PID[i_track] == 333) // phi
+		  {
+		    p_mFlow_phi[1][i_cent]->Fill(pt_track,v3);
+		    p_mFlow_phi_RP[1][i_cent]->Fill(pt_track,v3_RP);
+		    h_mPt_phi[1][i_cent]->Fill(pt_track);
+		  }
 		}
 	      }
 	    }
@@ -745,6 +777,7 @@ void AMPT_v3v2::Finish()
       p_mFlow_Lambda[i_order][i_cent]->Write();
       p_mFlow_Lambdabar[i_order][i_cent]->Write();
       p_mFlow_K0s[i_order][i_cent]->Write();
+      p_mFlow_phi[i_order][i_cent]->Write();
 
       // v2 relative to Reaction Plane
       p_mFlow_pi_plus_RP[i_order][i_cent]->Write();
@@ -756,6 +789,7 @@ void AMPT_v3v2::Finish()
       p_mFlow_Lambda_RP[i_order][i_cent]->Write();
       p_mFlow_Lambdabar_RP[i_order][i_cent]->Write();
       p_mFlow_K0s_RP[i_order][i_cent]->Write();
+      p_mFlow_phi_RP[i_order][i_cent]->Write();
 
       h_mPt_pi_plus[i_order][i_cent]->Write();
       h_mPt_pi_minus[i_order][i_cent]->Write();
@@ -766,6 +800,7 @@ void AMPT_v3v2::Finish()
       h_mPt_Lambda[i_order][i_cent]->Write();
       h_mPt_Lambdabar[i_order][i_cent]->Write();
       h_mPt_K0s[i_order][i_cent]->Write();
+      h_mPt_phi[i_order][i_cent]->Write();
     }
   }
   mFile_OutPut->Close();
