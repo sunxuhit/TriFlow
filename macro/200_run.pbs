@@ -1,0 +1,9 @@
+#PBS -q serial
+#PBS -l walltime=48:00:00
+#PBS -N my_job
+#PBS -e /project/projectdirs/star/xusun/OutPut/AuAu200GeV/Log/Correction/Correction.$PBS_JOBID.err
+#PBS -o /project/projectdirs/star/xusun/OutPut/AuAu200GeV/Log/Correction/Correction.$PBS_JOBID.out
+#PBS -V
+
+starver SL11c
+cd /global/homes/x/xusun/Reference/gitrepo/Analysis_v3
