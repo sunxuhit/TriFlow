@@ -3,10 +3,26 @@
 #include "TProfile.h"
 #include "TH1F.h"
 
+Double_t ErrorAdd(Float_t x, Float_t y)
+{
+  return sqrt(x*x+y*y);
+}
+
+Double_t ErrTimes(Float_t x, Float_t y, Float_t dx, Float_t dy)
+{
+  return x*y*ErrorAdd(dx/x,dy/y);
+}
+
+Double_t ErrDiv(Float_t x, Float_t y, Float_t dx, Float_t dy)
+{
+  return x/y*ErrorAdd(dx/x,dy/y);
+}
+
 static TString Mode[2] = {"Default","StringMelting"};
 static TString Energy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
 static TString Order[2] = {"2nd","3rd"};
 static TString Centrality[4] = {"0080","0010","1040","4080"};
+static TString ParType[10] = {"pi_plus","pi_minus","K_plus","K_minus","p","pbar","Lambda","Lambdabar","K0s","phi"};
 
 // Calculate integrated v2 and v3
 void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19.6 GeV, 3: 27 GeV, 4: 39 GeV, 5: 62.4 GeV, 6: 200 GeV | 0: Default, 1: String Melting
@@ -23,106 +39,83 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2:
 
 
   // flow for pi, K, p, Lambda, K0s by using eta_sub event plane method
-  TProfile *p_mFlow_pi_plus[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
-  TProfile *p_mFlow_pi_minus[2][4];
-  TProfile *p_mFlow_K_plus[2][4];
-  TProfile *p_mFlow_K_minus[2][4];
-  TProfile *p_mFlow_p[2][4];
-  TProfile *p_mFlow_pbar[2][4];
-  TProfile *p_mFlow_Lambda[2][4];
-  TProfile *p_mFlow_Lambdabar[2][4];
-  TProfile *p_mFlow_K0s[2][4];
-  TProfile *p_mFlow_phi[2][4];
+  // pi_plus,pi_minus,K_plus,K_minus,p,pbar,Lambda,Lambdabar,K0s,phi
+  TProfile *p_mFlow[10][2][4]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
+  TH1F *h_mFlow[10][2][4]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
 
-  // pt spectra for pi, K, p, Lambda, K0s
-  TH1F *h_mPt_pi_plus[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
-  TH1F *h_mPt_pi_minus[2][4];
-  TH1F *h_mPt_K_plus[2][4];
-  TH1F *h_mPt_K_minus[2][4];
-  TH1F *h_mPt_p[2][4];
-  TH1F *h_mPt_pbar[2][4];
-  TH1F *h_mPt_Lambda[2][4];
-  TH1F *h_mPt_Lambdabar[2][4];
-  TH1F *h_mPt_K0s[2][4];
-  TH1F *h_mPt_phi[2][4];
+  // pt spectra 
+  TH1F *h_mPt[10][2][4]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
 
-  // Read flow TProfile
+  // Integrated v2 and v3
+  TH1F *h_mInteFlow[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
+
+
+  // Read in flow TProfile => transfer to TH1F | Read in pt Spectra
+  for(Int_t i_par = 0; i_par < 10; i_par++)
+  {
+    for(Int_t i_order = 0; i_order < 2; i_order++)
+    {
+      for(Int_t i_cent = 0; i_cent < 4; i_cent++)
+      {
+	TString ProName;
+	TString HistName;
+
+	// v2 relative to event plane
+	//--------------------------------------------------------------------------------------------------
+	ProName = Form("Flow_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
+	p_mFlow[i_par][i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
+	HistName = Form("h_Flow_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data());
+	h_mFlow[i_par][i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,0.0,10.0);
+	for(Int_t i_bin = 1; i_bin < 101; i_bin++)
+	{
+	  h_mFlow[i_par][i_order][i_cent]->SetBinContent(i_bin,p_mFlow[i_par][i_order][i_cent]->GetBinContent(i_bin));
+	  h_mFlow[i_par][i_order][i_cent]->SetBinError(i_bin,p_mFlow[i_par][i_order][i_cent]->GetBinError(i_bin));
+	}
+	HistName = Form("Pt_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data());
+	h_mPt[i_par][i_order][i_cent] = (TH1F*)File_input->Get(HistName.Data());
+	h_mPt[i_par][i_order][i_cent]->Rebin(5);
+	h_mFlow[i_par][i_order][i_cent]->Multiply(h_mPt[i_par][i_order][i_cent]);
+	//--------------------------------------------------------------------------------------------------
+      }
+    }
+  }
+
+  // Calculate Integrated v2 and v3 => could be merged into loop above => using individual loop to be more clear
   for(Int_t i_order = 0; i_order < 2; i_order++)
   {
     for(Int_t i_cent = 0; i_cent < 4; i_cent++)
     {
-      TString ProName;
-      TString HistName;
-
-      // v2 relative to event plane
-      ProName = Form("Flow_pi_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
-      p_mFlow_pi_plus[i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
-      HistName = Form("Pt_pi_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_pi_plus[i_order][i_cent] = (TH1F*)File_input->Get(HistName.Data());
-
-      ProName = Form("Flow_pi_minus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // pi_minus
-      p_mFlow_pi_minus[i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
-      HistName = Form("Pt_pi_minus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_pi_minus[i_order][i_cent] = (TH1F*)File_input->Get(HistName.Data());
-
-      ProName = Form("Flow_K_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // K_plus
-      p_mFlow_K_plus[i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
-      HistName = Form("Pt_K_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_K_plus[i_order][i_cent] = (TH1F*)File_input->Get(HistName.Data());
-
-      ProName = Form("Flow_K_minus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // K_minus
-      p_mFlow_K_minus[i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
-      HistName = Form("Pt_K_minus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_K_minus[i_order][i_cent] = (TH1F*)File_input->Get(HistName.Data());
-
-      ProName = Form("Flow_p_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // p
-      p_mFlow_p[i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
-      HistName = Form("Pt_p_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_p[i_order][i_cent] = (TH1F*)File_input->Get(HistName.Data());
-
-      ProName = Form("Flow_pbar_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // pbar
-      p_mFlow_pbar[i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
-      HistName = Form("Pt_pbar_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_pbar[i_order][i_cent] = (TH1F*)File_input->Get(HistName.Data());
-
-      ProName = Form("Flow_Lambda_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // Lambda
-      p_mFlow_Lambda[i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
-      HistName = Form("Pt_Lambda_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_Lambda[i_order][i_cent] = (TH1F*)File_input->Get(HistName.Data());
-
-      ProName = Form("Flow_Lambdabar_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // Lambdabar
-      p_mFlow_Lambdabar[i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
-      HistName = Form("Pt_Lambdabar_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_Lambdabar[i_order][i_cent] = (TH1F*)File_input->Get(HistName.Data());
-
-      ProName = Form("Flow_K0s_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // K0s
-      p_mFlow_K0s[i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
-      HistName = Form("Pt_K0s_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_K0s[i_order][i_cent] = (TH1F*)File_input->Get(HistName.Data());
-
-      ProName = Form("Flow_phi_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // phi
-      p_mFlow_phi[i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
-      HistName = Form("Pt_phi_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_phi[i_order][i_cent] = (TH1F*)File_input->Get(HistName.Data());
+      TString HistName = Form("h_mInteFlow_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
+      h_mInteFlow[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),10,-0.5,9.5);
+      for(Int_t i_par = 0; i_par < 10; i_par++)
+      {
+	Double_t Inte_flow = 0.0;
+	Double_t Err_flow  = 0.0;
+	Double_t Inte_spec = 0.0;
+	Double_t Err_spec  = 0.0;
+	Inte_flow = h_mFlow[i_par][i_order][i_cent]->IntegralAndError(h_mFlow[i_par][i_order][i_cent]->FindBin(pt_start),h_mFlow[i_par][i_order][i_cent]->FindBin(pt_stop),Err_flow,"width");
+	Inte_spec = h_mPt[i_par][i_order][i_cent]->IntegralAndError(h_mPt[i_par][i_order][i_cent]->FindBin(pt_start),h_mPt[i_par][i_order][i_cent]->FindBin(pt_stop),Err_spec,"width");
+	if(Inte_spec != 0.0)
+	{
+	  Double_t Err_ratio = ErrDiv(Inte_flow,Inte_spec,Err_flow,Err_spec);
+	  h_mInteFlow[i_order][i_cent]->SetBinContent(i_par+1,Inte_flow/Inte_spec);
+	  h_mInteFlow[i_order][i_cent]->SetBinError(i_par+1,Err_ratio);
+	}
+      }
     }
   }
 
-  TH1F *h_test = new TH1F("h_test","h_test",100,0.0,10.0);
-  for(Int_t i_bin = 1; i_bin < 101; i_bin++)
+  // write Histogram into Output file
+  TString outputfile = Form("/home/xusun/Data/AMPT_%s/InteFlow/%s_%s/InteFlow.root",Mode[mMode].Data(),Energy[mEnergy].Data(),Mode[mMode].Data(),Energy[mEnergy].Data());
+  TFile *File_output = new TFile(outputfile.Data(),"RECREATE");
+  File_output->cd();
+  for(Int_t i_order = 0; i_order < 2; i_order++)
   {
-    h_test->SetBinContent(i_bin,p_mFlow_pi_plus[0][1]->GetBinContent(i_bin));
-    h_test->SetBinError(i_bin,p_mFlow_pi_plus[0][1]->GetBinError(i_bin));
+    for(Int_t i_cent = 0; i_cent < 4; i_cent++)
+    {
+      h_mInteFlow[i_order][i_cent]->Write();
+    }
   }
 
-  TH1F *h_mult = h_test->Clone("h_mult");;
-  h_mPt_pi_plus[0][1]->Rebin(5);
-  h_mult->Multiply(h_mPt_pi_plus[0][1]);
-  h_mult->SetLineColor(2);
-  h_mult->Draw("pE");
-  h_mPt_pi_plus[0][1]->Draw("pE same");
-
-  h_test->SetMarkerColor(2);
-  h_test->SetMarkerStyle(24);
-  h_test->SetMarkerSize(1.0);
-  h_test->Draw("pE same");
+  File_output->Close();
 }
