@@ -432,7 +432,6 @@ void AMPT_phi::Make()
 //	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
 	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],Mass[i_track]);
 	  if(ltrack.Pt() > 0.1 && ltrack.Mag() < 10.0) // pt and p cut
-//	  if(ltrack.Pt() > 1.0) // pt and p cut
 	    mKplus.push_back(static_cast<TLorentzVector>(ltrack));
 	}
 	if(PID[i_track] == -321) // K_minus
@@ -442,7 +441,6 @@ void AMPT_phi::Make()
 //	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],AMPT_phi::mMassKaon);
 	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],Mass[i_track]);
 	  if(ltrack.Pt() > 0.1 && ltrack.Mag() < 10.0) // pt and p cut
-//	  if(ltrack.Pt() > 1.0) // pt and p cut
 	    mKminus.push_back(static_cast<TLorentzVector>(ltrack));
 	}
       }
