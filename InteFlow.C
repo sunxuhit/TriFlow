@@ -65,8 +65,8 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2:
 	ProName = Form("Flow_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
 	p_mFlow[i_par][i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
 	HistName = Form("h_Flow_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data());
-	h_mFlow[i_par][i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,0.0,10.0);
-	for(Int_t i_bin = 1; i_bin < 101; i_bin++)
+	h_mFlow[i_par][i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+	for(Int_t i_bin = 1; i_bin < 26; i_bin++)
 	{
 	  h_mFlow[i_par][i_order][i_cent]->SetBinContent(i_bin,p_mFlow[i_par][i_order][i_cent]->GetBinContent(i_bin));
 	  h_mFlow[i_par][i_order][i_cent]->SetBinError(i_bin,p_mFlow[i_par][i_order][i_cent]->GetBinError(i_bin));
@@ -104,13 +104,23 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2:
     }
   }
 
+  // Calculate ratio of integrated v2 and v3
+  TH1F *h_ratio[4];
+  for(Int_t i_cent = 0; i_cent < 4; i_cent++)
+  {
+    TString HistName = Form("h_ratio_%s",Centrality[i_cent].Data());
+    h_ratio[i_cent] = (TH1F*)h_mInteFlow[0][i_cent]->Clone(HistName.Data());
+    h_ratio[i_cent]->Divide(h_mInteFlow[1][i_cent]);
+  }
+
   // write Histogram into Output file
   TString outputfile = Form("/home/xusun/Data/AMPT_%s/InteFlow/%s_%s/InteFlow.root",Mode[mMode].Data(),Energy[mEnergy].Data(),Mode[mMode].Data(),Energy[mEnergy].Data());
   TFile *File_output = new TFile(outputfile.Data(),"RECREATE");
   File_output->cd();
-  for(Int_t i_order = 0; i_order < 2; i_order++)
+  for(Int_t i_cent = 0; i_cent < 4; i_cent++)
   {
-    for(Int_t i_cent = 0; i_cent < 4; i_cent++)
+    h_ratio[i_cent]->Write();
+    for(Int_t i_order = 0; i_order < 2; i_order++)
     {
       h_mInteFlow[i_order][i_cent]->Write();
     }
