@@ -27,7 +27,8 @@ void Centrality(Int_t i_Energy,Int_t Mode) // 0: 7GeV, 1: 11GeV, 2: 19GeV, 3: 27
   Float_t Centrality_stop[9]  = {0.8,0.7,0.6,0.5,0.4,0.3,0.2, 0.1,0.05};
 //  Float_t Centrality_start[9] = {0.0,0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7};
 //  Float_t Centrality_stop[9]  = {0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8};
-  TString inputfile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Resolution/%s_Resolution/Resolution_%s.root",Mode_AMPT[Mode].Data(),Energy[i_Energy].Data(),Energy[i_Energy].Data());
+//  TString inputfile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Resolution/%s_Resolution/Resolution_%s.root",Mode_AMPT[Mode].Data(),Energy[i_Energy].Data(),Energy[i_Energy].Data());
+  TString inputfile = Form("/home/xusun/Data/AMPT_%s/Resolution/%s_Resolution/Resolution_%s.root",Mode_AMPT[Mode].Data(),Energy[i_Energy].Data(),Energy[i_Energy].Data());
   TFile *file_input = TFile::Open(inputfile.Data());
   cout << inputfile.Data() << endl;
   TH1F *h_refMult = (TH1F*)file_input->Get("h_mRefMult");
