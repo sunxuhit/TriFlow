@@ -65,7 +65,7 @@ void DiffFlow(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2:
 	ProName = Form("Flow_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
 	p_mFlow[i_par][i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
 	HistName = Form("h_Flow_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data());
-	h_mFlow[i_par][i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,0.0,10.0);
+	h_mFlow[i_par][i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
 	for(Int_t i_bin = 1; i_bin < 101; i_bin++)
 	{
 	  h_mFlow[i_par][i_order][i_cent]->SetBinContent(i_bin,p_mFlow[i_par][i_order][i_cent]->GetBinContent(i_bin));
