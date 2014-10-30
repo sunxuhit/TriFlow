@@ -29,7 +29,7 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2:
 {
   //---------------------Constant------------------------
   const Float_t pt_start = 0.2; // start point for pt integration
-  const Float_t pt_stop  = 3.0; // stop point for pt integration
+  const Float_t pt_stop  = 2.0; // stop point for pt integration
   //---------------------Constant------------------------
 
   TString inputfile = Form("/home/xusun/Data/AMPT_%s/Flow/%s_%s/Flow_%s.root",Mode[mMode].Data(),Energy[mEnergy].Data(),Mode[mMode].Data(),Energy[mEnergy].Data());

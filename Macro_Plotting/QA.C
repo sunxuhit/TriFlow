@@ -287,7 +287,8 @@ void QA(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19.6 
   h_mPsi3_West->SetTitle("");
   h_mPsi3_West->SetStats(0);
   h_mPsi3_West->GetXaxis()->SetRangeUser(-2.0,2.0);
-  h_mPsi3_West->GetYaxis()->SetRangeUser(30000,100000);
+//  h_mPsi3_West->GetYaxis()->SetRangeUser(30000,100000);
+  h_mPsi3_West->GetYaxis()->SetRangeUser(h_mPsi3_West->GetMaximum()/2.0,h_mPsi3_West->GetMaximum()*1.5);
   h_mPsi3_West->GetXaxis()->SetTitle("#Psi_{3,West}");
   h_mPsi3_West->GetYaxis()->SetTitle("N_{events}");
   h_mPsi3_West->GetXaxis()->SetTitleSize(0.06);

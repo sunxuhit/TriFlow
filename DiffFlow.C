@@ -46,10 +46,6 @@ void DiffFlow(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2:
   // pt spectra 
   TH1F *h_mPt[10][2][4]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
 
-  // Integrated v2 and v3
-  TH1F *h_mInteFlow[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
-
-
   // Read in flow TProfile => transfer to TH1F | Read in pt Spectra
   for(Int_t i_par = 0; i_par < 10; i_par++)
   {
