@@ -193,7 +193,7 @@ static TString ParType[10] = {"pi_plus","pi_minus","K_plus","K_minus","p","pbar"
 static TString ParName[5] = {"#pi","K","p","#phi","#Lambda"};
 
 // Calculate integrated v2 and v3
-void ratio(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19.6 GeV, 3: 27 GeV, 4: 39 GeV, 5: 62.4 GeV, 6: 200 GeV | 0: Default, 1: String Melting
+void ratio(Int_t mEnergy = 4, Int_t mMode = 1) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19.6 GeV, 3: 27 GeV, 4: 39 GeV, 5: 62.4 GeV, 6: 200 GeV | 0: Default, 1: String Melting
 {
   gStyle->SetTitleX(0.55);
   gStyle->SetTitleY(0.98);
@@ -249,5 +249,6 @@ void ratio(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19
   PlotLine(0.42,0.59,4.1,4.1,2,2,2);
   plotTopLegend("Data",0.7,4.07,0.04,1,0.0,42,0);
 
-  c_play->SaveAs("./figures/c_ratio_AMPT.eps");
+  TString CanName = Form("./figures/c_ratio_AMPT_%s.eps",Mode[mMode].Data());
+  c_play->SaveAs(CanName.Data());
 }
