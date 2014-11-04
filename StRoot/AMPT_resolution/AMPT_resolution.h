@@ -37,8 +37,8 @@ class AMPT_resolution // TODO: change the Tree structure
     static TString mBeamEnergy[7];
     static TString mMode_AMPT[2];
     static Int_t mCentrality[2][7][10]; // centrality definition
-    static Int_t mList_start[15];
-    static Int_t mList_stop[15];
+    static Int_t mList_start[20];
+    static Int_t mList_stop[20];
     TProfile *p_mRes2;
     TProfile *p_mRes3;
     TFile *mFile_OutPut;
