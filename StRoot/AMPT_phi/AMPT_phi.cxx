@@ -213,11 +213,11 @@ void AMPT_phi::FillHist3rd(Float_t pt_track, Int_t cent9, Float_t phi_psi, Float
 //------------------------------------------------------------
 void AMPT_phi::clear_phi(Int_t cent9)
 {
-  mEventCounter = 0;
-  mQ2East[i_cent].clear();
-  mQ2West[i_cent].clear();
-  mQ3East[i_cent].clear();
-  mQ3West[i_cent].clear();
+  mEventCounter[cent9] = 0;
+  mQ2East[cent9].clear();
+  mQ2West[cent9].clear();
+  mQ3East[cent9].clear();
+  mQ3West[cent9].clear();
 //  mRefMult[cent9].clear();
   mCentrality[cent9].clear();
 
@@ -434,6 +434,8 @@ void AMPT_phi::Make()
 
     if(cent9 > -1.0)
     {
+      Int_t Bin_Event = mEventCounter[cent9];
+
       // calculate event plane angle 
       Float_t Psi2_East = TMath::ATan2(Q2y_east,Q2x_east)/2.0; // 2nd: -pi/2 to pi/2
       Float_t Psi2_West = TMath::ATan2(Q2y_west,Q2x_west)/2.0;
@@ -455,7 +457,7 @@ void AMPT_phi::Make()
 
       //    cout << "refmult = " << refmult << ", centrality = " << cent9 << endl;
 
-      for(int_t i_track = 0; i_track < mult; i_track++) // 2nd track loop for k+ and k- selection
+      for(Int_t i_track = 0; i_track < Mult; i_track++) // 2nd track loop for k+ and k- selection
       {
 	if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
 
@@ -470,7 +472,7 @@ void AMPT_phi::Make()
 	  TLorentzVector ltrack;
 	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],Mass[i_track]);
 	  if(ltrack.Pt() > 0.1 && ltrack.Mag() < 10.0) // pt and p cut
-	    mKplus[cent9][mEventCounter].push_back(static_cast<TLorentzVector>(ltrack));
+	    mKplus[cent9][Bin_Event].push_back(static_cast<TLorentzVector>(ltrack));
 	}
 	if(PID[i_track] == -321) // K_minus
 	{
@@ -478,22 +480,22 @@ void AMPT_phi::Make()
 	  TLorentzVector ltrack;
 	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],Mass[i_track]);
 	  if(ltrack.Pt() > 0.1 && ltrack.Mag() < 10.0) // pt and p cut
-	    mKminus[cent9][mEventCounter].push_back(static_cast<TLorentzVector>(ltrack));
+	    mKminus[cent9][Bin_Event].push_back(static_cast<TLorentzVector>(ltrack));
 	}
       }
 
-      mEventCounter++;
+      mEventCounter[cent9]++;
 
       if(mFlag_ME == 0) // same event
       {
-	doPhi(mFlag_ME,cent9);
+	doPhi(cent9);
 	clear_phi(cent9);
       }
       if(mFlag_ME == 1) // mixed event
       {
 	if(mEventCounter[cent9] == AMPT_phi::Buffer_depth)
 	{
-	  doPhi(mFlag_ME,cent9);
+	  doPhi(cent9);
 	  clear_phi(cent9);
 	}
       }
@@ -509,7 +511,7 @@ void AMPT_phi::doPhi(Int_t cent9)
 {
   if(mFlag_ME == 0)
   {
-    for(Int_t Bin_Event = 0; Bin_Event < mEventCounter; Bin_Event++)
+    for(Int_t Bin_Event = 0; Bin_Event < mEventCounter[cent9]; Bin_Event++)
     {
       for(Int_t i_kplus = 0; i_kplus < mKplus[cent9][Bin_Event].size(); i_kplus++)
       {

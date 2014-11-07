@@ -79,7 +79,7 @@ class AMPT_phi
     static Int_t Phi_Psi_total;
 
     // mixed event
-    Int_t Buffer_depth;
+    static Int_t Buffer_depth;
     Int_t mEventCounter[9]; // centrality bin
     std::vector<TVector2> mQ2East[9]; // 0 = centrality bin | push_back->event
     std::vector<TVector2> mQ2West[9];
