@@ -85,7 +85,7 @@ class AMPT_phi
     std::vector<TVector2> mQ2West[9];
     std::vector<TVector2> mQ3East[9];
     std::vector<TVector2> mQ3West[9];
-    std::vector<Int_t> mRefMult[9];
+//    std::vector<Int_t> mRefMult[9];
     std::vector<Int_t> mCentrality[9];
     // store daughter particles of phi
     std::vector<TLorentzVector> mKplus[9][5]; // 0 = centrality bin, 1 = event bin | push_back->track

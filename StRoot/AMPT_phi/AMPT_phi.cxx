@@ -218,7 +218,7 @@ void AMPT_phi::clear_phi(Int_t cent9)
   mQ2West[i_cent].clear();
   mQ3East[i_cent].clear();
   mQ3West[i_cent].clear();
-  mRefMult[cent9].clear();
+//  mRefMult[cent9].clear();
   mCentrality[cent9].clear();
 
   for(Int_t i_event = 0; i_event < AMPT_phi::Buffer_depth; i_event++)
@@ -450,7 +450,7 @@ void AMPT_phi::Make()
       mQ2West[cent9].push_back(static_cast<TVector2>(Q2West));
       mQ3East[cent9].push_back(static_cast<TVector2>(Q3East));
       mQ3West[cent9].push_back(static_cast<TVector2>(Q3West));
-      mRefMult[cent9].push_back(static_cast<Int_t>(refMult));
+//      mRefMult[cent9].push_back(static_cast<Int_t>(refMult));
       mCentrality[cent9].push_back(static_cast<Int_t>(cent9));
 
       //    cout << "refmult = " << refmult << ", centrality = " << cent9 << endl;
