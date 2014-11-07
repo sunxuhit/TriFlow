@@ -513,8 +513,14 @@ void AMPT_phi::doPhi(Int_t cent9)
     {
       for(Int_t i_kplus = 0; i_kplus < mKplus[cent9][Bin_Event].size(); i_kplus++)
       {
+	TLorentzVector ltrack_Kplus = mKplus[cent9][Bin_Event][i_kplus];
 	for(Int_t i_kminus = 0; i_kminus < mKminus[cent9][Bin_Event].size(); i_kminus++)
 	{
+	  TLorentzVector ltrack_Kminus = mKminus[cent9][Bin_Event][i_kminus];
+
+	  TLorentzVector ltrack_phi = ltrack_Kplus + ltrack_Kminus;
+	  Float_t InvMass = ltrack_phi.M();
+	  h_mPhi->Fill(InvMass);
 	}
       }
     }
