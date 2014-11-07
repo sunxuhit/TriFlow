@@ -462,7 +462,7 @@ void AMPT_phi::Make()
 	if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
 
 	track.SetXYZ(Px[i_track],Py[i_track],Pz[i_track]);
-	float_t eta_track = track.Eta();
+	Float_t eta_track = track.Eta();
 	if(TMath::Abs(eta_track) > 1.8) continue; // select partile within tpc acceptence 
 
 	// store kaons
