@@ -554,9 +554,9 @@ void AMPT_phi::Finish()
       {
 	for(Int_t i_phi_psi = 0; i_phi_psi < 7; i_phi_psi++)
 	{
-	  h_mFlow_phi[i_order][i_cent][i_pt][i_phi_psi]->Write();
+//	  h_mFlow_phi[i_order][i_cent][i_pt][i_phi_psi]->Write();
 	}
-	h_mPt_phi[i_order][i_cent][i_pt]->Write();
+//	h_mPt_phi[i_order][i_cent][i_pt]->Write();
       }
     }
   }
