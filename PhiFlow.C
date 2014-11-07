@@ -8,7 +8,7 @@ void PhiFlow(const Int_t Energy = 4, const Int_t Mode = 0, const Int_t List = 0,
   cout << "All libraries are loaded!!!!" << endl;
   cout << "Start to Calculate Flow!!" << endl;
 
-  AMPT_phi *mPhiFlow = new AMPT_phi(Energy,Mode,List,StartEvent,StopEvent);
+  AMPT_phi *mPhiFlow = new AMPT_phi(Energy,Mode,List,StartEvent,StopEvent,Flag_ME);
   mPhiFlow->Init();
   mPhiFlow->Make();
   mPhiFlow->Finish();
