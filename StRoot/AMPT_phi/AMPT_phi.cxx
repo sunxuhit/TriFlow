@@ -431,8 +431,8 @@ void AMPT_phi::Make()
     h_mRefMult->Fill(refMult); // fill refMult distribution
 
     Int_t cent9 = getCentrality(refMult);
-    Float_t res2 = getResolution(0,cent9);
-    Float_t res3 = getResolution(1,cent9);
+//    Float_t res2 = getResolution(0,cent9);
+//    Float_t res3 = getResolution(1,cent9);
 
     if(cent9 > -1.0)
     {
@@ -517,6 +517,8 @@ void AMPT_phi::Make()
 //------------------------------------------------------------
 void AMPT_phi::doPhi(Int_t cent9)
 {
+  Float_t res2 = getResolution(0,cent9);
+  Float_t res3 = getResolution(1,cent9);
   if(mFlag_ME == 0)
   {
     for(Int_t Bin_Event = 0; Bin_Event < mEventCounter[cent9]; Bin_Event++)

@@ -8,3 +8,4 @@ StRoot/AMPT_resolution/Centrality_C.d
 StRoot/AMPT_phi/.consign
 StRoot/AMPT_resolution/*.eps
 Macro_Plotting/figures/*.eps
+StRoot/*/*.swp
