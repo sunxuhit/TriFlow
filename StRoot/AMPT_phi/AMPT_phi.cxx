@@ -224,7 +224,9 @@ void AMPT_phi::clear_phi(Int_t cent9)
   for(Int_t i_event = 0; i_event < AMPT_phi::Buffer_depth; i_event++)
   {
     mKplus[cent9][i_event].clear();
+    mFlag_Kplus[cent9][i_event].clear();
     mKminus[cent9][i_event].clear();
+    mFlag_Kminus[cent9][i_event].clear();
   }
 }
 //------------------------------------------------------------
@@ -437,10 +439,10 @@ void AMPT_phi::Make()
       Int_t Bin_Event = mEventCounter[cent9];
 
       // calculate event plane angle 
-      Float_t Psi2_East = TMath::ATan2(Q2y_east,Q2x_east)/2.0; // 2nd: -pi/2 to pi/2
-      Float_t Psi2_West = TMath::ATan2(Q2y_west,Q2x_west)/2.0;
-      Float_t Psi3_East = TMath::ATan2(Q3y_east,Q3x_east)/3.0; // 3rd: -pi/3 to pi/3
-      Float_t Psi3_West = TMath::ATan2(Q3y_west,Q3x_west)/3.0;
+//      Float_t Psi2_East = TMath::ATan2(Q2y_east,Q2x_east)/2.0; // 2nd: -pi/2 to pi/2
+//      Float_t Psi2_West = TMath::ATan2(Q2y_west,Q2x_west)/2.0;
+//      Float_t Psi3_East = TMath::ATan2(Q3y_east,Q3x_east)/3.0; // 3rd: -pi/3 to pi/3
+//      Float_t Psi3_West = TMath::ATan2(Q3y_west,Q3x_west)/3.0;
 
       // save Q-Vector, refMult and Centrality
       TVector2 Q2East(Q2x_east,Q2y_east);
@@ -472,7 +474,10 @@ void AMPT_phi::Make()
 	  TLorentzVector ltrack;
 	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],Mass[i_track]);
 	  if(ltrack.Pt() > 0.1 && ltrack.Mag() < 10.0) // pt and p cut
+	  {
 	    mKplus[cent9][Bin_Event].push_back(static_cast<TLorentzVector>(ltrack));
+	    mFlag_Kplus[cent9][Bin_Event].push_back(static_cast<Int_t>(Bin_Event)); // Flag to determine self-correlation, important for Mixed Event
+	  }
 	}
 	if(PID[i_track] == -321) // K_minus
 	{
@@ -480,7 +485,10 @@ void AMPT_phi::Make()
 	  TLorentzVector ltrack;
 	  ltrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],Mass[i_track]);
 	  if(ltrack.Pt() > 0.1 && ltrack.Mag() < 10.0) // pt and p cut
+	  {
 	    mKminus[cent9][Bin_Event].push_back(static_cast<TLorentzVector>(ltrack));
+	    mFlag_Kminus[cent9][Bin_Event].push_back(static_cast<Int_t>(Bin_Event)); // Flag to determine self-correlation, important for Mixed Event
+	  }
 	}
       }
 
@@ -513,16 +521,61 @@ void AMPT_phi::doPhi(Int_t cent9)
   {
     for(Int_t Bin_Event = 0; Bin_Event < mEventCounter[cent9]; Bin_Event++)
     {
-      for(Int_t i_kplus = 0; i_kplus < mKplus[cent9][Bin_Event].size(); i_kplus++)
+      for(Int_t i_kplus = 0; i_kplus < mKplus[cent9][Bin_Event].size(); i_kplus++) // K_plus loop
       {
 	TLorentzVector ltrack_Kplus = mKplus[cent9][Bin_Event][i_kplus];
-	for(Int_t i_kminus = 0; i_kminus < mKminus[cent9][Bin_Event].size(); i_kminus++)
+	for(Int_t i_kminus = 0; i_kminus < mKminus[cent9][Bin_Event].size(); i_kminus++) // K_minus loop
 	{
 	  TLorentzVector ltrack_Kminus = mKminus[cent9][Bin_Event][i_kminus];
 
-	  TLorentzVector ltrack_phi = ltrack_Kplus + ltrack_Kminus;
+	  TLorentzVector ltrack_phi = ltrack_Kplus + ltrack_Kminus; // reconstructed phi meson
+	  h_mPhi->Fill(ltrack_phi.M()); // QA for phi reconstruction
+
+	  if(ltrack_phi.Px() == 0. && ltrack_phi.Py() == 0.) continue;
+
 	  Float_t InvMass = ltrack_phi.M();
-	  h_mPhi->Fill(InvMass);
+	  Float_t pt_track = ltrack_phi.Perp(); // pt of phi-meson
+	  Float_t phi_track = ltrack_phi.Phi(); // -pi to pi
+	  Float_t eta_track = ltrack_phi.Eta(); // eta of phi-meson
+
+	  if(TMath::Abs(eta_track) <= 1.0) // eta cut
+	  {
+	    if(eta_track < 0.0) // east track => west event plane
+	    {// subtract self-correlation from daughter particle who determined west event plane
+	      TVector2 Q2West = mQ2West[cent9][Bin_Event];
+	      TVector2 Q3West = mQ3West[cent9][Bin_Event];
+	      if(ltrack_Kplus.Eta() > 0.05 && ltrack_Kplus.Eta() <= 1.0 && ltrack_Kplus.Perp() > 0.2 && ltrack_Kplus.Perp() < 2.0) // check K_plus
+	      {
+		Float_t q2x_Kplus = ltrack_Kplus.Perp()*TMath::Cos(2.0*ltrack_Kplus.Phi()); // 2nd event plane
+		Float_t q2y_Kplus = ltrack_Kplus.Perp()*TMath::Sin(2.0*ltrack_Kplus.Phi());
+		TVector2 q2_Kplus(q2x_Kplus,q2y_Kplus); 
+		Q2West = Q2West - q2_Kplus;
+
+		Float_t q3x_Kplus = ltrack_Kplus.Perp()*TMath::Cos(3.0*ltrack_Kplus.Phi()); // 3rd event plane
+		Float_t q3y_Kplus = ltrack_Kplus.Perp()*TMath::Sin(3.0*ltrack_Kplus.Phi());
+		TVector2 q3_Kplus(q3x_Kplus,q3y_Kplus); 
+		Q3West = Q3West - q3_Kplus;
+	      }
+	      if(ltrack_Kminus.Eta() > 0.05 && ltrack_Kminus.Eta() <= 1.0 && ltrack_Kminus.Perp() > 0.2 && ltrack_Kminus.Perp() < 2.0) // check K_minus
+	      {
+		Float_t q2x_Kminus = ltrack_Kminus.Perp()*TMath::Cos(2.0*ltrack_Kminus.Phi()); // 2nd event plane
+		Float_t q2y_Kminus = ltrack_Kminus.Perp()*TMath::Sin(2.0*ltrack_Kminus.Phi());
+		TVector2 q2_Kminus(q2x_Kminus,q2y_Kminus); 
+		Q2West = Q2West - q2_Kminus;
+
+		Float_t q3x_Kminus = ltrack_Kminus.Perp()*TMath::Cos(3.0*ltrack_Kminus.Phi()); // 3rd event plane
+		Float_t q3y_Kminus = ltrack_Kminus.Perp()*TMath::Sin(3.0*ltrack_Kminus.Phi());
+		TVector2 q3_Kminus(q3x_Kminus,q3y_Kminus); 
+		Q3West = Q3West - q3_Kminus;
+	      }
+	      Float_t Psi2_West = TMath::ATan2(Q2West.Y(),Q2West.X())/2.0;
+	      Float_t phi_psi2 = phi_track - Psi2_West;
+	      FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
+	    }
+	    if(eta_track > 0.0) // west track => east event plane
+	    {
+	    }
+	  }
 	}
       }
     }
@@ -554,7 +607,7 @@ void AMPT_phi::Finish()
       {
 	for(Int_t i_phi_psi = 0; i_phi_psi < 7; i_phi_psi++)
 	{
-//	  h_mFlow_phi[i_order][i_cent][i_pt][i_phi_psi]->Write();
+	  h_mFlow_phi[i_order][i_cent][i_pt][i_phi_psi]->Write();
 	}
 //	h_mPt_phi[i_order][i_cent][i_pt]->Write();
       }

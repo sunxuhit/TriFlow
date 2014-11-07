@@ -88,8 +88,10 @@ class AMPT_phi
 //    std::vector<Int_t> mRefMult[9];
     std::vector<Int_t> mCentrality[9];
     // store daughter particles of phi
-    std::vector<TLorentzVector> mKplus[9][5]; // 0 = centrality bin, 1 = event bin | push_back->track
+    std::vector<TLorentzVector> mKplus[9][5]; // 0 = centrality bin, 1 = event bin | push_back->track(4-Vector)
     std::vector<TLorentzVector> mKminus[9][5];
+    std::vector<Int_t> mFlag_Kplus[9][5]; // 0 = centrality bin, 1 = event bin | push_back->track(mEventCounter)
+    std::vector<Int_t> mFlag_Kminus[9][5];
 
     // QA Plot
     TH1F *h_mPart;
