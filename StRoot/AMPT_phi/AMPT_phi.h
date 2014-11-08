@@ -103,8 +103,8 @@ class AMPT_phi
     TH1F *h_mPsi3_East;
     TH1F *h_mPsi3_West;
     TH1F *h_mCentrality;
-    // invariant mass distribution
-    TH1F *h_mPhi; 
+    // invariant mass distribution for resolution correction
+    TH1F *h_mPhi[9]; 
 
     // resolution
     TProfile *p_mRes[2];

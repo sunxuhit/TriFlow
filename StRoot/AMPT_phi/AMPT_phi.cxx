@@ -245,7 +245,6 @@ void AMPT_phi::Init()
 
   mFile_OutPut = new TFile(mOutPutFile.Data(),"RECREATE");
 
-  // flow TProfile
   for(Int_t i_order = 0; i_order < 2; i_order++)
   {
     for(Int_t i_cent = 0; i_cent < 4; i_cent++)
@@ -260,12 +259,19 @@ void AMPT_phi::Init()
 	  // Flow relative to event plane
 	  HistName = Form("Flow_phi_%s_%s_pt_%d_phi_Psi_%d",Order[i_order].Data(),Centrality[i_cent].Data(),i_pt,i_phi_psi); // phi
 	  h_mFlow_phi[i_order][i_cent][i_pt][i_phi_psi] = new TH1F(HistName.Data(),HistName.Data(),400,0.98,1.05);; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80% | pt bin | phi-Psi bin
+	  h_mFlow_phi[i_order][i_cent][i_pt][i_phi_psi]->Sumw2();
 	}
 	// Pt spectra
 	HistName = Form("Pt_phi_%s_%s_pt_%d",Order[i_order].Data(),Centrality[i_cent].Data(),i_pt);
 	h_mPt_phi[i_order][i_cent][i_pt] = new TH1F(HistName.Data(),HistName.Data(),200,0.98,1.05);
+	h_mPt_phi[i_order][i_cent][i_pt]->Sumw2();
       }
     }
+  }
+  for(Int_t i_cent = 0; i_cent < 9; i_cent++) // phi Yields vs Centrality => resolution correction
+  {
+    TString HistName = Form("h_mPhi_%d",i_cent);
+    h_mPhi[i_cent] = new TH1F(HistName.Data(),HistName.Data(),400,0.98,1.05);
   }
 
   // QA Plot
@@ -278,7 +284,6 @@ void AMPT_phi::Init()
   h_mPsi3_East = new TH1F("h_mPsi3_East","h_mPsi3_East",100,-TMath::Pi(),TMath::Pi());
   h_mPsi3_West = new TH1F("h_mPsi3_West","h_mPsi3_West",100,-TMath::Pi(),TMath::Pi());
   h_mCentrality = new TH1F("h_mCentrality","h_mCentrality",9,-0.5,8.5);
-  h_mPhi = new TH1F("h_mPhi","h_mPhi",500,0.98,1.05);
 
   // initialize the TChain
   if (!mInPutList.IsNull())   // if input file is ok
@@ -531,7 +536,7 @@ void AMPT_phi::doPhi(Int_t cent9)
 	  TLorentzVector ltrack_Kminus = mKminus[cent9][Bin_Event][i_kminus];
 
 	  TLorentzVector ltrack_phi = ltrack_Kplus + ltrack_Kminus; // reconstructed phi meson
-	  h_mPhi->Fill(ltrack_phi.M()); // QA for phi reconstruction
+	  h_mPhi[cent9]->Fill(ltrack_phi.M()); // QA for phi reconstruction
 
 	  if(ltrack_phi.Px() == 0. && ltrack_phi.Py() == 0.) continue;
 
@@ -634,7 +639,7 @@ void AMPT_phi::doPhi(Int_t cent9)
 	    TLorentzVector ltrack_Kminus_B = mKminus[cent9][Bin_Event_B][i_kminus_B];
 
 	    TLorentzVector ltrack_phi = ltrack_Kplus_A + ltrack_Kminus_B; // reconstructed phi meson
-	    h_mPhi->Fill(ltrack_phi.M()); // QA for phi reconstruction
+	    h_mPhi[cent9]->Fill(ltrack_phi.M()); // QA for phi reconstruction
 
 	    if(ltrack_phi.Px() == 0. && ltrack_phi.Py() == 0.) continue;
 
@@ -654,7 +659,7 @@ void AMPT_phi::doPhi(Int_t cent9)
 	    TLorentzVector ltrack_Kplus_B = mKplus[cent9][Bin_Event_B][i_kplus_B];
 
 	    TLorentzVector ltrack_phi = ltrack_Kminus_A + ltrack_Kplus_B; // reconstructed phi meson
-	    h_mPhi->Fill(ltrack_phi.M()); // QA for phi reconstruction
+	    h_mPhi[cent9]->Fill(ltrack_phi.M()); // QA for phi reconstruction
 
 	    if(ltrack_phi.Px() == 0. && ltrack_phi.Py() == 0.) continue;
 
