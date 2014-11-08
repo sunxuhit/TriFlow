@@ -590,8 +590,6 @@ void AMPT_phi::doPhi(Int_t cent9)
 	      TVector2 Q3East = mQ3East[cent9][Bin_Event];
 	      if(mFlag_Kplus[cent9][Bin_Event][i_kplus] == 0 && ltrack_Kplus.Eta() >= -1.0 && ltrack_Kplus.Eta() < -0.05 && ltrack_Kplus.Perp() > 0.2 && ltrack_Kplus.Perp() < 2.0) // check K_plus
 	      {
-		cout << mFlag_Kplus << endl;
-		cout << mFlag_Kplus[cent9][Bin_Event][i_kplus] << endl;
 		Float_t q2x_Kplus = ltrack_Kplus.Perp()*TMath::Cos(2.0*ltrack_Kplus.Phi()); // 2nd event plane
 		Float_t q2y_Kplus = ltrack_Kplus.Perp()*TMath::Sin(2.0*ltrack_Kplus.Phi());
 		TVector2 q2_Kplus(q2x_Kplus,q2y_Kplus); 
@@ -695,8 +693,6 @@ void AMPT_phi::doPhi(Int_t cent9)
 		TVector2 Q3East = mQ3East[cent9][0];
 		if(mFlag_Kplus[cent9][Bin_Event_A][i_kplus_A] == 0 && ltrack_Kplus_A.Eta() >= -1.0 && ltrack_Kplus_A.Eta() < -0.05 && ltrack_Kplus_A.Perp() > 0.2 && ltrack_Kplus_A.Perp() < 2.0) // check K_plus from event A
 		{
-		  cout << mFlag_Kplus << endl;
-		  cout << mFlag_Kplus[cent9][Bin_Event_A][i_kplus_A] << endl;
 		  Float_t q2x_Kplus = ltrack_Kplus_A.Perp()*TMath::Cos(2.0*ltrack_Kplus_A.Phi()); // 2nd event plane
 		  Float_t q2y_Kplus = ltrack_Kplus_A.Perp()*TMath::Sin(2.0*ltrack_Kplus_A.Phi());
 		  TVector2 q2_Kplus(q2x_Kplus,q2y_Kplus); 
