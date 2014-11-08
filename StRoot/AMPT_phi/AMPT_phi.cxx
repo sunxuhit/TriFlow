@@ -657,7 +657,7 @@ void AMPT_phi::doPhi(Int_t cent9)
 	      {// subtract self-correlation from daughter particle who determined west event plane
 		TVector2 Q2West = mQ2West[cent9][0]; // only use Q-Vector from first event
 		TVector2 Q3West = mQ3West[cent9][0];
-		if(mFlag_Kplus[cent9][Bin_Event][i_kplus_A] == 0 && ltrack_Kplus_A.Eta() > 0.05 && ltrack_Kplus_A.Eta() <= 1.0 && ltrack_Kplus_A.Perp() > 0.2 && ltrack_Kplus_A.Perp() < 2.0) // check K_plus from event A
+		if(mFlag_Kplus[cent9][Bin_Event_A][i_kplus_A] == 0 && ltrack_Kplus_A.Eta() > 0.05 && ltrack_Kplus_A.Eta() <= 1.0 && ltrack_Kplus_A.Perp() > 0.2 && ltrack_Kplus_A.Perp() < 2.0) // check K_plus from event A
 		{
 		  Float_t q2x_Kplus = ltrack_Kplus_A.Perp()*TMath::Cos(2.0*ltrack_Kplus_A.Phi()); // 2nd event plane
 		  Float_t q2y_Kplus = ltrack_Kplus_A.Perp()*TMath::Sin(2.0*ltrack_Kplus_A.Phi());
