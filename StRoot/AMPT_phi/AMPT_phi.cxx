@@ -621,6 +621,51 @@ void AMPT_phi::doPhi(Int_t cent9)
   }
   if(mFlag_ME == 1)
   {
+    for(Int_t Bin_Event_A = 0; Bin_Event_A < mEventCounter[cent9]-1; Bin_Event_A++) // event A loop
+    {
+      for(Int_t Bin_Event_B = Bin_Event_A+1; Bin_Event_B < mEventCounter[cent9]-1; Bin_Event_B++) // event B loop
+      {
+	// mix Kplus from event A with Kminus from event B
+	for(Int_t i_kplus_A = 0; i_kplus_A < mKplus[cent9][Bin_Event_A].size(); i_kplus_A++) // first track loop over Kplus from event A
+	{
+	  TLorentzVector ltrack_Kplus_A = mKplus[cent9][Bin_Event_A][i_kplus_A];
+	  for(Int_t i_kminus_B = 0; i_kminus_B < mKminus[cent9][Bin_Event_B].size(); i_kminus_B++) // second track loop over Kminus from event B
+	  {
+	    TLorentzVector ltrack_Kminus_B = mKminus[cent9][Bin_Event_B][i_kminus_B];
+
+	    TLorentzVector ltrack_phi = ltrack_Kplus_A + ltrack_Kminus_B; // reconstructed phi meson
+	    h_mPhi->Fill(ltrack_phi.M()); // QA for phi reconstruction
+
+	    if(ltrack_phi.Px() == 0. && ltrack_phi.Py() == 0.) continue;
+
+	    Float_t InvMass = ltrack_phi.M();
+	    Float_t pt_track = ltrack_phi.Perp(); // pt of phi-meson
+	    Float_t phi_track = ltrack_phi.Phi(); // -pi to pi
+	    Float_t eta_track = ltrack_phi.Eta(); // eta of phi-meson
+	  }
+	}
+
+	// mix Kminus from event A with Kplus from event B
+	for(Int_t i_kminus_A = 0; i_kminus_A < mKminus[cent9][Bin_Event_A].size(); i_kminus_A++) // first track loop over Kminus from event A
+	{
+	  TLorentzVector ltrack_Kminus_A = mKminus[cent9][Bin_Event_A][i_kminus_A];
+	  for(Int_t i_kplus_B = 0; i_kplus_B < mKplus[cent9][Bin_Event_B].size(); i_kplus_B++) // second track loop over Kminus from event B
+	  {
+	    TLorentzVector ltrack_Kplus_B = mKplus[cent9][Bin_Event_B][i_kplus_B];
+
+	    TLorentzVector ltrack_phi = ltrack_Kminus_A + ltrack_Kplus_B; // reconstructed phi meson
+	    h_mPhi->Fill(ltrack_phi.M()); // QA for phi reconstruction
+
+	    if(ltrack_phi.Px() == 0. && ltrack_phi.Py() == 0.) continue;
+
+	    Float_t InvMass = ltrack_phi.M();
+	    Float_t pt_track = ltrack_phi.Perp(); // pt of phi-meson
+	    Float_t phi_track = ltrack_phi.Phi(); // -pi to pi
+	    Float_t eta_track = ltrack_phi.Eta(); // eta of phi-meson
+	  }
+	}
+      }
+    }
   }
 }
 //------------------------------------------------------------
@@ -648,7 +693,7 @@ void AMPT_phi::Finish()
 	{
 	  h_mFlow_phi[i_order][i_cent][i_pt][i_phi_psi]->Write();
 	}
-//	h_mPt_phi[i_order][i_cent][i_pt]->Write();
+	h_mPt_phi[i_order][i_cent][i_pt]->Write();
       }
     }
   }
