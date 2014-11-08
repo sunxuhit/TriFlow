@@ -48,6 +48,7 @@ class AMPT_phi
     static Int_t mInput_flag;
     static TString mBeamEnergy[7];
     static TString mMode_AMPT[2];
+    static TString mMode_SM[2];
     static Int_t mRefMult[2][7][10]; // centrality definition
     static Int_t mList_start[20];
     static Int_t mList_stop[20];

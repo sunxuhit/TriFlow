@@ -15,6 +15,7 @@ ClassImp(AMPT_phi)
 Int_t AMPT_phi::mInput_flag = 1;
 TString AMPT_phi::mBeamEnergy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
 TString AMPT_phi::mMode_AMPT[2] = {"Default","StringMelting"};
+TString AMPT_phi::mMode_SM[2] = {"SE","ME"};
 Int_t AMPT_phi::mRefMult[2][7][10] = {
 			 	        { // Default
 					  {9,16,26,42,63,91,129,182,219,327}, //  7GeV
@@ -81,7 +82,7 @@ AMPT_phi::AMPT_phi(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Lo
   TString InPutRes = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Resolution/%s_Resolution/Resolution_%s.root",mMode_AMPT[Mode].Data(),mBeamEnergy[Energy].Data(),mBeamEnergy[Energy].Data());
   SetInPutRes(InPutRes); // set input resolution
 
-  TString OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Flow/%s_%s/Phi/Flow_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+  TString OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Flow/%s_%s/Phi/Flow_%s_%d_%d_%s.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List],mMode_SM[Flag_ME].Data());
   SetOutPutFile(OutPutFile); // set output file
 }
 
