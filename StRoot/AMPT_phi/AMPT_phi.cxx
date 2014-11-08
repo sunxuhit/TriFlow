@@ -687,7 +687,6 @@ void AMPT_phi::Finish()
   h_mPsi3_East->Write();
   h_mPsi3_West->Write();
   h_mCentrality->Write();
-  h_mPhi->Write();
   for(Int_t i_order = 0; i_order < 2; i_order++)
   {
     for(Int_t i_cent = 0; i_cent < 4; i_cent++)
@@ -701,6 +700,10 @@ void AMPT_phi::Finish()
 	h_mPt_phi[i_order][i_cent][i_pt]->Write();
       }
     }
+  }
+  for(Int_t i_cent = 0; i_cent < 9; i_cent++)
+  {
+    h_mPhi[i_cent]->Write();
   }
   mFile_OutPut->Close();
 }
