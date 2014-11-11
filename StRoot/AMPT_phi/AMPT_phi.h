@@ -4,6 +4,7 @@
 #include "TString.h"
 #include <vector>
 #include "TLorentzVector.h"
+#include "TVector2.h"
 
 class TTree;
 class TChain;
@@ -15,7 +16,7 @@ class TH1F;
 class AMPT_phi
 {
   public:
-    AMPT_phi(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Long64_t StopEvent); // read in energy, AMPT mode, data list, StartEvent and StopEvent
+    AMPT_phi(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Long64_t StopEvent, Int_t Flag_ME); // read in energy, AMPT mode, data list, StartEvent and StopEvent
     ~AMPT_phi();
 
     void SetInPutList(const TString inputlist);
@@ -29,13 +30,16 @@ class AMPT_phi
     void FillHist2nd(Float_t pt, Int_t cent9, Float_t phi, Float_t res, Float_t InvMass); // fill Histogram for flow calculation
     void FillHist3rd(Float_t pt, Int_t cent9, Float_t phi, Float_t res, Float_t InvMass); // fill Histogram for flow calculation
     void Finish(); // save resolution 
+    void clear_phi(Int_t cent9); // clear everything used for phi reconstruction
+    void doPhi(Int_t cent9); // reconstruct phi meson
 
     Float_t getResolution(Int_t order, Int_t i_cent); // get Resolution 
     Int_t getCentrality(Int_t refMult); // get Centrality
 
   private:
-    Int_t   mEnergy;
+    Int_t mEnergy;
     Int_t mMode; // 0 for default, 1 for string melting
+    Int_t mFlag_ME;
     TString mInPutList;
     TString mOutPutFile;
     TString mInPutRes;
@@ -44,6 +48,7 @@ class AMPT_phi
     static Int_t mInput_flag;
     static TString mBeamEnergy[7];
     static TString mMode_AMPT[2];
+    static TString mMode_SM[2];
     static Int_t mRefMult[2][7][10]; // centrality definition
     static Int_t mList_start[20];
     static Int_t mList_stop[20];
@@ -74,9 +79,20 @@ class AMPT_phi
     static Int_t pt_total_phi;
     static Int_t Phi_Psi_total;
 
+    // mixed event
+    static Int_t Buffer_depth;
+    Int_t mEventCounter[9]; // centrality bin
+    std::vector<TVector2> mQ2East[9]; // 0 = centrality bin | push_back->event
+    std::vector<TVector2> mQ2West[9];
+    std::vector<TVector2> mQ3East[9];
+    std::vector<TVector2> mQ3West[9];
+//    std::vector<Int_t> mRefMult[9];
+    std::vector<Int_t> mCentrality[9];
     // store daughter particles of phi
-    std::vector<TLorentzVector> mKplus;
-    std::vector<TLorentzVector> mKminus;
+    std::vector<TLorentzVector> mKplus[9][5]; // 0 = centrality bin, 1 = event bin | push_back->track(4-Vector)
+    std::vector<TLorentzVector> mKminus[9][5];
+    std::vector<Int_t> mFlag_Kplus[9][5]; // 0 = centrality bin, 1 = event bin | push_back->track(mEventCounter)
+    std::vector<Int_t> mFlag_Kminus[9][5];
 
     // QA Plot
     TH1F *h_mPart;
@@ -88,8 +104,8 @@ class AMPT_phi
     TH1F *h_mPsi3_East;
     TH1F *h_mPsi3_West;
     TH1F *h_mCentrality;
-    // invariant mass distribution
-    TH1F *h_mPhi; 
+    // invariant mass distribution for resolution correction
+    TH1F *h_mPhi[9]; 
 
     // resolution
     TProfile *p_mRes[2];
