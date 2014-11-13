@@ -5,6 +5,7 @@
 #include "TMath.h"
 #include "TCanvas.h"
 #include "TF1.h"
+#include "TLine.h"
 
 Double_t PolyBreitWigner(Double_t *x_val, Double_t *par) 
 {
@@ -84,6 +85,20 @@ Double_t Gaussion(Double_t *x_val, Double_t *par)
   return y;
 }
 
+void PlotLine(Double_t x1_val, Double_t x2_val, Double_t y1_val, Double_t y2_val, Int_t Line_Col, Int_t LineWidth, Int_t LineStyle)
+{
+  TLine* Zero_line = new TLine();
+  Zero_line -> SetX1(x1_val);
+  Zero_line -> SetX2(x2_val);
+  Zero_line -> SetY1(y1_val);
+  Zero_line -> SetY2(y2_val);
+  Zero_line -> SetLineWidth(LineWidth);
+  Zero_line -> SetLineStyle(LineStyle);
+  Zero_line -> SetLineColor(Line_Col);
+  Zero_line -> Draw();
+  //delete Zero_line;
+}
+
 static TString mBeamEnergy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
 static TString mMode_AMPT[2] = {"Default","StringMelting"};
 static TString mMode_SM[2] = {"SE","ME"};
@@ -124,12 +139,12 @@ static Int_t pt_new_bin_start[pt_total_New_phi] = {0,1,2,3,4,5,6,7,8,9,10,11,12,
 static Int_t pt_new_bin_stop[pt_total_New_phi]  = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22};
 
 // Energy = 0: 7GeV, 1: 11GeV, 2: 19GeV, 3: 27GeV, 4: 39GeV, 5: 62GeV | Mode = 0: Default, 1: String Melting
-void PhiFlow(Int_t mEnergy = 4, Int_t mList = 0, Int_t mMode = 0) 
+void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0) 
 {
-  TString inputfile_SE = Form("/home/xusun/Data/AMPT_%s/Flow/%s_Default/Phi/Flow_%s_%d_%d_SE.root",mMode_AMPT[mMode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[mList],mList_stop[mList]);
+  TString inputfile_SE = Form("/home/xusun/Data/AMPT_%s/Flow/%s_Default/Phi/Flow_%s_SE.root",mMode_AMPT[mMode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data());
   TFile *File_input_SE = TFile::Open(inputfile_SE.Data());
 
-  TString inputfile_ME = Form("/home/xusun/Data/AMPT_%s/Flow/%s_Default/Phi/Flow_%s_%d_%d_ME.root",mMode_AMPT[mMode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[mList],mList_stop[mList]);
+  TString inputfile_ME = Form("/home/xusun/Data/AMPT_%s/Flow/%s_Default/Phi/Flow_%s_ME.root",mMode_AMPT[mMode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data());
   TFile *File_input_ME = TFile::Open(inputfile_ME.Data());
 
   // read in TH1F for flow calculation
@@ -332,7 +347,7 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mList = 0, Int_t mMode = 0)
   }
 
   /*
-  // QA plots: Poly+BW fit to extract signal
+  // QA plots: Poly+BW fit to extract fit parameters 
   TCanvas *c_PolyBW_total[2][Centrality_total];
   TF1 *f_Poly_total[2][Centrality_total][pt_total_New_phi];
   for(Int_t i_order = 0; i_order < 2; i_order++)
@@ -478,6 +493,8 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mList = 0, Int_t mMode = 0)
   TH1F *h_Sig_total[2][Centrality_total][pt_total_New_phi]; // merged distribution from phi-Psi distribution which subtracted linear background 
   TF1  *f_Sig_total[2][Centrality_total][pt_total_New_phi]; // Breit Wigner distribution
   Float_t ParFit_Sig_total[2][Centrality_total][pt_total_New_phi][3];
+  Float_t Inte_start[2][Centrality_total][pt_total_New_phi];
+  Float_t Inte_stop[2][Centrality_total][pt_total_New_phi];
 
   for(Int_t i_order = 0; i_order < 2; i_order++)
   {
@@ -512,6 +529,9 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mList = 0, Int_t mMode = 0)
 	{
 	  ParFit_Sig_total[i_order][i_cent][i_pt][n_par] = f_Sig_total[i_order][i_cent][i_pt]->GetParameter(n_par);
 	}
+	// Integration range
+	Inte_start[i_order][i_cent][i_pt] = ParFit_Sig_total[i_order][i_cent][i_pt][0] - nSigmaPhi*ParFit_Sig_total[i_order][i_cent][i_pt][1];
+	Inte_stop[i_order][i_cent][i_pt]  = ParFit_Sig_total[i_order][i_cent][i_pt][0] + nSigmaPhi*ParFit_Sig_total[i_order][i_cent][i_pt][1];
       }
     }
   }
@@ -534,9 +554,47 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mList = 0, Int_t mMode = 0)
 	c_phi_Psi[i_order][i_cent][i_pt]->cd(8)->SetBottomMargin(0.15);
 	c_phi_Psi[i_order][i_cent][i_pt]->cd(8)->SetTicks(1,1);
 	c_phi_Psi[i_order][i_cent][i_pt]->cd(8)->SetGrid(0,0);
+	h_Sig_total[i_order][i_cent][i_pt]->SetStats(0);
+	h_Sig_total[i_order][i_cent][i_pt]->SetTitle("Merged Inv. Mass distribution");
+	h_Sig_total[i_order][i_cent][i_pt]->GetXaxis()->SetNdivisions(505,'X');
+	h_Sig_total[i_order][i_cent][i_pt]->GetYaxis()->SetNdivisions(505,'Y');
+	h_Sig_total[i_order][i_cent][i_pt]->GetXaxis()->SetTitle("M(K^{+},K^{-}) (GeV/c^{2})");
+	h_Sig_total[i_order][i_cent][i_pt]->GetYaxis()->SetTitle("Counts/Resolution");
+	h_Sig_total[i_order][i_cent][i_pt]->GetXaxis()->SetTitleSize(0.04);
+	h_Sig_total[i_order][i_cent][i_pt]->GetYaxis()->SetTitleSize(0.04);
+	h_Sig_total[i_order][i_cent][i_pt]->GetXaxis()->CenterTitle();
+	h_Sig_total[i_order][i_cent][i_pt]->GetYaxis()->CenterTitle();
+//	h_Sig_total[i_order][i_cent][i_pt]->SetMarkerStyle(24);
+//	h_Sig_total[i_order][i_cent][i_pt]->SetMarkerColor(1);
+//	h_Sig_total[i_order][i_cent][i_pt]->SetMarkerSize(0.8);
 	h_Sig_total[i_order][i_cent][i_pt]->Draw("pE");
 	f_Sig_total[i_order][i_cent][i_pt]->SetLineColor(2);
 	f_Sig_total[i_order][i_cent][i_pt]->Draw("l same");
+	PlotLine(0.98,1.05,0.0,0.0,1,2,2);
+	PlotLine(Inte_start[i_order][i_cent][i_pt],Inte_start[i_order][i_cent][i_pt],0.0,h_Sig_total[i_order][i_cent][i_pt]->GetMaximum(),4,2,2);
+	PlotLine(Inte_stop[i_order][i_cent][i_pt],Inte_stop[i_order][i_cent][i_pt],0.0,h_Sig_total[i_order][i_cent][i_pt]->GetMaximum(),4,2,2);
+
+	for(Int_t i_phi = 0; i_phi < Phi_Psi_total; i_phi++)
+	{
+	  c_phi_Psi[i_order][i_cent][i_pt]->cd(i_phi+1);
+	  c_phi_Psi[i_order][i_cent][i_pt]->cd(i_phi+1)->SetLeftMargin(0.15);
+	  c_phi_Psi[i_order][i_cent][i_pt]->cd(i_phi+1)->SetBottomMargin(0.15);
+	  c_phi_Psi[i_order][i_cent][i_pt]->cd(i_phi+1)->SetTicks(1,1);
+	  c_phi_Psi[i_order][i_cent][i_pt]->cd(i_phi+1)->SetGrid(0,0);
+	  h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->SetStats(0);
+	  h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetXaxis()->SetNdivisions(505,'X');
+	  h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetYaxis()->SetNdivisions(505,'Y');
+	  h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetXaxis()->SetTitle("M(K^{+},K^{-}) (GeV/c^{2})");
+	  h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetYaxis()->SetTitle("Counts/Resolution");
+	  h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetXaxis()->SetTitleSize(0.04);
+	  h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetYaxis()->SetTitleSize(0.04);
+	  h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetXaxis()->CenterTitle();
+	  h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetYaxis()->CenterTitle();
+	  h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->Draw("pE");
+	  PlotLine(0.98,1.05,0.0,0.0,1,2,2);
+	  PlotLine(Inte_start[i_order][i_cent][i_pt],Inte_start[i_order][i_cent][i_pt],0.0,h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetMaximum(),4,2,2);
+	  PlotLine(Inte_stop[i_order][i_cent][i_pt],Inte_stop[i_order][i_cent][i_pt],0.0,h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetMaximum(),4,2,2);
+	}
       }
     }
   }
