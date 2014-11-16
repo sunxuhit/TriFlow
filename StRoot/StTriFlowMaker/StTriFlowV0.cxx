@@ -656,7 +656,6 @@ void StTriFlowV0::doLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_P
 	      Float_t Time_after = Time_before;
 	      Float_t Beta_after = Beta_before;
 	      mTofCorr->correctBeta(helixA,Time_after,Beta_after);
-//	      Float_t Mass2_proton;
 	      if(Beta_after != 0) Mass2_proton = mMomentum[key_proton][n_proton]*mMomentum[key_proton][n_proton]*(1.0/(Beta_after*Beta_after) - 1.0);
 	      mTofCorr->clearContainers();
 	    }
@@ -844,7 +843,6 @@ void StTriFlowV0::doLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_P
 		Float_t Time_after = Time_before;
 		Float_t Beta_after = Beta_before;
 		mTofCorr->correctBeta(helixA,Time_after,Beta_after);
-//		Float_t Mass2_proton;
 		if(Beta_after != 0) Mass2_proton = mMomentum[key_A_proton][n_proton]*mMomentum[key_A_proton][n_proton]*(1.0/(Beta_after*Beta_after) - 1.0);
 		mTofCorr->clearContainers();
 	      }
@@ -963,7 +961,6 @@ void StTriFlowV0::doLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_P
 		Float_t Time_after = Time_before;
 		Float_t Beta_after = Beta_before;
 		mTofCorr->correctBeta(helixB,Time_after,Beta_after);
-//		Float_t Mass2_proton;
 		if(Beta_after != 0) Mass2_proton = mMomentum[key_B_proton][n_proton]*mMomentum[key_B_proton][n_proton]*(1.0/(Beta_after*Beta_after) - 1.0);
 		mTofCorr->clearContainers();
 	      }
@@ -1134,7 +1131,6 @@ void StTriFlowV0::doAntiLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t B
 	      Float_t Time_after = Time_before;
 	      Float_t Beta_after = Beta_before;
 	      mTofCorr->correctBeta(helixA,Time_after,Beta_after);
-	      Float_t Mass2_proton;
 	      if(Beta_after != 0) Mass2_proton = mMomentum[key_antiproton][n_antiproton]*mMomentum[key_antiproton][n_antiproton]*(1.0/(Beta_after*Beta_after) - 1.0);
 	      mTofCorr->clearContainers();
 	    }
@@ -1322,7 +1318,6 @@ void StTriFlowV0::doAntiLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t B
 		Float_t Time_after = Time_before;
 		Float_t Beta_after = Beta_before;
 		mTofCorr->correctBeta(helixA,Time_after,Beta_after);
-		Float_t Mass2_proton;
 		if(Beta_after != 0) Mass2_proton = mMomentum[key_A_antiproton][n_antiproton]*mMomentum[key_A_antiproton][n_antiproton]*(1.0/(Beta_after*Beta_after) - 1.0);
 		mTofCorr->clearContainers();
 	      }
@@ -1441,7 +1436,6 @@ void StTriFlowV0::doAntiLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t B
 		Float_t Time_after = Time_before;
 		Float_t Beta_after = Beta_before;
 		mTofCorr->correctBeta(helixB,Time_after,Beta_after);
-		Float_t Mass2_proton;
 		if(Beta_after != 0) Mass2_proton = mMomentum[key_B_antiproton][n_antiproton]*mMomentum[key_B_antiproton][n_antiproton]*(1.0/(Beta_after*Beta_after) - 1.0);
 		mTofCorr->clearContainers();
 	      }
