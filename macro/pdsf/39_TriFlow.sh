@@ -25,8 +25,8 @@ if [ $# -eq 0 ]
 #      echo -n 3',' >> run$Name$counter.csh  # Pion and Kaon mode
 #      echo -n 4',' >> run$Name$counter.csh  # Proton and Yields mode
 #      echo -n 5',' >> run$Name$counter.csh  # Phi mode
-      echo -n 6',' >> run$Name$counter.csh  # Lambda mode
-#      echo -n 7',' >> run$Name$counter.csh  # anti-Lambda mode
+#      echo -n 6',' >> run$Name$counter.csh  # Lambda mode
+      echo -n 7',' >> run$Name$counter.csh  # anti-Lambda mode
 ###############################mode###################################
 
 ###############################energy###################################
