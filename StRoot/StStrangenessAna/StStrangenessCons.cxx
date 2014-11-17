@@ -4,8 +4,8 @@
 ClassImp(Strangeness)
 
 //-----------------------------------------------------------------
-TString Strangeness::v0_tree[4]  = {"XuPhiMesonEvent","LambdaEvent","LambdaEvent","K0sEvent"}; // TODO: 2: LambdaEvent->antiLambdaEvent
-TString Strangeness::v0_branch[4] = {"phi_flow_branch","Lambda_flow_branch","Lambda_flow_branch","K0s_flow_branch"}; // TODO: 2: Lambda_flow_branch->antiLambda_flow_branch
+TString Strangeness::v0_tree[4]  = {"XuPhiMesonEvent","LambdaEvent","antiLambdaEvent","K0sEvent"};
+TString Strangeness::v0_branch[4] = {"phi_flow_branch","Lambda_flow_branch","antiLambda_flow_branch","K0s_flow_branch"};
 TString Strangeness::Energy[3] = {"200GeV","39GeV","27GeV"};
 TString Strangeness::Partype[4] = {"Phi","Lambda","AntiLambda","K0s"};
 Int_t   Strangeness::mList_Delta = 20;

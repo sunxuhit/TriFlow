@@ -116,8 +116,8 @@ void StTriFlowV0::InitAntiLambda()
   }
 
   mV0Event = new StV0Event();
-  mTree_AntiLambda = new TTree("LambdaEvent","LambdaEvent");
-  mTree_AntiLambda->Branch("Lambda_flow_branch","StV0Event",&mV0Event);
+  mTree_AntiLambda = new TTree("antiLambdaEvent","antiLambdaEvent");
+  mTree_AntiLambda->Branch("antiLambda_flow_branch","StV0Event",&mV0Event);
   mTree_AntiLambda->SetAutoSave(5000000);
 }
 //------------------------------------------------------------------------------------------------------------------
