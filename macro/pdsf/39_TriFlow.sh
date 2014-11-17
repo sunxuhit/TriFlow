@@ -5,12 +5,12 @@ date
 
 if [ $# -eq 0 ]
   then
-    Name="_39GeV_Phi_ME_"
+    Name="_39GeV_antiLambda_SE_"
     suffix=".root"
     List="/project/projectdirs/star/xusun/OutPut/AuAu39GeV/List/run_list/39GeV_"
     suffixlist=".list"
-#    for((counter=1;counter<=629;counter=counter+1))
-    for((counter=634;counter<=706;counter=counter+1)) # missing run
+#    for((counter=1;counter<=713;counter=counter+1))
+    for((counter=123;counter<=323;counter=counter+1)) # missing run
 #    for((counter=210;counter<=215;counter=counter+1))
     do
       cp ./run.csh ./run$Name$counter.csh

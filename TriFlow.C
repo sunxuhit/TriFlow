@@ -8,11 +8,11 @@ class StPicoDstMaker;
 
 StChain *chain;
 //void TriFlow(const Char_t *inputFile="/project/projectdirs/star/xusun/OutPut/AuAu200GeV/List/run_list/200GeV_511.list", const Int_t jobCounter = 511, const Int_t Mode = 7, const Int_t energy = 0)
-void TriFlow(const Char_t *inputFile="/project/projectdirs/star/xusun/OutPut/AuAu39GeV/List/run_list/39GeV_511.list", const Int_t jobCounter = 511, const Int_t Mode = 6, const Int_t energy = 1)
+void TriFlow(const Char_t *inputFile="/project/projectdirs/star/xusun/OutPut/AuAu39GeV/List/run_list/39GeV_511.list", const Int_t jobCounter = 511, const Int_t Mode = 7, const Int_t energy = 1)
 //void TriFlow(const Char_t *inputFile="./List/27GeV/run_list/27GeV_134.list", const Int_t jobCounter = 134, const Int_t Mode = 3, const Int_t energy = 2)
 {
-        Int_t nEvents = 10000000;
-//	Int_t nEvents = 5000;
+//        Int_t nEvents = 10000000;
+	Int_t nEvents = 50000;
 //Load all the System libraries
 	
         gROOT->LoadMacro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
