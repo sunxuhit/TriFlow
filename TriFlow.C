@@ -13,7 +13,6 @@ void TriFlow(const Char_t *inputFile="/project/projectdirs/star/xusun/OutPut/AuA
 {
 //        Int_t nEvents = 10000000;
 	Int_t nEvents = 50000;
-//Load all the System libraries
 	
         gROOT->LoadMacro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
 	loadSharedLibraries();
@@ -38,14 +37,6 @@ void TriFlow(const Char_t *inputFile="/project/projectdirs/star/xusun/OutPut/AuA
 	int total = picoMaker->chain()->GetEntries();
         cout << " Total entries = " << total << endl;
         if(nEvents>total) nEvents = total;
-	/*
-        if(nEvents+150000>total) 
-	{
-	  cout << "Recalculate nEvents!" << endl;
-	  nEvents = total-150000;
-	}
-        cout << " Events remains = " << nEvents << endl;
-	*/
 	for (Int_t i=0; i<nEvents; i++)
 	{
 	  if(i != 0 && i%50 == 0)

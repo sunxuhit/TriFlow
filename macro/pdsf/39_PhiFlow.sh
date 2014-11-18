@@ -6,9 +6,9 @@ date
 if [ $# -eq 0 ]
   then
 #    counter=0
-    Name="_39GeV_Lambda_ME_"
+    Name="_39GeV_Lambda_SE_"
     suffix=".root"
-    for((counter=0;counter<=31;counter=counter+1))
+    for((counter=0;counter<=20;counter=counter+1))
 #    for((counter=23;counter<=28;counter=counter+1)) #test
     do
       cp ./run.csh ./run$Name$counter.csh
@@ -21,8 +21,8 @@ if [ $# -eq 0 ]
 ###############################energy###################################
 
 ###############################X_flag###################################
-#      echo -n 0',' >> run$Name$counter.csh # Same Event 
-      echo -n 1',' >> run$Name$counter.csh  # Mixed Event
+      echo -n 0',' >> run$Name$counter.csh # Same Event 
+#      echo -n 1',' >> run$Name$counter.csh  # Mixed Event
 ###############################X_flag###################################
 
       echo -n $counter',' >> run$Name$counter.csh # List
@@ -38,8 +38,8 @@ if [ $# -eq 0 ]
 
 ##############################Partilce##################################
 #      echo 0')'"'" >> run$Name$counter.csh  # phi meson
-      echo 1')'"'" >> run$Name$counter.csh  # Lambda
-#      echo 2')'"'" >> run$Name$counter.csh  # anti-Lambda
+#      echo 1')'"'" >> run$Name$counter.csh  # Lambda
+      echo 2')'"'" >> run$Name$counter.csh  # anti-Lambda
 #      echo 3')'"'" >> run$Name$counter.csh  # K0s
 ##############################Partilce##################################
 
