@@ -578,11 +578,11 @@ void AMPT_phi::doPhi(Int_t cent9)
 	      }
 	      Float_t Psi2_West = TMath::ATan2(Q2West.Y(),Q2West.X())/2.0;
 	      Float_t phi_psi2 = phi_track - Psi2_West;
-	      FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
+	      if(res2 > 0.0) FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
 
 	      Float_t Psi3_West = TMath::ATan2(Q3West.Y(),Q3West.X())/3.0;
 	      Float_t phi_psi3 = phi_track - Psi3_West;
-	      FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
+	      if(res3 > 0.0) FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
 	    }
 	    if(eta_track > 0.0) // west track => east event plane
 	    {// subtract self-correlation from daughter particle who determined east event plane
@@ -614,11 +614,11 @@ void AMPT_phi::doPhi(Int_t cent9)
 	      }
 	      Float_t Psi2_East = TMath::ATan2(Q2East.Y(),Q2East.X())/2.0;
 	      Float_t phi_psi2 = phi_track - Psi2_East;
-	      FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
+	      if(res2 > 0.0) FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
 
 	      Float_t Psi3_East = TMath::ATan2(Q3East.Y(),Q3East.X())/3.0;
 	      Float_t phi_psi3 = phi_track - Psi3_East;
-	      FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
+	      if(res3 > 0.0) FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
 	    }
 	  }
 	}
@@ -681,11 +681,11 @@ void AMPT_phi::doPhi(Int_t cent9)
 		}
 		Float_t Psi2_West = TMath::ATan2(Q2West.Y(),Q2West.X())/2.0;
 		Float_t phi_psi2 = phi_track - Psi2_West;
-		FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
+		if(res2 > 0.0) FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
 
 		Float_t Psi3_West = TMath::ATan2(Q3West.Y(),Q3West.X())/3.0;
 		Float_t phi_psi3 = phi_track - Psi3_West;
-		FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
+		if(res3 > 0.0) FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
 	      }
 	      if(eta_track > 0.0) // west track => east event plane
 	      {// subtract self-correlation from daughter particle who determined east event plane
@@ -717,11 +717,11 @@ void AMPT_phi::doPhi(Int_t cent9)
 		}
 		Float_t Psi2_East = TMath::ATan2(Q2East.Y(),Q2East.X())/2.0;
 		Float_t phi_psi2 = phi_track - Psi2_East;
-		FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
+		if(res2 > 0.0) FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
 
 		Float_t Psi3_East = TMath::ATan2(Q3East.Y(),Q3East.X())/3.0;
 		Float_t phi_psi3 = phi_track - Psi3_East;
-		FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
+		if(res3 > 0.0) FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
 	      }
 	    }
 	  }
@@ -777,11 +777,11 @@ void AMPT_phi::doPhi(Int_t cent9)
 		}
 		Float_t Psi2_West = TMath::ATan2(Q2West.Y(),Q2West.X())/2.0;
 		Float_t phi_psi2 = phi_track - Psi2_West;
-		FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
+		if(res2 > 0.0) FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
 
 		Float_t Psi3_West = TMath::ATan2(Q3West.Y(),Q3West.X())/3.0;
 		Float_t phi_psi3 = phi_track - Psi3_West;
-		FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
+		if(res3 > 0.0) FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
 	      }
 	      if(eta_track > 0.0) // west track => east event plane
 	      {// subtract self-correlation from daughter particle who determined east event plane
@@ -813,11 +813,11 @@ void AMPT_phi::doPhi(Int_t cent9)
 		}
 		Float_t Psi2_East = TMath::ATan2(Q2East.Y(),Q2East.X())/2.0;
 		Float_t phi_psi2 = phi_track - Psi2_East;
-		FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
+		if(res2 > 0.0) FillHist2nd(pt_track,cent9,phi_psi2,res2,InvMass);
 
 		Float_t Psi3_East = TMath::ATan2(Q3East.Y(),Q3East.X())/3.0;
 		Float_t phi_psi3 = phi_track - Psi3_East;
-		FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
+		if(res3 > 0.0) FillHist3rd(pt_track,cent9,phi_psi3,res3,InvMass);
 	      }
 	    }
 	  }

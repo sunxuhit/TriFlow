@@ -123,8 +123,8 @@ static TString mCentrality[4] = {"0080","0010","1040","4080"};
 
 static const Int_t pt_total_phi = 23;
 static const Int_t Centrality_total = 4;
-static const Int_t Centrality_start = 0;
-static const Int_t Centrality_stop = 1;
+static const Int_t Centrality_start = 2;
+static const Int_t Centrality_stop = 3;
 static const Int_t Phi_Psi_total = 7;
 static const Float_t nSigmaPhi = 2.0;
 static const Double_t PI_max[2] = {TMath::Pi()/2.0,TMath::Pi()/3.0};
@@ -141,10 +141,10 @@ static Int_t pt_new_bin_stop[pt_total_New_phi]  = {0,1,2,3,4,5,6,7,8,9,10,11,12,
 // Energy = 0: 7GeV, 1: 11GeV, 2: 19GeV, 3: 27GeV, 4: 39GeV, 5: 62GeV | Mode = 0: Default, 1: String Melting
 void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0) 
 {
-  TString inputfile_SE = Form("/home/xusun/Data/AMPT_%s/Flow/%s_Default/Phi/Flow_%s_SE.root",mMode_AMPT[mMode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data());
+  TString inputfile_SE = Form("/home/xusun/Data/AMPT_%s/Flow/%s_%s/Phi/Flow_%s_SE.root",mMode_AMPT[mMode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[mMode].Data(),mBeamEnergy[mEnergy].Data());
   TFile *File_input_SE = TFile::Open(inputfile_SE.Data());
 
-  TString inputfile_ME = Form("/home/xusun/Data/AMPT_%s/Flow/%s_Default/Phi/Flow_%s_ME.root",mMode_AMPT[mMode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data());
+  TString inputfile_ME = Form("/home/xusun/Data/AMPT_%s/Flow/%s_%s/Phi/Flow_%s_ME.root",mMode_AMPT[mMode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[mMode].Data(),mBeamEnergy[mEnergy].Data());
   TFile *File_input_ME = TFile::Open(inputfile_ME.Data());
 
   // read in TH1F for flow calculation
@@ -229,6 +229,8 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0)
 	  h_flow_SM[i_order][i_cent][i_pt][i_phi]->SetFillStyle(3003);
 	  h_flow_SM[i_order][i_cent][i_pt][i_phi]->Draw("h same");
 	}
+	CanName = "./figures/" + CanName + ".eps";
+	c_pt[i_order][i_cent][i_phi]->SaveAs(CanName.Data());
       }
     }
   }
@@ -295,11 +297,14 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0)
 	  h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->SetMarkerSize(0.8);
 	  h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->Draw("pE");
 	}
+	CanName = "./figures/" + CanName + ".eps";
+	c_pt_new[i_order][i_cent][i_phi]->SaveAs(CanName.Data());
       }
     }
   }
   */
 
+#if 0
   // Poly+BW fit for merged phi-Psi bin to extract fit parameters
   TH1F *h_flow_SM_total[2][Centrality_total][pt_total_New_phi];
   TF1  *f_PolyBW_total[2][Centrality_total][pt_total_New_phi];
@@ -487,9 +492,10 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0)
     }
   }
   */
+#endif
 
   // Counting and BW fits to extract raw flow signal
-  // merge phi-Psi distribution after subtract linear background to extract fit range for signal
+  // merge phi-Psi distribution to extract fit range for signal
   TH1F *h_Sig_total[2][Centrality_total][pt_total_New_phi]; // merged distribution from phi-Psi distribution which subtracted linear background 
   TF1  *f_Sig_total[2][Centrality_total][pt_total_New_phi]; // Breit Wigner distribution
   Float_t ParFit_Sig_total[2][Centrality_total][pt_total_New_phi][3];
@@ -514,9 +520,13 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0)
 	    {
 	      f_Sig_total[i_order][i_cent][i_pt]->ReleaseParameter(n_par);
 	    }
-	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(0,ParFit_total[i_order][i_cent][i_pt][0]);
-	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(1,ParFit_total[i_order][i_cent][i_pt][1]);
-	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(2,ParFit_total[i_order][i_cent][i_pt][2]);
+//	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(0,ParFit_total[i_order][i_cent][i_pt][0]);
+//	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(1,ParFit_total[i_order][i_cent][i_pt][1]);
+//	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(2,ParFit_total[i_order][i_cent][i_pt][2]);
+	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(0,1.019);
+	    f_Sig_total[i_order][i_cent][i_pt]->SetParLimits(0,1.014,1.024);
+	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(1,0.0055);
+	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(2,10000);
 	    f_Sig_total[i_order][i_cent][i_pt]->SetRange(BW_Start,BW_Stop);
 	  }
 	  else
@@ -536,6 +546,35 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0)
     }
   }
 
+  // calculate total counts and errors for each phi-Psi bin by counting
+  TH1F *h_Counts[2][Centrality_total][pt_total_New_phi]; // counts vs phi-Psi
+  for(Int_t i_order = 0; i_order < 2; i_order++)
+  {
+    for(Int_t i_cent = Centrality_start; i_cent < Centrality_stop; i_cent++) // centrality bin
+    {
+      for(Int_t i_pt = 0; i_pt < pt_total_New_phi; i_pt++)
+      {
+	TString HistName = Form("h_Counts_%s_%s_pt_%d",mOrder[i_order].Data(),mCentrality[i_cent].Data(),i_pt);
+	h_Counts[i_order][i_cent][i_pt] = new TH1F(HistName.Data(),HistName.Data(),7,0,PI_max[i_order]);
+	for(Int_t i_phi = 0; i_phi < Phi_Psi_total; i_phi++) // phi-psi bin
+	{
+	  Float_t counts = 0.0;
+	  Float_t errors = 0.0;
+	  Float_t bin_center = PI_max[i_order]/14.0+i_phi*PI_max[i_order]/7.0;
+	  Int_t bin_start = h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->FindBin(Inte_start[i_order][i_cent][i_pt]);
+	  Int_t bin_stop  = h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->FindBin(Inte_stop[i_order][i_cent][i_pt]);
+	  for(Int_t bin = bin_start; bin <= bin_stop; bin++)
+	  {
+	    counts += h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetBinContent(bin);
+	    errors += h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetBinError(bin)*h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetBinError(bin);
+	  }
+	  h_Counts[i_order][i_cent][i_pt]->SetBinContent(h_Counts[i_order][i_cent][i_pt]->FindBin(bin_center),counts);
+	  h_Counts[i_order][i_cent][i_pt]->SetBinError(h_Counts[i_order][i_cent][i_pt]->FindBin(bin_center),TMath::Sqrt(errors));
+	}
+      }
+    }
+  }
+
   // QA plots: phi-Psi distribution for each pT bin
   TCanvas *c_phi_Psi[2][Centrality_total][pt_total_New_phi];
   for(Int_t i_order = 0; i_order < 2; i_order++)
@@ -543,7 +582,7 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0)
     for(Int_t i_cent = Centrality_start; i_cent < Centrality_stop; i_cent++)
     {
 //      for(Int_t i_pt = 0; i_pt < pt_total_New_phi; i_pt++)
-      for(Int_t i_pt = 1; i_pt < 5; i_pt++)
+      for(Int_t i_pt = 1; i_pt < 6; i_pt++)
       {
 	TString CanName = Form("c_phi_Psi_%s_%s_pt_%d",mOrder[i_order].Data(),mCentrality[i_cent].Data(),i_pt);
 	c_phi_Psi[i_order][i_cent][i_pt] = new TCanvas(CanName.Data(),CanName.Data(),10,10,900,900);
@@ -595,6 +634,30 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0)
 	  PlotLine(Inte_start[i_order][i_cent][i_pt],Inte_start[i_order][i_cent][i_pt],0.0,h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetMaximum(),4,2,2);
 	  PlotLine(Inte_stop[i_order][i_cent][i_pt],Inte_stop[i_order][i_cent][i_pt],0.0,h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetMaximum(),4,2,2);
 	}
+	CanName = "./figures/" + CanName + ".eps";
+	c_phi_Psi[i_order][i_cent][i_pt]->SaveAs(CanName.Data());
+
+	c_phi_Psi[i_order][i_cent][i_pt]->cd(9);
+	c_phi_Psi[i_order][i_cent][i_pt]->cd(9)->SetLeftMargin(0.15);
+	c_phi_Psi[i_order][i_cent][i_pt]->cd(9)->SetBottomMargin(0.15);
+	c_phi_Psi[i_order][i_cent][i_pt]->cd(9)->SetTicks(1,1);
+	c_phi_Psi[i_order][i_cent][i_pt]->cd(9)->SetGrid(0,0);
+	h_Counts[i_order][i_cent][i_pt]->SetStats(0);
+	h_Counts[i_order][i_cent][i_pt]->SetTitle("");
+	h_Counts[i_order][i_cent][i_pt]->GetXaxis()->SetNdivisions(505,'X');
+	h_Counts[i_order][i_cent][i_pt]->GetYaxis()->SetNdivisions(505,'Y');
+	h_Counts[i_order][i_cent][i_pt]->GetXaxis()->SetTitle("#phi-#Psi");
+	h_Counts[i_order][i_cent][i_pt]->GetYaxis()->SetTitle("Counts/Resolution");
+	h_Counts[i_order][i_cent][i_pt]->GetXaxis()->SetTitleSize(0.04);
+	h_Counts[i_order][i_cent][i_pt]->GetYaxis()->SetTitleSize(0.04);
+	h_Counts[i_order][i_cent][i_pt]->GetXaxis()->CenterTitle();
+	h_Counts[i_order][i_cent][i_pt]->GetYaxis()->CenterTitle();
+	h_Counts[i_order][i_cent][i_pt]->SetMarkerStyle(24);
+	h_Counts[i_order][i_cent][i_pt]->SetMarkerColor(1);
+	h_Counts[i_order][i_cent][i_pt]->SetMarkerSize(0.8);
+	h_Counts[i_order][i_cent][i_pt]->Draw("pE");
+//	f_Sig_total[i_order][i_cent][i_pt]->SetLineColor(2);
+//	f_Sig_total[i_order][i_cent][i_pt]->Draw("l same");
       }
     }
   }
