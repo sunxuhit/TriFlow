@@ -1,5 +1,5 @@
 #!/bin/csh
 
 starver pro
-cd /u/xusun/Reference/gitrepo/Analysis_v3
+cd /global/homes/x/xusun/STAR/Analysis_v3 
 
