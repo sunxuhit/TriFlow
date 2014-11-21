@@ -10,3 +10,4 @@ StRoot/AMPT_resolution/*.eps
 Macro_Plotting/figures/*.eps
 StRoot/*/*.swp
 StRoot/AMPT_phi/figures/*.eps
+StRoot/AMPT_phi/flow/*.root

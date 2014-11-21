@@ -6,6 +6,8 @@
 #include "TCanvas.h"
 #include "TF1.h"
 #include "TLine.h"
+#include "TProfile.h"
+#include "TGraphAsymmErrors.h"
 
 Double_t PolyBreitWigner(Double_t *x_val, Double_t *par) 
 {
@@ -45,28 +47,16 @@ Double_t BreitWigner(Double_t *x_val, Double_t *par)
   return BW;
 }
 
-Double_t flow_2(Double_t *x_val, Double_t *par)
+Double_t flow(Double_t *x_val, Double_t *par)
 {
   Double_t x, y;
-  Double_t Ampl, v2;
+  Double_t Ampl, v2, order;
   x = x_val[0];
   Ampl = par[0];
   v2 = par[1];
+  order = par[2];
 
-  y = Ampl*(1.0 + 2.0*v2*TMath::Cos(2.0*x));
-
-  return y;
-}
-
-Double_t flow_3(Double_t *x_val, Double_t *par)
-{
-  Double_t x, y;
-  Double_t Ampl, v3;
-  x = x_val[0];
-  Ampl = par[0];
-  v3 = par[1];
-
-  y = Ampl*(1.0 + 2.0*v3*TMath::Cos(3.0*x));
+  y = Ampl*(1.0 + 2.0*v2*TMath::Cos(order*x));
 
   return y;
 }
@@ -106,11 +96,6 @@ static TString mMode_SM[2] = {"SE","ME"};
 static Int_t mList_start[20] = {  1,101,201,301,401,501,601,701,801, 901,1001,1101,1201,1301,1401,1501,1601,1701,1801,1901};
 static Int_t mList_stop[20]  = {100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000};
 
-// pt bin
-//                                 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 ,10 ,11 ,12 ,13 ,14 ,15 ,16 ,17 ,18 ,19 ,10 ,21 ,22
-static Double_t pt_low_phi[23] = {0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.4,3.8,4.2,4.6,5.0,5.4,5.8,6.2};
-static Double_t pt_up_phi[23]  = {0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.4,3.8,4.2,4.6,5.0,5.4,5.8,6.2,6.6};
-
 // phi-Psi bin
 static Double_t phi_Psi2_low[7] = {0.0,TMath::Pi()/14.0,2.0*TMath::Pi()/14.0,3.0*TMath::Pi()/14.0,4.0*TMath::Pi()/14.0,5.0*TMath::Pi()/14.0,6.0*TMath::Pi()/14.0};
 static Double_t phi_Psi2_up[7]  = {TMath::Pi()/14.0,2.0*TMath::Pi()/14.0,3.0*TMath::Pi()/14.0,4.0*TMath::Pi()/14.0,5.0*TMath::Pi()/14.0,6.0*TMath::Pi()/14.0,7.0*TMath::Pi()/14.0};
@@ -123,8 +108,8 @@ static TString mCentrality[4] = {"0080","0010","1040","4080"};
 
 static const Int_t pt_total_phi = 23;
 static const Int_t Centrality_total = 4;
-static const Int_t Centrality_start = 2;
-static const Int_t Centrality_stop = 3;
+static const Int_t Centrality_start = 0;
+static const Int_t Centrality_stop = 4;
 static const Int_t Phi_Psi_total = 7;
 static const Float_t nSigmaPhi = 2.0;
 static const Double_t PI_max[2] = {TMath::Pi()/2.0,TMath::Pi()/3.0};
@@ -135,8 +120,22 @@ static const Float_t BW_Stop  = 1.050;
 
 // new pt bins => need to adjust for different energies
 static const Int_t pt_total_New_phi = 23;
+
+// pt bin
+//                                 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 ,10 ,11 ,12 ,13 ,14 ,15 ,16 ,17 ,18 ,19 ,10 ,21 ,22
+static Double_t pt_low_phi[23] = {0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.4,3.8,4.2,4.6,5.0,5.4,5.8,6.2};
+static Double_t pt_up_phi[23]  = {0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,3.0,3.4,3.8,4.2,4.6,5.0,5.4,5.8,6.2,6.6};
+
 static Int_t pt_new_bin_start[pt_total_New_phi] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22};
 static Int_t pt_new_bin_stop[pt_total_New_phi]  = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22};
+
+/*
+static const Int_t pt_total_New_phi = 3;
+static Float_t pt_low_phi[pt_total_phi] = {0.2,1.0,1.8};
+static Float_t pt_up_phi[pt_total_phi]  = {1.0,1.8,2.6};
+static Int_t pt_new_bin_start[pt_total_New_phi] = {0,4, 8};
+static Int_t pt_new_bin_stop[pt_total_New_phi]  = {3,7,11};
+*/
 
 // Energy = 0: 7GeV, 1: 11GeV, 2: 19GeV, 3: 27GeV, 4: 39GeV, 5: 62GeV | Mode = 0: Default, 1: String Melting
 void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0) 
@@ -525,7 +524,7 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0)
 //	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(2,ParFit_total[i_order][i_cent][i_pt][2]);
 	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(0,1.019);
 	    f_Sig_total[i_order][i_cent][i_pt]->SetParLimits(0,1.014,1.024);
-	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(1,0.0055);
+	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(1,0.0045);
 	    f_Sig_total[i_order][i_cent][i_pt]->SetParameter(2,10000);
 	    f_Sig_total[i_order][i_cent][i_pt]->SetRange(BW_Start,BW_Stop);
 	  }
@@ -575,14 +574,36 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0)
     }
   }
 
+  // do cos fit to extract raw v2 and v3
+  TF1 *f_phi[2][Centrality_total][pt_total_New_phi];
+  Float_t Order[2] = {2.0,3.0};
+
+  for(Int_t i_order = 0; i_order < 2; i_order++)
+  {
+    for(Int_t i_cent = Centrality_start; i_cent < Centrality_stop; i_cent++)
+    {
+      for(Int_t i_pt = 0; i_pt < pt_total_New_phi; i_pt++)
+//      for(Int_t i_pt = 0; i_pt < 10; i_pt++)
+      {
+	TString Flow_phi = Form("flow_%s_%s_pt_%d_phi",mOrder[i_order].Data(),mCentrality[i_cent].Data(),i_pt);
+	f_phi[i_order][i_cent][i_pt] = new TF1(Flow_phi.Data(),flow,0.0,PI_max[i_order],3);
+	f_phi[i_order][i_cent][i_pt]->SetParameter(0,2.0);
+	f_phi[i_order][i_cent][i_pt]->SetParameter(1,1.0);
+	f_phi[i_order][i_cent][i_pt]->FixParameter(2,Order[i_order]);
+//	h_Counts[i_order][i_cent][i_pt]->Fit(f_phi[i_order][i_cent][i_pt],"NQMI");
+	h_Counts[i_order][i_cent][i_pt]->Fit(f_phi[i_order][i_cent][i_pt],"NQM");
+      }
+    }
+  }
+
   // QA plots: phi-Psi distribution for each pT bin
   TCanvas *c_phi_Psi[2][Centrality_total][pt_total_New_phi];
   for(Int_t i_order = 0; i_order < 2; i_order++)
   {
     for(Int_t i_cent = Centrality_start; i_cent < Centrality_stop; i_cent++)
     {
-//      for(Int_t i_pt = 0; i_pt < pt_total_New_phi; i_pt++)
-      for(Int_t i_pt = 1; i_pt < 6; i_pt++)
+      for(Int_t i_pt = 0; i_pt < pt_total_New_phi; i_pt++)
+//      for(Int_t i_pt = 0; i_pt < 10; i_pt++)
       {
 	TString CanName = Form("c_phi_Psi_%s_%s_pt_%d",mOrder[i_order].Data(),mCentrality[i_cent].Data(),i_pt);
 	c_phi_Psi[i_order][i_cent][i_pt] = new TCanvas(CanName.Data(),CanName.Data(),10,10,900,900);
@@ -634,8 +655,6 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0)
 	  PlotLine(Inte_start[i_order][i_cent][i_pt],Inte_start[i_order][i_cent][i_pt],0.0,h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetMaximum(),4,2,2);
 	  PlotLine(Inte_stop[i_order][i_cent][i_pt],Inte_stop[i_order][i_cent][i_pt],0.0,h_flow_SM_New[i_order][i_cent][i_pt][i_phi]->GetMaximum(),4,2,2);
 	}
-	CanName = "./figures/" + CanName + ".eps";
-	c_phi_Psi[i_order][i_cent][i_pt]->SaveAs(CanName.Data());
 
 	c_phi_Psi[i_order][i_cent][i_pt]->cd(9);
 	c_phi_Psi[i_order][i_cent][i_pt]->cd(9)->SetLeftMargin(0.15);
@@ -656,8 +675,31 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0)
 	h_Counts[i_order][i_cent][i_pt]->SetMarkerColor(1);
 	h_Counts[i_order][i_cent][i_pt]->SetMarkerSize(0.8);
 	h_Counts[i_order][i_cent][i_pt]->Draw("pE");
-//	f_Sig_total[i_order][i_cent][i_pt]->SetLineColor(2);
-//	f_Sig_total[i_order][i_cent][i_pt]->Draw("l same");
+	f_phi[i_order][i_cent][i_pt]->SetLineColor(2);
+	f_phi[i_order][i_cent][i_pt]->Draw("l same");
+
+	CanName = "./figures/" + CanName + ".eps";
+	c_phi_Psi[i_order][i_cent][i_pt]->SaveAs(CanName.Data());
+      }
+    }
+  }
+
+  
+  // fill raw v2 and v3 into histogram for counting and Breit Wignar
+  TH1F *h_flow[2][Centrality_total];
+  for(Int_t i_order = 0; i_order < 2; i_order++)
+  {
+    for(Int_t i_cent = Centrality_start; i_cent < Centrality_stop; i_cent++) // centrality bin
+    {
+      TString HistName = Form("flow_%s_%s_phi",mOrder[i_order].Data(),mCentrality[i_cent].Data());
+      h_flow[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,0.0,3.6);
+      for(Int_t i_pt = 0; i_pt < pt_total_New_phi; i_pt++)
+      {
+	Int_t bin_center = h_flow[i_order][i_cent]->FindBin((pt_low_phi[i_pt]+pt_up_phi[i_pt])/2.0);
+	Float_t bin_content = f_phi[i_order][i_cent][i_pt]->GetParameter(1);
+	Float_t bin_error = f_phi[i_order][i_cent][i_pt]->GetParError(1);
+	h_flow[i_order][i_cent]->SetBinContent(bin_center,bin_content);
+	h_flow[i_order][i_cent]->SetBinError(bin_center,bin_error);
       }
     }
   }
@@ -666,8 +708,24 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0)
   TH1F *h_Centrality_SE[9];
   TH1F *h_Centrality_ME[9];
   TH1F *h_Centrality_SM[9];
+  TF1  *f_Centrality_SM[9]; // Breit Wigner distribution
+  Float_t ParFit_Centrality_SM[9][3];
+  Float_t Inte_Centrality_start[9];
+  Float_t Inte_Centrality_stop[9];
   for(Int_t i_cent = 0; i_cent < 9; i_cent++) // harmonic loop
   {
+    TString FuncName = Form("f_mPhi_%d",i_cent);
+    f_Centrality_SM[i_cent] = new TF1(FuncName.Data(),BreitWigner,BW_Start,BW_Stop,3);
+    for(Int_t n_par = 0; n_par < 3; n_par++)
+    {
+      f_Centrality_SM[i_cent]->ReleaseParameter(n_par);
+    }
+    f_Centrality_SM[i_cent]->SetParameter(0,1.019);
+    f_Centrality_SM[i_cent]->SetParLimits(0,1.014,1.024);
+    f_Centrality_SM[i_cent]->SetParameter(1,0.0045);
+    f_Centrality_SM[i_cent]->SetParameter(2,10000);
+    f_Centrality_SM[i_cent]->SetRange(BW_Start,BW_Stop);
+
     TString HistName = Form("h_mPhi_%d",i_cent);
     h_Centrality_SE[i_cent] = (TH1F*)File_input_SE->Get(HistName.Data());
     h_Centrality_ME[i_cent] = (TH1F*)File_input_ME->Get(HistName.Data());
@@ -688,13 +746,108 @@ void PhiFlow(Int_t mEnergy = 4, Int_t mMode = 0)
     {
       h_Centrality_ME[i_cent]->Scale(Inte_SE/Inte_ME);
       h_Centrality_SM[i_cent]->Add(h_Centrality_ME[i_cent],-1.0);
+      h_Centrality_SM[i_cent]->Fit(f_Centrality_SM[i_cent],"NMQR");
+      for(Int_t n_par = 0; n_par < 3; n_par++)
+      {
+	ParFit_Centrality_SM[i_cent][n_par] = f_Centrality_SM[i_cent]->GetParameter(n_par);
+      }
+      // Integration range
+      Inte_Centrality_start[i_cent] = ParFit_Centrality_SM[i_cent][0] - nSigmaPhi*ParFit_Centrality_SM[i_cent][1];
+      Inte_Centrality_stop[i_cent]  = ParFit_Centrality_SM[i_cent][0] + nSigmaPhi*ParFit_Centrality_SM[i_cent][1];
     }
   }
-  /*
-  h_Centrality_SE[7]->Draw("pE");
-  h_Centrality_ME[7]->SetLineColor(2);
-  h_Centrality_ME[7]->Draw("pE same");
-  h_Centrality_SM[7]->SetLineColor(4);
-  h_Centrality_SM[7]->Draw("PE same");
-  */
+
+  // calculate total counts and for each centrality bin and eta bin
+  Float_t Counts_Yields[9];
+  for(Int_t i_cent = 0; i_cent < 9; i_cent++) // harmonic loop
+  {
+    Counts_Yields[i_cent] = 0.0;
+    Int_t bin_start = h_Centrality_SM[i_cent]->FindBin(Inte_Centrality_start[i_cent]);
+    Int_t bin_stop  = h_Centrality_SM[i_cent]->FindBin(Inte_Centrality_stop[i_cent]);
+    for(Int_t bin = bin_start; bin <= bin_stop; bin++)
+    {
+      Counts_Yields[i_cent] += h_Centrality_SM[i_cent]->GetBinContent(bin);
+    }
+  }
+
+  // get resolution
+  TString input_res = Form("/home/xusun/Data/AMPT_%s/Resolution/%s_Resolution/Resolution_%s.root",mMode_AMPT[mMode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data());
+  TFile *input = TFile::Open(input_res.Data());
+  TProfile *p_res[2];
+  Double_t mean_res_phi[2][Centrality_total];
+
+  for(Int_t i_order = 0; i_order < 2; i_order++)
+  {
+    TString ProName = Form("p_mRes%d",i_order+2);
+    p_res[i_order] = (TProfile*)input->Get(ProName.Data());
+  }
+
+  for(Int_t i_order = 0; i_order < 2; i_order++)
+  {
+    for(Int_t i_cent = Centrality_start; i_cent < Centrality_stop; i_cent++)
+    {
+      mean_res_phi[i_order][i_cent] = 0.0;
+
+      Double_t res[9];
+      Float_t phi_total = 0.0;
+      for(Int_t i = 0; i < 9; i++)
+      {
+	res[i] = -999.9;
+      }
+      for(Int_t cent = cent_low[i_cent]; cent <= cent_up[i_cent]; cent++)
+      {
+	if(p_res[i_order]->GetBinContent(cent+1) > 0)
+	{
+	  res[cent] = TMath::Sqrt(p_res[i_order]->GetBinContent(cent+1));
+	  phi_total += Counts_Yields[cent];
+	}
+      }
+      for(Int_t cent = cent_low[i_cent]; cent <= cent_up[i_cent]; cent++)
+      {
+	mean_res_phi[i_order][i_cent] += Counts_Yields[cent]/(res[cent]*phi_total);
+      }
+      cout << mOrder[i_order].Data() << ", centality_bin = " << i_cent  << ", mean_res_phi = " << mean_res_phi[i_order][i_cent] << endl;
+    }
+  }
+
+  // scale raw v2 and v3 with resoltuion correction
+  for(Int_t i_order = 0; i_order < 2; i_order++)
+  {
+    for(Int_t i_cent = Centrality_start; i_cent < Centrality_stop; i_cent++)
+    {
+      h_flow[i_order][i_cent]->Scale(mean_res_phi[i_order][i_cent]);
+    }
+  }
+
+
+  // save v2 and v3 into TGraphAsymmErrors and into file
+  TGraphAsymmErrors *g_flow[2][Centrality_total];
+  for(Int_t i_order = 0; i_order < 2; i_order++)
+  {
+    for(Int_t i_cent = Centrality_start; i_cent < Centrality_stop; i_cent++)
+    {
+      TString g_Name = Form("g_%s_%s",mOrder[i_order].Data(),mCentrality[i_cent].Data());
+      g_flow[i_order][i_cent] = new TGraphAsymmErrors();
+      g_flow[i_order][i_cent]->SetName(g_Name.Data());
+      for(Int_t i_pt = 0; i_pt < pt_total_New_phi; i_pt++)
+      {
+	Int_t bin_center = h_flow[i_order][i_cent]->FindBin((pt_low_phi[i_pt]+pt_up_phi[i_pt])/2.0);
+	Float_t bin_content = h_flow[i_order][i_cent]->GetBinContent(bin_center);
+	Float_t bin_error   = h_flow[i_order][i_cent]->GetBinError(bin_center);
+	g_flow[i_order][i_cent]->SetPoint(i_pt,(pt_low_phi[i_pt]+pt_up_phi[i_pt])/2.0,bin_content);
+	g_flow[i_order][i_cent]->SetPointError(i_pt,0.0,0.0,bin_error,bin_error);
+      }
+    }
+  }
+
+  TFile *File_OutPut = new TFile("./flow/Flow_Phi.root","RECREATE");
+  File_OutPut->cd();
+  for(Int_t i_order = 0; i_order < 2; i_order++)
+  {
+    for(Int_t i_cent = Centrality_start; i_cent < Centrality_stop; i_cent++)
+    {
+      g_flow[i_order][i_cent]->Write();
+    }
+  }
+  File_OutPut->Close();
 }
