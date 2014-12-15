@@ -46,7 +46,16 @@ AMPT_resolution::AMPT_resolution(Int_t Energy, Int_t Mode, Int_t Screen, Int_t L
   mEnergy = Energy;
   mMode = Mode;
   mScreen = Screen;
-  TString InPutList = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/List/%s_List/Split_%s_%d_%d.list",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+
+  TString InPutList;
+  if(mMode == 0)
+  {
+    InPutList = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/List/%s_List/Split_%s_%d_%d.list",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+  }
+  if(mMode == 1)
+  {
+    InPutList = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/List/%s_List/%s/Split_%s_%d_%d.list",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mScreenMass_AMPT[mScreen].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+  }
   SetInPutList(InPutList);
   SetStartEvent(StartEvent);
   SetStopEvent(StopEvent);
