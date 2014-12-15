@@ -8,7 +8,7 @@ void Flow(const Int_t Energy = 4, const Int_t Mode = 0, const Int_t Screen = 0, 
   cout << "All libraries are loaded!!!!" << endl;
   cout << "Start to Calculate Flow!!" << endl;
 
-  AMPT_v3v2 *mFlow = new AMPT_v3v2(Energy,Mode,List,StartEvent,StopEvent);
+  AMPT_v3v2 *mFlow = new AMPT_v3v2(Energy,Mode,Screen,List,StartEvent,StopEvent);
   mFlow->Init();
   mFlow->Make();
   mFlow->Finish();

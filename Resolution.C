@@ -8,7 +8,7 @@ void Resolution(const Int_t Energy = 3, const Int_t Mode = 1, const Int_t Screen
   cout << "All libraries are loaded!!!!" << endl;
   cout << "Start to Calculate Resolution!!" << endl;
 
-  AMPT_resolution *mRes = new AMPT_resolution(Energy,Mode,List,StartEvent,StopEvent);
+  AMPT_resolution *mRes = new AMPT_resolution(Energy,Mode,Screen,List,StartEvent,StopEvent);
   mRes->Init();
   mRes->Make();
   mRes->Finish();
