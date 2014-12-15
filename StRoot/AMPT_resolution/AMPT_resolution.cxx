@@ -16,6 +16,7 @@ ClassImp(AMPT_resolution)
 Int_t AMPT_resolution::mInput_flag = 1;
 TString AMPT_resolution::mBeamEnergy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
 TString AMPT_resolution::mMode_AMPT[2] = {"Default","StringMelting"};
+TString AMPT_resolution::mScreenMass_AMPT[2] = {"3mb","6mb"};
 Int_t AMPT_resolution::mCentrality[2][7][10] = {
 						 { // Default
 						   {9,16,27,42,63,92,130,182,219,329}, //  7GeV
@@ -40,15 +41,25 @@ Int_t AMPT_resolution::mCentrality[2][7][10] = {
 Int_t AMPT_resolution::mList_start[25] = {  1,101,201,301,401,501,601,701,801, 901,1001,1101,1201,1301,1401,1501,1601,1701,1801,1901,2001,2101,2201,2301,2401};
 Int_t AMPT_resolution::mList_stop[25]  = {100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500};
 //------------------------------------------------------------
-AMPT_resolution::AMPT_resolution(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Long64_t StopEvent)
+AMPT_resolution::AMPT_resolution(Int_t Energy, Int_t Mode, Int_t Screen, Int_t List, Long64_t StartEvent, Long64_t StopEvent)
 {
   mEnergy = Energy;
   mMode = Mode;
+  mScreen = Screen;
   TString InPutList = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/List/%s_List/Split_%s_%d_%d.list",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
   SetInPutList(InPutList);
   SetStartEvent(StartEvent);
   SetStopEvent(StopEvent);
-  TString OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Resolution/%s_Resolution/Resolution_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+
+  TString OutPutFile;
+  if(mMode == 0)
+  {
+    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Resolution/%s_Resolution/Resolution_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+  }
+  if(mMode == 1)
+  {
+    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Resolution/%s_Resolution/%s/Resolution_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mScreenMass_AMPT[mScreen].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+  }
   SetOutPutFile(OutPutFile);
 }
 

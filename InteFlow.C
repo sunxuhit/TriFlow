@@ -80,6 +80,7 @@ Double_t SpectraFunc(Double_t* x_val, Double_t* par)
 }
 
 static TString Mode[2] = {"Default","StringMelting"};
+static TString ScreenMass[2] = {"3mb","6mb"};
 static TString Energy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
 static TString Order[2] = {"2nd","3rd"};
 static TString Centrality[4] = {"0080","0010","1040","4080"};
@@ -103,7 +104,7 @@ static Int_t mParType_Start = 0;
 static Int_t mParType_Stop  = 3;
 
 // Calculate integrated v2 and v3
-void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19.6 GeV, 3: 27 GeV, 4: 39 GeV, 5: 62.4 GeV, 6: 200 GeV | 0: Default, 1: String Melting
+void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19.6 GeV, 3: 27 GeV, 4: 39 GeV, 5: 62.4 GeV, 6: 200 GeV | 0: Default, 1: String Melting | 0: 3mb, 1: 6mb
 {
 //  ROOT::Math::MinimizerOptions::SetDefaultMaxFunctionCalls(50000);
   //---------------------Constant------------------------
@@ -111,8 +112,15 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2:
   const Float_t pt_stop  = 2.0; // stop point for pt integration
   //---------------------Constant------------------------
 
-  TString inputfile = Form("/home/xusun/Data/AMPT_%s/Flow/%s_%s/Flow_%s.root",Mode[mMode].Data(),Energy[mEnergy].Data(),Mode[mMode].Data(),Energy[mEnergy].Data());
-//  TString inputfile = Form("/home/xusun/Data/AMPT_%s/Flow/%s_%s/Flow_%s_1_100.root",Mode[mMode].Data(),Energy[mEnergy].Data(),Mode[mMode].Data(),Energy[mEnergy].Data()); // temperory file
+  TString inputfile;
+  if(mMode == 0)
+  {
+    inputfile = Form("/home/xusun/Data/AMPT_%s/Flow/%s_%s/Flow_%s.root",Mode[mMode].Data(),Energy[mEnergy].Data(),Mode[mMode].Data(),Energy[mEnergy].Data());
+  }
+  if(mMode == 1)
+  {
+    inputfile = Form("/home/xusun/Data/AMPT_%s/Flow/%s_%s/%s/Flow_%s.root",Mode[mMode].Data(),Energy[mEnergy].Data(),Mode[mMode].Data(),ScreenMass[mScreen].Data(),Energy[mEnergy].Data());
+  }
   cout << "Input File: " << inputfile.Data() << endl;
   TFile *File_input = TFile::Open(inputfile.Data());
 
@@ -267,7 +275,16 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2:
   }
 
   // write Histogram into Output file
-  TString outputfile = Form("/home/xusun/Data/AMPT_%s/InteFlow/%s_%s/InteFlow.root",Mode[mMode].Data(),Energy[mEnergy].Data(),Mode[mMode].Data(),Energy[mEnergy].Data());
+  TString outputfile;
+  if(mMode == 0)
+  {
+    outputfile = Form("/home/xusun/Data/AMPT_%s/InteFlow/%s_%s/InteFlow.root",Mode[mMode].Data(),Energy[mEnergy].Data(),Mode[mMode].Data());
+  }
+  if(mMode == 1)
+  {
+    outputfile = Form("/home/xusun/Data/AMPT_%s/InteFlow/%s_%s/%s/InteFlow.root",Mode[mMode].Data(),Energy[mEnergy].Data(),Mode[mMode].Data(),ScreenMass[mScreen].Data());
+  }
+  cout << "OutPut File: " << outputfile.Data() << endl;
   TFile *File_output = new TFile(outputfile.Data(),"RECREATE");
   File_output->cd();
   for(Int_t i_cent = 0; i_cent < 4; i_cent++)

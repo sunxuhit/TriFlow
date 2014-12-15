@@ -14,7 +14,7 @@ class TH2F;
 class AMPT_resolution // TODO: change the Tree structure
 {
   public:
-    AMPT_resolution(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Long64_t StopEvent); // read in energy, AMPT mode, data list, StartEvent and StopEvent
+    AMPT_resolution(Int_t Energy, Int_t Mode, Int_t Screen, Int_t List, Long64_t StartEvent, Long64_t StopEvent); // read in energy, AMPT mode, data list, StartEvent and StopEvent
     ~AMPT_resolution();
 
     void SetInPutList(const TString inputlist);
@@ -29,6 +29,7 @@ class AMPT_resolution // TODO: change the Tree structure
   private:
     Int_t   mEnergy;
     Int_t mMode; // 0 for default, 1 for string melting
+    Int_t mScreen; // 0 for 3mb, 1 for 6mb
     TString mInPutList;
     TString mOutPutFile;
     Long64_t mStartEvent;
@@ -36,6 +37,7 @@ class AMPT_resolution // TODO: change the Tree structure
     static Int_t mInput_flag;
     static TString mBeamEnergy[7];
     static TString mMode_AMPT[2];
+    static TString mScreenMass_AMPT[2];
     static Int_t mCentrality[2][7][10]; // centrality definition
     static Int_t mList_start[25];
     static Int_t mList_stop[25];

@@ -14,6 +14,7 @@ ClassImp(AMPT_v3v2)
 Int_t AMPT_v3v2::mInput_flag = 1;
 TString AMPT_v3v2::mBeamEnergy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
 TString AMPT_v3v2::mMode_AMPT[2] = {"Default","StringMelting"};
+TString AMPT_v3v2::mScreenMass_AMPT[2] = {"3mb","6mb"};
 Int_t AMPT_v3v2::mRefMult[2][7][10] = {
 				        { // Default
 				          {9,16,27,42,63,92,130,182,219,329}, //  7GeV
@@ -43,20 +44,37 @@ Int_t AMPT_v3v2::mList_stop[25]  = {100,200,300,400,500,600,700,800,900,1000,110
 Int_t AMPT_v3v2::Centrality_start = 0;
 Int_t AMPT_v3v2::Centrality_stop  = 4;
 //------------------------------------------------------------
-AMPT_v3v2::AMPT_v3v2(Int_t Energy, Int_t Mode, Int_t List, Long64_t StartEvent, Long64_t StopEvent)
+AMPT_v3v2::AMPT_v3v2(Int_t Energy, Int_t Mode, Int_t Screen, Int_t List, Long64_t StartEvent, Long64_t StopEvent)
 {
   mEnergy = Energy;
   mMode = Mode;
+  mScreen = Screen;
   TString InPutList = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/List/%s_List/Split_%s_%d_%d.list",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
   SetInPutList(InPutList); // set input list
 
   SetStartEvent(StartEvent); // set start event
   SetStopEvent(StopEvent); // set stop event
 
-  TString InPutRes = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Resolution/%s_Resolution/Resolution_%s.root",mMode_AMPT[Mode].Data(),mBeamEnergy[Energy].Data(),mBeamEnergy[Energy].Data());
+  TString InPutRes;
+  if(mMode == 0)
+  {
+    InPutRes = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Resolution/%s_Resolution/Resolution_%s.root",mMode_AMPT[Mode].Data(),mBeamEnergy[Energy].Data(),mBeamEnergy[Energy].Data());
+  }
+  if(mMode == 1)
+  {
+    InPutRes = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Resolution/%s_Resolution/%s/Resolution_%s.root",mMode_AMPT[Mode].Data(),mBeamEnergy[Energy].Data(),mScreenMass_AMPT[mScreen].Data(),mBeamEnergy[Energy].Data());
+  }
   SetInPutRes(InPutRes); // set input resolution
 
-  TString OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Flow/%s_%s/Flow_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+  TString OutPutFile;
+  if(mMode == 0)
+  {
+    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Flow/%s_%s/Flow_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+  }
+  if(mMode == 1)
+  {
+    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Flow/%s_%s/%s/Flow_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mScreenMass_AMPT[mScreen].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+  }
   SetOutPutFile(OutPutFile); // set output file
 }
 
