@@ -240,9 +240,9 @@ void AMPT_resolution::Make()
 //      cout << "px = " << Px[i_track] << ", py = " << Py[i_track] << ", pz = " << Pz[i_track] << endl;
 //      cout << "p_track = " << p_track << ", pt_track = " << pt_track << endl;
       // track selection
+      if(TMath::Abs(eta_track) < 0.5) refMult++; // refMult calculation
       if(TMath::Abs(PID[i_track]) == 211 || TMath::Abs(PID[i_track]) == 321 || TMath::Abs(PID[i_track]) == 2212) // pi^{+/-}, K^{+/-}, p and pbar
       {
-	if(TMath::Abs(eta_track) < 0.5) refMult++; // refMult calculation
 	if(pt_track > 0.2 && pt_track < 2.0 && p_track < 10.0) // pt and p cut
 //	if(pt_track >= 0.2 && pt_track < 2.0) // pt and p cut
 	{
