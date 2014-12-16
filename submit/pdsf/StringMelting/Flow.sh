@@ -6,9 +6,9 @@ date
 if [ $# -eq 0 ]
   then
 #    counter=0
-    Name="_Flow_StringMelting_"
+    Name="_Flow_StringMelting_3mb_"
     suffix=".root"
-    for((counter=0;counter<=11;counter=counter+1))
+    for((counter=0;counter<=19;counter=counter+1))
     do
       cp ./run.csh ./run$Name$counter.csh
 
@@ -18,7 +18,7 @@ if [ $# -eq 0 ]
 #      echo -n 1',' >> run$Name$counter.csh  # 11GeV
 #      echo -n 2',' >> run$Name$counter.csh  # 19GeV
 #      echo -n 3',' >> run$Name$counter.csh  # 27GeV
-#      echo -n 4',' >> run$Name$counter.csh  # 39GeV
+      echo -n 4',' >> run$Name$counter.csh  # 39GeV
 #      echo -n 5',' >> run$Name$counter.csh  # 62GeV
 #      echo -n 6',' >> run$Name$counter.csh  # 200GeV
 ###############################energy###################################
@@ -44,8 +44,8 @@ if [ $# -eq 0 ]
 ############################start_event#################################
 
 #############################stop_event#################################
-#      echo  1000000000')'"'" >> run$Name$counter.csh  # stop_event
-      echo  100024')'"'" >> run$Name$counter.csh  # stop_event: test mode
+      echo  1000000000')'"'" >> run$Name$counter.csh  # stop_event
+#      echo  100024')'"'" >> run$Name$counter.csh  # stop_event: test mode
 #############################stop_event#################################
 
       qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G,projectio=1 -o /project/projectdirs/star/xusun/OutPut/AMPT_StringMelting/Log/run$Name$counter.log -e /project/projectdirs/star/xusun/OutPut/AMPT_StringMelting/Log/run$Name$counter.err ./run$Name$counter.csh
