@@ -111,7 +111,7 @@ void AMPT_resolution::Init()
   h_mPart = new TH1F("h_mPart","h_mPart",2000,0,2000.0);
   h_mMult = new TH1F("h_mMult","h_mMult",10000,0,10000.0);
   h_mRefMult = new TH1F("h_mRefMult","h_mRefMult",10000,0,10000.0);
-  h_mEta = new TH1F("h_mEta","h_mEta",800,-10.0,10.0);
+  h_mEta = new TH1F("h_mEta","h_mEta",1001,-10.01,10.01);
   h_mPsi2_East = new TH1F("h_mPsi2_East","h_mPsi2_East",100,-TMath::Pi()/2.0,TMath::Pi()/2.0);
   h_mPsi2_West = new TH1F("h_mPsi2_West","h_mPsi2_West",100,-TMath::Pi()/2.0,TMath::Pi()/2.0);
   h_mPsi3_East = new TH1F("h_mPsi3_East","h_mPsi3_East",100,-TMath::Pi()/3.0,TMath::Pi()/3.0);
