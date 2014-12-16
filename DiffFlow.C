@@ -28,11 +28,6 @@ static TString ParType[10] = {"pi_plus","pi_minus","K_plus","K_minus","p","pbar"
 // Calculate integrated v2 and v3
 void DiffFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19.6 GeV, 3: 27 GeV, 4: 39 GeV, 5: 62.4 GeV, 6: 200 GeV | 0: Default, 1: String Melting | 0: 3mb, 1: 6mb
 {
-  //---------------------Constant------------------------
-  const Float_t pt_start = 0.2; // start point for pt integration
-  const Float_t pt_stop  = 3.0; // stop point for pt integration
-  //---------------------Constant------------------------
-
   TString inputfile;
   if(mMode == 0)
   {

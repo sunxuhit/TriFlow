@@ -108,8 +108,8 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 G
 {
 //  ROOT::Math::MinimizerOptions::SetDefaultMaxFunctionCalls(50000);
   //---------------------Constant------------------------
-  const Float_t pt_start = 0.2; // start point for pt integration
-  const Float_t pt_stop  = 2.0; // stop point for pt integration
+  const Float_t pt_start = 1.5; // start point for pt integration
+  const Float_t pt_stop  = 3.0; // stop point for pt integration
   //---------------------Constant------------------------
 
   TString inputfile;
