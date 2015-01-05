@@ -139,7 +139,6 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 G
 
 
   // Read in flow TProfile => transfer to TH1F | Read in pt Spectra
-//  for(Int_t i_par = mParType_Start; i_par < mParType_Stop; i_par++)
   for(Int_t i_par = 0; i_par < 10; i_par++)
   {
     for(Int_t i_order = 0; i_order < 2; i_order++)
@@ -154,7 +153,7 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 G
 	ProName = Form("Flow_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
 	p_mFlow[i_par][i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
 	HistName = Form("h_Flow_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data());
-	h_mFlow[i_par][i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+	h_mFlow[i_par][i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.1,5.1);
 	for(Int_t i_bin = 1; i_bin < 26; i_bin++)
 	{
 	  h_mFlow[i_par][i_order][i_cent]->SetBinContent(i_bin,p_mFlow[i_par][i_order][i_cent]->GetBinContent(i_bin));
@@ -164,81 +163,11 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 G
 	HistName = Form("Pt_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data());
 	h_mPt[i_par][i_order][i_cent] = (TH1F*)File_input->Get(HistName.Data());
 
-//	TString FuncName = Form("f_Pt_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data());
-//	f_mPt[i_par][i_order][i_cent] = new TF1(FuncName.Data(),PtFitFunc2_mod_x,0,5.0,4);
-//	f_mPt[i_par][i_order][i_cent]->SetParameter(0,ParMass[i_par]);
-//	f_mPt[i_par][i_order][i_cent]->SetParameter(1,0.2);
-//	f_mPt[i_par][i_order][i_cent]->SetParameter(2,10000);
-//	f_mPt[i_par][i_order][i_cent]->SetParameter(3,0.1);
-//	f_mPt[i_par][i_order][i_cent]->SetRange(1.5,3.0);
-
-//	f_mPt[i_par][i_order][i_cent] = new TF1(FuncName.Data(),SpectraFunc,0,5.0,7);
-//	f_mPt[i_par][i_order][i_cent]->SetParameter(0,0.20);
-//	f_mPt[i_par][i_order][i_cent]->SetParLimits(0,0.0,1.00);
-//	f_mPt[i_par][i_order][i_cent]->SetParameter(1,0.5);
-//	f_mPt[i_par][i_order][i_cent]->FixParameter(2,0.);
-//	f_mPt[i_par][i_order][i_cent]->FixParameter(3,0.);
-//	f_mPt[i_par][i_order][i_cent]->FixParameter(4,1.0);
-//	f_mPt[i_par][i_order][i_cent]->FixParameter(5,i_par);
-//	f_mPt[i_par][i_order][i_cent]->SetParameter(6,1000);
-//	f_mPt[i_par][i_order][i_cent]->SetRange(1.5,3.0);
-//	h_mPt[i_par][i_order][i_cent]->Fit(f_mPt[i_par][i_order][i_cent],"NMR");
-
-//	h_mPt[i_par][i_order][i_cent]->Rebin(4);
 	h_mFlow[i_par][i_order][i_cent]->Multiply(h_mPt[i_par][i_order][i_cent]);
 	//--------------------------------------------------------------------------------------------------
       }
     }
   }
-
-  /*
-  TCanvas *c_play = new TCanvas("c_play","c_play",10,10,800,800);
-  c_play->cd()->SetLeftMargin(0.15);
-  c_play->cd()->SetBottomMargin(0.15);
-  c_play->cd()->SetTicks(1,1);
-  c_play->cd()->SetGrid(0,0);
-  c_play->cd()->SetLogy();
-
-  TH1F *h_play = new TH1F("h_play","h_play",100,0.0,5.0);
-  for(Int_t i_bin = 1; i_bin < 101; i_bin++)
-  {
-    h_play->SetBinContent(i_bin,-10.0);
-    h_play->SetBinError(i_bin,1.0);
-  }
-  Double_t y_max = h_mPt[0][mOrder_Start][mCentrality_Start]->GetMaximum()*100;
-  h_play->SetStats(0);
-  h_play->SetTitle("");
-  h_play->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-  h_play->GetYaxis()->SetTitle("dN/dp_{T}");
-  h_play->GetYaxis()->SetTitleOffset(1.2);
-  h_play->GetXaxis()->CenterTitle();
-  h_play->GetYaxis()->CenterTitle();
-  h_play->GetXaxis()->SetRangeUser(0.0,5.0);
-  h_play->GetYaxis()->SetRangeUser(0.1,10.0*y_max);
-  h_play->SetNdivisions(505,"X");
-  h_play->SetNdivisions(510,"Y");
-  h_play->Draw("PE");
-  TLegend *leg = new TLegend(0.7,0.65,0.85,0.87);
-  leg->SetFillColor(10);
-  leg->SetBorderSize(0);
-  for(Int_t i_par = 0; i_par < 5; i_par++)
-  {
-    h_mPt[ParOrder[i_par]][mOrder_Start][mCentrality_Start]->SetMarkerStyle(ParStyle[i_par]);
-    h_mPt[ParOrder[i_par]][mOrder_Start][mCentrality_Start]->SetMarkerColor(ParColor[i_par]);
-    h_mPt[ParOrder[i_par]][mOrder_Start][mCentrality_Start]->SetMarkerSize(1.2);
-    h_mPt[ParOrder[i_par]][mOrder_Start][mCentrality_Start]->Scale(TMath::Power(10,-1.0*(i_par-2)));
-    h_mPt[ParOrder[i_par]][mOrder_Start][mCentrality_Start]->Draw("pE same");
-    Double_t Norm = f_mPt[ParOrder[i_par]][mOrder_Start][mCentrality_Start]->GetParameter(6);
-    f_mPt[ParOrder[i_par]][mOrder_Start][mCentrality_Start]->SetParameter(6,Norm*TMath::Power(10,-1.0*(i_par-2)));
-    f_mPt[ParOrder[i_par]][mOrder_Start][mCentrality_Start]->SetLineColor(ParColor[i_par]);
-    f_mPt[ParOrder[i_par]][mOrder_Start][mCentrality_Start]->SetLineWidth(4);
-    f_mPt[ParOrder[i_par]][mOrder_Start][mCentrality_Start]->Draw("l same");
-    TString legend = Form("%s #times 10^{%d}",ParName[i_par].Data(),-1*(i_par-2));
-    cout << legend << endl;
-    leg->AddEntry(h_mPt[ParOrder[i_par]][mOrder_Start][mCentrality_Start],legend.Data(),"p");
-  }
-  leg->Draw("same");
-  */
 
   // Calculate Integrated v2 and v3 => could be merged into loop above => using individual loop to be more clear
   for(Int_t i_order = 0; i_order < 2; i_order++)
