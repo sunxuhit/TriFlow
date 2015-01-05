@@ -16,7 +16,7 @@ Int_t AMPT_phi::mInput_flag = 1;
 TString AMPT_phi::mBeamEnergy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
 TString AMPT_phi::mMode_AMPT[2] = {"Default","StringMelting"};
 TString AMPT_phi::mMode_SM[2] = {"SE","ME"};
-Int_t AMPT_phi::mCentrality[2][7][10] = {
+Int_t AMPT_phi::mRefMult[2][7][10] = {
 					  { // Default
 					    {9,16,27,42,63,92,130,182,219,329}, //  7GeV
 					    {10,18,31,49,74,106,148,207,246,352}, // 11GeV

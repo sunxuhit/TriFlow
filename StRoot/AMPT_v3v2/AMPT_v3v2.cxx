@@ -15,7 +15,7 @@ Int_t AMPT_v3v2::mInput_flag = 1;
 TString AMPT_v3v2::mBeamEnergy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
 TString AMPT_v3v2::mMode_AMPT[2] = {"Default","StringMelting"};
 TString AMPT_v3v2::mScreenMass_AMPT[2] = {"3mb","6mb"};
-Int_t AMPT_v3v2::mCentrality[2][7][10] = {
+Int_t AMPT_v3v2::mRefMult[2][7][10] = {
 					   { // Default
 					     {9,16,27,42,63,92,130,182,219,329}, //  7GeV
 					     {10,18,31,49,74,106,148,207,246,352}, // 11GeV
