@@ -66,15 +66,15 @@ class AMPT_phi
     static Float_t pt_up_phi[23];
 
     // phi-Psi bin
-    static Float_t phi_Psi2_low[7];
-    static Float_t phi_Psi2_up[7];
-    static Float_t phi_Psi3_low[7];
-    static Float_t phi_Psi3_up[7];
+    static Double_t phi_Psi2_low[7];
+    static Double_t phi_Psi2_up[7];
+    static Double_t phi_Psi3_low[7];
+    static Double_t phi_Psi3_up[7];
 
-    static Float_t Psi2_low[3];
-    static Float_t Psi2_up[3];
-    static Float_t Psi3_low[5];
-    static Float_t Psi3_up[5];
+    static Double_t Psi2_low[3];
+    static Double_t Psi2_up[3];
+    static Double_t Psi3_low[5];
+    static Double_t Psi3_up[5];
 
     static Int_t pt_total_phi;
     static Int_t Phi_Psi_total;
