@@ -53,7 +53,7 @@ void Centrality(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // mEnerg
       {
 	bin_cent[9] = i_binx;
       }
-      if(ratio > Centrality_start[i_cent] && ratio < Centrality_stop[i_cent])
+      if(ratio > Centrality_start[i_cent] && ratio <= Centrality_stop[i_cent])
       {
 	bin_cent[i_cent] = i_binx;
       }
