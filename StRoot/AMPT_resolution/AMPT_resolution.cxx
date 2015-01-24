@@ -174,10 +174,10 @@ void AMPT_resolution::Init()
     mChain_Input->SetBranchAddress("Nb", &Nb, &b_Nb);
     mChain_Input->SetBranchAddress("Nab", &Nab, &b_Nab);
     mChain_Input->SetBranchAddress("Psi", &Psi, &b_Psi);
-    mChain_Input->SetBranchAddress("Nx", Nx, &b_Nx);
-    mChain_Input->SetBranchAddress("Ny", Ny, &b_Ny);
-    mChain_Input->SetBranchAddress("Nz", Nz, &b_Nz);
-    mChain_Input->SetBranchAddress("Stat", Stat, &b_Stat);
+//    mChain_Input->SetBranchAddress("Nx", Nx, &b_Nx);
+//    mChain_Input->SetBranchAddress("Ny", Ny, &b_Ny);
+//    mChain_Input->SetBranchAddress("Nz", Nz, &b_Nz);
+//    mChain_Input->SetBranchAddress("Stat", Stat, &b_Stat);
     mChain_Input->SetBranchAddress("PID", PID, &b_PID);
     mChain_Input->SetBranchAddress("Px", Px, &b_Px);
     mChain_Input->SetBranchAddress("Py", Py, &b_Py);
