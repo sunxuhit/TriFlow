@@ -281,12 +281,12 @@ void AMPT_resolution::Make()
     if(cent9 > -1.0)
     {
       // eta_sub method event plane resolution calculation
+      /*
       if( 
-	  /*
 	  !(Q2x_east == 0.0 && Q2y_east == 0.0) 
        && !(Q2x_west == 0.0 && Q2y_west == 0.0)
-       */
 	)
+	*/
       {
 	Float_t Psi2_east = TMath::ATan2(Q2y_east,Q2x_east)/2.0; // -pi/2 to pi/2
 	Float_t Psi2_west = TMath::ATan2(Q2y_west,Q2x_west)/2.0;
@@ -295,12 +295,12 @@ void AMPT_resolution::Make()
 	h_mPsi2_West->Fill(Psi2_west);
 	h_mPsi2->Fill(Psi2_east,Psi2_west);
       }
-      if( 
 	  /*
+      if( 
 	  !(Q3x_east == 0.0 && Q3y_east == 0.0) 
        && !(Q3x_west == 0.0 && Q3y_west == 0.0)
-       */
 	)
+       */
       {
 	Float_t Psi3_east = TMath::ATan2(Q3y_east,Q3x_east)/3.0; // -pi/3 to pi/3
 	Float_t Psi3_west = TMath::ATan2(Q3y_west,Q3x_west)/3.0;
