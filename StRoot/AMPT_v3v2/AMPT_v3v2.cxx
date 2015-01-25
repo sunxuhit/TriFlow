@@ -548,7 +548,7 @@ void AMPT_v3v2::Make()
 	  if(TMath::Abs(eta_track) <= 1.0) // eta cut
 	  {
 	    if(pt_track < 0.1) continue;
-	    Float_t v3, v3_RP
+	    Float_t v3, v3_RP;
 	    if(eta_track <= 0.0) // east track => west event plane
 	    {
 	      v3 = TMath::Cos(3.0*(phi_track-Psi3_West))/res3;
