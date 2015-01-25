@@ -114,12 +114,22 @@ void AMPT_resolution::Init()
   h_mMult = new TH1F("h_mMult","h_mMult",10000,0,10000.0);
   h_mRefMult = new TH1F("h_mRefMult","h_mRefMult",10000,-0.5,9999.5);
   h_mEta = new TH1F("h_mEta","h_mEta",1001,-10.01,10.01);
-  h_mPsi2_East = new TH1F("h_mPsi2_East","h_mPsi2_East",100,-TMath::Pi()/2.0,TMath::Pi()/2.0);
-  h_mPsi2_West = new TH1F("h_mPsi2_West","h_mPsi2_West",100,-TMath::Pi()/2.0,TMath::Pi()/2.0);
-  h_mPsi3_East = new TH1F("h_mPsi3_East","h_mPsi3_East",100,-TMath::Pi()/3.0,TMath::Pi()/3.0);
-  h_mPsi3_West = new TH1F("h_mPsi3_West","h_mPsi3_West",100,-TMath::Pi()/3.0,TMath::Pi()/3.0);
-  h_mPsi2 = new TH2F("h_mPsi2","h_mPsi2",100,-TMath::Pi()/2.0,TMath::Pi()/2.0,100,-TMath::Pi()/2.0,TMath::Pi()/2.0);
-  h_mPsi3 = new TH2F("h_mPsi3","h_mPsi3",100,-TMath::Pi()/3.0,TMath::Pi()/3.0,100,-TMath::Pi()/3.0,TMath::Pi()/3.0);
+  for(Int_t i_cent = 0; i_cent < 9; i_cent++)
+  {
+    TString HistName;
+    HistName = Form("h_mPsi2_East_%d",i_cent);
+    h_mPsi2_East[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    HistName = Form("h_mPsi2_West_%d",i_cent);
+    h_mPsi2_West[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    HistName = Form("h_mPsi3_East_%d",i_cent);
+    h_mPsi3_East[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    HistName = Form("h_mPsi3_West_%d",i_cent);
+    h_mPsi3_West[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    HistName = Form("h_mPsi2_%d",i_cent);
+    h_mPsi2[i_cent] = new TH2F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi(),100,-TMath::Pi(),TMath::Pi());
+    HistName = Form("h_mPsi3_%d",i_cent);
+    h_mPsi3[i_cent] = new TH2F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi(),100,-TMath::Pi(),TMath::Pi());
+  }
 
   // initialize the TChain
   if (!mInPutList.IsNull())   // if input file is ok
@@ -291,9 +301,9 @@ void AMPT_resolution::Make()
 	Float_t Psi2_east = TMath::ATan2(Q2y_east,Q2x_east)/2.0; // -pi/2 to pi/2
 	Float_t Psi2_west = TMath::ATan2(Q2y_west,Q2x_west)/2.0;
 	p_mRes2->Fill(cent9,TMath::Cos(2.0*(Psi2_east-Psi2_west)));
-	h_mPsi2_East->Fill(Psi2_east);
-	h_mPsi2_West->Fill(Psi2_west);
-	h_mPsi2->Fill(Psi2_east,Psi2_west);
+	h_mPsi2_East[cent9]->Fill(Psi2_east);
+	h_mPsi2_West[cent9]->Fill(Psi2_west);
+	h_mPsi2[cent9]->Fill(Psi2_east,Psi2_west);
       }
 	  /*
       if( 
@@ -305,9 +315,9 @@ void AMPT_resolution::Make()
 	Float_t Psi3_east = TMath::ATan2(Q3y_east,Q3x_east)/3.0; // -pi/3 to pi/3
 	Float_t Psi3_west = TMath::ATan2(Q3y_west,Q3x_west)/3.0;
 	p_mRes3->Fill(cent9,TMath::Cos(3.0*(Psi3_east-Psi3_west)));
-	h_mPsi3_East->Fill(Psi3_east);
-	h_mPsi3_West->Fill(Psi3_west);
-	h_mPsi3->Fill(Psi3_east,Psi3_west);
+	h_mPsi3_East[cent9]->Fill(Psi3_east);
+	h_mPsi3_West[cent9]->Fill(Psi3_west);
+	h_mPsi3[cent9]->Fill(Psi3_east,Psi3_west);
       }
     }
   }
@@ -325,12 +335,15 @@ void AMPT_resolution::Finish()
   h_mPart->Write();
   h_mMult->Write();
   h_mEta->Write();
-  h_mPsi2_East->Write();
-  h_mPsi2_West->Write();
-  h_mPsi3_East->Write();
-  h_mPsi3_West->Write();
-  h_mPsi2->Write();
-  h_mPsi3->Write();
+  for(Int_t i_cent = 0; i_cent < 9; i_cent++)
+  {
+    h_mPsi2_East[i_cent]->Write();
+    h_mPsi2_West[i_cent]->Write();
+    h_mPsi3_East[i_cent]->Write();
+    h_mPsi3_West[i_cent]->Write();
+    h_mPsi2[i_cent]->Write();
+    h_mPsi3[i_cent]->Write();
+  }
   h_mRefMult->Write();
   mFile_OutPut->Close();
 }

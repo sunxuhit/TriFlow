@@ -50,12 +50,12 @@ class AMPT_resolution // TODO: change the Tree structure
     TH1F *h_mMult;
     TH1F *h_mRefMult;
     TH1F *h_mEta;
-    TH1F *h_mPsi2_East;
-    TH1F *h_mPsi2_West;
-    TH1F *h_mPsi3_East;
-    TH1F *h_mPsi3_West;
-    TH2F *h_mPsi2;
-    TH2F *h_mPsi3;
+    TH1F *h_mPsi2_East[9];
+    TH1F *h_mPsi2_West[9];
+    TH1F *h_mPsi3_East[9];
+    TH1F *h_mPsi3_West[9];
+    TH2F *h_mPsi2[9];
+    TH2F *h_mPsi3[9];
 
     //---------------------------------------------------------------
     TChain         *mChain_Input;

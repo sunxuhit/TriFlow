@@ -257,10 +257,18 @@ void AMPT_v3v2::Init()
   h_mMult = new TH1F("h_mMult","h_mMult",10000,0,10000.0);
   h_mRefMult = new TH1F("h_mRefMult","h_mRefMult",10000,0,10000.0);
   h_mEta = new TH1F("h_mEta","h_mEta",1001,-10.01,10.01);
-  h_mPsi2_East = new TH1F("h_mPsi2_East","h_mPsi2_East",100,-TMath::Pi(),TMath::Pi());
-  h_mPsi2_West = new TH1F("h_mPsi2_West","h_mPsi2_West",100,-TMath::Pi(),TMath::Pi());
-  h_mPsi3_East = new TH1F("h_mPsi3_East","h_mPsi3_East",100,-TMath::Pi(),TMath::Pi());
-  h_mPsi3_West = new TH1F("h_mPsi3_West","h_mPsi3_West",100,-TMath::Pi(),TMath::Pi());
+  for(Int_t i_cent = 0; i_cent < 9; i_cent++)
+  {
+    TString HistName;
+    HistName = Form("h_mPsi2_East_%d",i_cent);
+    h_mPsi2_East[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    HistName = Form("h_mPsi2_West_%d",i_cent);
+    h_mPsi2_West[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    HistName = Form("h_mPsi3_East_%d",i_cent);
+    h_mPsi3_East[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    HistName = Form("h_mPsi3_West_%d",i_cent);
+    h_mPsi3_West[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+  }
   h_mCentrality = new TH1F("h_mCentrality","h_mCentrality",9,-0.5,8.5);
 
   // initialize the TChain
@@ -527,8 +535,8 @@ void AMPT_v3v2::Make()
 	}
 
 	// QA: 2nd event plane and centrality
-	h_mPsi2_East->Fill(Psi2_East);
-	h_mPsi2_West->Fill(Psi2_West);
+	h_mPsi2_East[cent9]->Fill(Psi2_East);
+	h_mPsi2_West[cent9]->Fill(Psi2_West);
 	h_mCentrality->Fill(cent9);
       }
       if( // 3rd track loop for v3 calculation
@@ -637,8 +645,8 @@ void AMPT_v3v2::Make()
 	}
 
 	// QA: 3rd event plane
-	h_mPsi3_East->Fill(Psi3_East);
-	h_mPsi3_West->Fill(Psi3_West);
+	h_mPsi3_East[cent9]->Fill(Psi3_East);
+	h_mPsi3_West[cent9]->Fill(Psi3_West);
       }
     }
   }
@@ -656,10 +664,13 @@ void AMPT_v3v2::Finish()
   h_mMult->Write();
   h_mEta->Write();
   h_mRefMult->Write();
-  h_mPsi2_East->Write();
-  h_mPsi2_West->Write();
-  h_mPsi3_East->Write();
-  h_mPsi3_West->Write();
+  for(Int_t i_cent = 0; i_cent < 9; i_cent++)
+  {
+    h_mPsi2_East[i_cent]->Write();
+    h_mPsi2_West[i_cent]->Write();
+    h_mPsi3_East[i_cent]->Write();
+    h_mPsi3_West[i_cent]->Write();
+  }
   h_mCentrality->Write();
   for(Int_t i_order = 0; i_order < 2; i_order++)
   {
