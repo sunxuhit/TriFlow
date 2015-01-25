@@ -277,7 +277,7 @@ void AMPT_resolution::Make()
     h_mRefMult->Fill(refMult); // fill refMult distribution
     // Centrality defination
     Int_t cent9 = -1;;
-    for(Int_t i_cent = 0; i_cent < 10; i_cent++)
+    for(Int_t i_cent = 0; i_cent < 9; i_cent++)
     {
       if(refMult >= mCentrality[mMode][mEnergy][i_cent] && refMult < mCentrality[mMode][mEnergy][i_cent+1])
       {
