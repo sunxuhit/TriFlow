@@ -222,9 +222,8 @@ void AMPT_resolution::Make()
     mChain_Input->GetEntry(i_event);
 
     TVector3 track;
-    Float_t Q2x_full = 0.0, Q2y_full = 0.0, Q2x_east = 0.0, Q2y_east = 0.0, Q2x_west = 0.0, Q2y_west = 0.0;
-    Float_t Q3x_full = 0.0, Q3y_full = 0.0, Q3x_east = 0.0, Q3y_east = 0.0, Q3x_west = 0.0, Q3y_west = 0.0;
-    Int_t Num_esat = 0, Num_west = 0;
+    Float_t Q2x_east = 0.0, Q2y_east = 0.0, Q2x_west = 0.0, Q2y_west = 0.0;
+    Float_t Q3x_east = 0.0, Q3y_east = 0.0, Q3x_west = 0.0, Q3y_west = 0.0;
     Int_t refMult = 0;
 
     h_mPart->Fill(Npartp+Npartt);
@@ -250,12 +249,6 @@ void AMPT_resolution::Make()
 	{
 	  if(TMath::Abs(eta_track) <= 1.0) // eta cut
 	  {
-	    // full event
-	    Q2x_full += TMath::Cos(2.0*phi_track);
-	    Q2y_full += TMath::Sin(2.0*phi_track);
-	    Q3x_full += TMath::Cos(3.0*phi_track);
-	    Q3y_full += TMath::Sin(3.0*phi_track);
-
 	    if(eta_track < -0.05) // east
 	    {
 	      Q2x_east += pt_track*TMath::Cos(2.0*phi_track);
@@ -289,8 +282,10 @@ void AMPT_resolution::Make()
     {
       // eta_sub method event plane resolution calculation
       if( 
+	  /*
 	  !(Q2x_east == 0.0 && Q2y_east == 0.0) 
        && !(Q2x_west == 0.0 && Q2y_west == 0.0)
+       */
 	)
       {
 	Float_t Psi2_east = TMath::ATan2(Q2y_east,Q2x_east)/2.0; // -pi/2 to pi/2
@@ -301,8 +296,10 @@ void AMPT_resolution::Make()
 	h_mPsi2->Fill(Psi2_east,Psi2_west);
       }
       if( 
+	  /*
 	  !(Q3x_east == 0.0 && Q3y_east == 0.0) 
        && !(Q3x_west == 0.0 && Q3y_west == 0.0)
+       */
 	)
       {
 	Float_t Psi3_east = TMath::ATan2(Q3y_east,Q3x_east)/3.0; // -pi/3 to pi/3

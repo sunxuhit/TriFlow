@@ -422,9 +422,12 @@ void AMPT_v3v2::Make()
     if(cent9 > -1.0)
     {
       if( // 2nd track loop for v2 calculation
+	  /*
 	  !(Q2x_east == 0.0 && Q2y_east == 0.0) 
        && !(Q2x_west == 0.0 && Q2y_west == 0.0)
        && res2 > 0.0
+       */
+	  res2 > 0.0
 	)
       {
 	track.SetXYZ(-999.9,-999.9,-999.9);
@@ -529,9 +532,12 @@ void AMPT_v3v2::Make()
 	h_mCentrality->Fill(cent9);
       }
       if( // 3rd track loop for v3 calculation
+	  /*
 	  !(Q3x_east == 0.0 && Q3y_east == 0.0) 
        && !(Q3x_west == 0.0 && Q3y_west == 0.0)
        && res3 > 0.0
+       */
+	  res3 > 0.0
 	)
       {
 	track.SetXYZ(-999.9,-999.9,-999.9);
