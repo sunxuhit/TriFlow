@@ -47,12 +47,12 @@ void Centrality(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // mEnerg
   {
     Float_t Inte_cent = h_refMult->Integral(i_binx,binx_max);
     Float_t ratio = (Float_t)Inte_cent/(Float_t)Inte;
+    if(ratio == 0.0)
+    {
+      bin_cent[9] = i_binx;
+    }
     for(Int_t i_cent = 0; i_cent < 9; i_cent++)
     {
-      if(ratio == 0.0)
-      {
-	bin_cent[9] = i_binx;
-      }
       if(ratio > Centrality_start[i_cent] && ratio <= Centrality_stop[i_cent])
       {
 	bin_cent[i_cent] = i_binx;
@@ -83,5 +83,4 @@ void Centrality(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // mEnerg
   {
     PlotLine(h_refMult->GetBinCenter(bin_cent[i_cent]),h_refMult->GetBinCenter(bin_cent[i_cent]),0.0,y_max/2.0,1,2,2);
   }
-
 }
