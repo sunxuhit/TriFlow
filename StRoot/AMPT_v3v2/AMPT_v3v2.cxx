@@ -444,8 +444,8 @@ void AMPT_v3v2::Make()
 	  Float_t pt_track = track.Perp();
 	  Float_t phi_track = track.Phi(); // -pi to pi
 	  Float_t eta_track = track.Eta();
-	  Float_t phi_track2 = TMath::ATan2(Py[i_track],Px[i_track]);
-	  cout << "Phi_Vector = " << phi_track << ", phi_direct = " << phi_track2 << endl;
+//	  Float_t phi_track2 = TMath::ATan2(Py[i_track],Px[i_track]);
+//	  cout << "Phi_Vector = " << phi_track << ", phi_direct = " << phi_track2 << endl;
 
 	  // track selection
 	  if(TMath::Abs(eta_track) < 1.0) // eta cut
