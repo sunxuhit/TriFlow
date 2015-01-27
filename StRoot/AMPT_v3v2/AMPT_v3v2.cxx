@@ -446,7 +446,7 @@ void AMPT_v3v2::Make()
 	  Float_t eta_track = track.Eta();
 
 	  // track selection
-	  if(TMath::Abs(eta_track) <= 1.0) // eta cut
+	  if(TMath::Abs(eta_track) < 1.0) // eta cut
 	  {
 	    if(pt_track < 0.1) continue;
 	    Float_t v2;
@@ -554,7 +554,7 @@ void AMPT_v3v2::Make()
 	  Float_t eta_track = track.Eta();
 
 	  // track selection
-	  if(TMath::Abs(eta_track) <= 1.0) // eta cut
+	  if(TMath::Abs(eta_track) < 1.0) // eta cut
 	  {
 	    if(pt_track < 0.1) continue;
 	    Float_t v3;
