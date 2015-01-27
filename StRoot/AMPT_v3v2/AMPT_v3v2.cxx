@@ -430,12 +430,9 @@ void AMPT_v3v2::Make()
     if(cent9 > -1.0)
     {
       if( // 2nd track loop for v2 calculation
-	  /*
 	  !(Q2x_east == 0.0 && Q2y_east == 0.0) 
        && !(Q2x_west == 0.0 && Q2y_west == 0.0)
        && res2 > 0.0
-       */
-	  res2 > 0.0
 	)
       {
 	track.SetXYZ(-999.9,-999.9,-999.9);
@@ -452,18 +449,17 @@ void AMPT_v3v2::Make()
 	  if(TMath::Abs(eta_track) <= 1.0) // eta cut
 	  {
 	    if(pt_track < 0.1) continue;
-	    Float_t v2, v2_RP;
+	    Float_t v2;
+	    Float_t v2_RP = TMath::Cos(2.0*phi_track);
 	    if(eta_track <= 0.0) // east track => west event plane
 	    {
 //	      v2 = TMath::Cos(2.0*(phi_track-Psi2_West))/res2;
 	      v2 = TMath::Cos(2.0*(phi_track-Psi2_West));
-	      v2_RP = TMath::Cos(2.0*phi_track);
 	    }
 	    if(eta_track > 0.0) // west track => east event plane
 	    {
 //	      v2 = TMath::Cos(2.0*(phi_track-Psi2_East))/res2;
 	      v2 = TMath::Cos(2.0*(phi_track-Psi2_East));
-	      v2_RP = TMath::Cos(2.0*phi_track);
 	    }
 	    // Centrality bin selection
 	    for(Int_t i_cent = AMPT_v3v2::Centrality_start; i_cent < AMPT_v3v2::Centrality_stop; i_cent++)
@@ -542,12 +538,9 @@ void AMPT_v3v2::Make()
 	h_mCentrality->Fill(cent9);
       }
       if( // 3rd track loop for v3 calculation
-	  /*
 	  !(Q3x_east == 0.0 && Q3y_east == 0.0) 
        && !(Q3x_west == 0.0 && Q3y_west == 0.0)
        && res3 > 0.0
-       */
-	  res3 > 0.0
 	)
       {
 	track.SetXYZ(-999.9,-999.9,-999.9);
@@ -564,18 +557,17 @@ void AMPT_v3v2::Make()
 	  if(TMath::Abs(eta_track) <= 1.0) // eta cut
 	  {
 	    if(pt_track < 0.1) continue;
-	    Float_t v3, v3_RP;
+	    Float_t v3;
+	    Float_t v3_RP = TMath::Cos(3.0*phi_track);
 	    if(eta_track <= 0.0) // east track => west event plane
 	    {
 //	      v3 = TMath::Cos(3.0*(phi_track-Psi3_West))/res3;
 	      v3 = TMath::Cos(3.0*(phi_track-Psi3_West));
-	      v3_RP = TMath::Cos(3.0*phi_track);
 	    }
 	    if(eta_track > 0.0) // west track => east event plane
 	    {
 //	      v3 = TMath::Cos(3.0*(phi_track-Psi3_East))/res3;
 	      v3 = TMath::Cos(3.0*(phi_track-Psi3_East));
-	      v3_RP = TMath::Cos(3.0*phi_track);
 	    }
 	    // Centrality bin selection
 	    for(Int_t i_cent = AMPT_v3v2::Centrality_start; i_cent < AMPT_v3v2::Centrality_stop; i_cent++)
