@@ -463,7 +463,6 @@ void AMPT_v3v2::Make()
 //	      v2 = TMath::Cos(2.0*(phi_track-Psi2_East))/res2;
 	      v2 = TMath::Cos(2.0*(phi_track-Psi2_East));
 	    }
-	    cout << "v2_diff = " << v2_RP - v2 << endl;
 	    // Centrality bin selection
 	    for(Int_t i_cent = AMPT_v3v2::Centrality_start; i_cent < AMPT_v3v2::Centrality_stop; i_cent++)
 	    {
