@@ -121,10 +121,10 @@ class AMPT_v3v2 // TODO: change the Tree structure
     Int_t           Nb;
     Int_t           Nab;
     Float_t         Psi;
-//    Float_t         Nx[394];   //[Nab]
-//    Float_t         Ny[394];   //[Nab]
-//    Float_t         Nz[394];   //[Nab]
-//    Int_t           Stat[394];   //[Nab]
+    Float_t         Nx[394];   //[Nab]
+    Float_t         Ny[394];   //[Nab]
+    Float_t         Nz[394];   //[Nab]
+    Int_t           Stat[394];   //[Nab]
     Int_t           PID[38570];   //[Mult]
     Float_t         Px[38570];   //[Mult]
     Float_t         Py[38570];   //[Mult]
