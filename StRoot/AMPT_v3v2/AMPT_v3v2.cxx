@@ -455,13 +455,11 @@ void AMPT_v3v2::Make()
 	    Float_t v2_RP = TMath::Cos(2.0*phi_track);
 	    if(eta_track <= 0.0) // east track => west event plane
 	    {
-//	      v2 = TMath::Cos(2.0*(phi_track-Psi2_West))/res2;
-	      v2 = TMath::Cos(2.0*(phi_track-Psi2_West));
+	      v2 = TMath::Cos(2.0*(phi_track-Psi2_West))/res2;
 	    }
 	    if(eta_track > 0.0) // west track => east event plane
 	    {
-//	      v2 = TMath::Cos(2.0*(phi_track-Psi2_East))/res2;
-	      v2 = TMath::Cos(2.0*(phi_track-Psi2_East));
+	      v2 = TMath::Cos(2.0*(phi_track-Psi2_East))/res2;
 	    }
 	    // Centrality bin selection
 	    for(Int_t i_cent = AMPT_v3v2::Centrality_start; i_cent < AMPT_v3v2::Centrality_stop; i_cent++)
@@ -563,13 +561,11 @@ void AMPT_v3v2::Make()
 	    Float_t v3_RP = TMath::Cos(3.0*phi_track);
 	    if(eta_track <= 0.0) // east track => west event plane
 	    {
-//	      v3 = TMath::Cos(3.0*(phi_track-Psi3_West))/res3;
-	      v3 = TMath::Cos(3.0*(phi_track-Psi3_West));
+	      v3 = TMath::Cos(3.0*(phi_track-Psi3_West))/res3;
 	    }
 	    if(eta_track > 0.0) // west track => east event plane
 	    {
-//	      v3 = TMath::Cos(3.0*(phi_track-Psi3_East))/res3;
-	      v3 = TMath::Cos(3.0*(phi_track-Psi3_East));
+	      v3 = TMath::Cos(3.0*(phi_track-Psi3_East))/res3;
 	    }
 	    // Centrality bin selection
 	    for(Int_t i_cent = AMPT_v3v2::Centrality_start; i_cent < AMPT_v3v2::Centrality_stop; i_cent++)
