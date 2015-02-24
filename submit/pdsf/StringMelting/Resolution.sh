@@ -30,8 +30,9 @@ if [ $# -eq 0 ]
 #############################AMPT_Mode##################################
 
 #############################Screen_Mode##################################
-      echo -n 0',' >> run$Name$counter.csh  # 3mb
-#      echo -n 1',' >> run$Name$counter.csh  # 6mb
+      echo -n 0',' >> run$Name$counter.csh  # 1.5mb
+#      echo -n 1',' >> run$Name$counter.csh  # 3mb
+#      echo -n 2',' >> run$Name$counter.csh  # 6mb
 #############################AMPT_Mode##################################
 
 ################################List####################################
