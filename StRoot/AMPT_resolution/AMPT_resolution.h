@@ -37,7 +37,7 @@ class AMPT_resolution // TODO: change the Tree structure
     static Int_t mInput_flag;
     static TString mBeamEnergy[7];
     static TString mMode_AMPT[2];
-    static TString mScreenMass_AMPT[2];
+    static TString mScreenMass_AMPT[3];
     static Int_t mCentrality[2][7][10]; // centrality definition
     static Int_t mList_start[25];
     static Int_t mList_stop[25];

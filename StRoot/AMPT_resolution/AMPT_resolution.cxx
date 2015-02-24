@@ -16,7 +16,7 @@ ClassImp(AMPT_resolution)
 Int_t AMPT_resolution::mInput_flag = 1;
 TString AMPT_resolution::mBeamEnergy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
 TString AMPT_resolution::mMode_AMPT[2] = {"Default","StringMelting"};
-TString AMPT_resolution::mScreenMass_AMPT[2] = {"3mb","6mb"};
+TString AMPT_resolution::mScreenMass_AMPT[3] = {"1mb","3mb","6mb"};
 Int_t AMPT_resolution::mCentrality[2][7][10] = {
 						 { // Default
 						   {9,16,27,42,63,92,130,182,219,329}, //  7GeV
@@ -39,9 +39,9 @@ Int_t AMPT_resolution::mCentrality[2][7][10] = {
 //						   {13,26,43,69,104,149,208,287,337,504}, // 39GeV | with phi decay | 3 mb
 //						   {15,26,43,68,101,144,201,277,325,492}, // 39GeV | with phi decay | 6 mb
 						   {16,29,49,77,117,169,238,331,390,628},  // 62GeV
+						   {15,29,51,86,137,206,301,431,517,778}  // 200GeV | with phi decay | 1.5 mb
 //						   {22,41,72,118,182,269,387,550,657,1043}  // 200GeV | with phi decay | 3 mb
 //						   {21,42,72,117,181,269,388,551,659,978}  // 200GeV | with phi decay | 3 mb v1.21/v2.21
-						   {15,29,51,86,137,206,301,431,517,778}  // 200GeV | with phi decay | 1.5 mb
 //						   {22,41,71,114,176,261,376,536,641,1088}  // 200GeV | with phi decay | 6 mb
 						 }
 					       }; // 80%,70%,60%,50%,40%,30%,20%,10%,5%,0%
