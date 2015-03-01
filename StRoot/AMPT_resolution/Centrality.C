@@ -19,11 +19,11 @@ void PlotLine(Double_t x1_val, Double_t x2_val, Double_t y1_val, Double_t y2_val
   //delete Zero_line;
 }
 
-void Centrality(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // mEnergy = 0: 7GeV, 1: 11GeV, 2: 19GeV, 3: 27GeV, 4: 39GeV, 5: 62GeV, 6: 200GeV | mMode = 0: Default, 1: StringMelting | mScreen = 0: 3mb, 1: 6mb
+void Centrality(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // mEnergy = 0: 7GeV, 1: 11GeV, 2: 19GeV, 3: 27GeV, 4: 39GeV, 5: 62GeV, 6: 200GeV | mMode = 0: Default, 1: StringMelting | mScreen = 0: 1mb, 1: 3mb, 2: 6mb
 {
   TString Energy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
   TString Mode_AMPT[2] ={"Default","StringMelting"};
-  TString ScreenMass_AMPT[2] ={"3mb","6mb"};
+  TString ScreenMass_AMPT[3] ={"1mb","3mb","6mb"};
   Float_t Centrality_start[9] = {0.7,0.6,0.5,0.4,0.3,0.2,0.1,0.05, 0.0};
   Float_t Centrality_stop[9]  = {0.8,0.7,0.6,0.5,0.4,0.3,0.2, 0.1,0.05};
 //  Float_t Centrality_start[9] = {0.0,0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7};
