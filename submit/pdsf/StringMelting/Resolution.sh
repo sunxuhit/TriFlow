@@ -6,7 +6,7 @@ date
 if [ $# -eq 0 ]
   then
 #    counter=0
-    Name="_Resolution_StringMelting_3mb_"
+    Name="_11GeV_Res_Str3_"
     suffix=".root"
     for((counter=0;counter<=19;counter=counter+1))
     do
@@ -15,10 +15,10 @@ if [ $# -eq 0 ]
       echo -n "root4star -b -q -x 'Resolution.C(" >> run$Name$counter.csh
 ###############################energy###################################
 #      echo -n 0',' >> run$Name$counter.csh  # 7GeV
-#      echo -n 1',' >> run$Name$counter.csh  # 11GeV
+      echo -n 1',' >> run$Name$counter.csh  # 11GeV
 #      echo -n 2',' >> run$Name$counter.csh  # 19GeV
 #      echo -n 3',' >> run$Name$counter.csh  # 27GeV
-      echo -n 4',' >> run$Name$counter.csh  # 39GeV
+#      echo -n 4',' >> run$Name$counter.csh  # 39GeV
 #      echo -n 5',' >> run$Name$counter.csh  # 62GeV
 #      echo -n 6',' >> run$Name$counter.csh  # 200GeV
 ###############################energy###################################
@@ -30,8 +30,8 @@ if [ $# -eq 0 ]
 #############################AMPT_Mode##################################
 
 #############################Screen_Mode##################################
-      echo -n 0',' >> run$Name$counter.csh  # 1.5mb
-#      echo -n 1',' >> run$Name$counter.csh  # 3mb
+#      echo -n 0',' >> run$Name$counter.csh  # 1.5mb
+      echo -n 1',' >> run$Name$counter.csh  # 3mb
 #      echo -n 2',' >> run$Name$counter.csh  # 6mb
 #############################AMPT_Mode##################################
 
