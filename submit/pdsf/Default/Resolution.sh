@@ -6,7 +6,7 @@ date
 if [ $# -eq 0 ]
   then
 #    counter=0
-    Name="11GeV_Res_Def"
+    Name="_11GeV_Res_Def_"
     for((counter=0;counter<=19;counter=counter+1))
     do
       cp ./run.csh ./run$Name$counter.csh
