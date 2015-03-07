@@ -7,7 +7,6 @@ if [ $# -eq 0 ]
   then
 #    counter=0
     Name="_11GeV_Res_Str3_"
-    suffix=".root"
     for((counter=0;counter<=19;counter=counter+1))
     do
       cp ./run.csh ./run$Name$counter.csh

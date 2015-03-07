@@ -6,8 +6,7 @@ date
 if [ $# -eq 0 ]
   then
 #    counter=0
-    Name="_Flow_StringMelting_3mb_"
-    suffix=".root"
+    Name="_39GeV_Flow_Str3_"
     for((counter=0;counter<=19;counter=counter+1))
     do
       cp ./run.csh ./run$Name$counter.csh
