@@ -19,14 +19,14 @@ Double_t ErrDiv(Float_t x, Float_t y, Float_t dx, Float_t dy)
 }
 
 static TString Mode[2] = {"Default","StringMelting"};
-static TString ScreenMass[2] = {"3mb","6mb"};
+static TString ScreenMass[3] = {"1mb","3mb","6mb"};
 static TString Energy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
 static TString Order[2] = {"2nd","3rd"};
 static TString Centrality[4] = {"0080","0010","1040","4080"};
 static TString ParType[10] = {"pi_plus","pi_minus","K_plus","K_minus","p","pbar","Lambda","Lambdabar","K0s","phi"};
 
 // Calculate integrated v2 and v3
-void DiffFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19.6 GeV, 3: 27 GeV, 4: 39 GeV, 5: 62.4 GeV, 6: 200 GeV | 0: Default, 1: String Melting | 0: 3mb, 1: 6mb
+void DiffFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19.6 GeV, 3: 27 GeV, 4: 39 GeV, 5: 62.4 GeV, 6: 200 GeV | 0: Default, 1: String Melting | 0: 1mb, 1: 3mb, 2: 6mb
 {
   TString inputfile;
   if(mMode == 0)
