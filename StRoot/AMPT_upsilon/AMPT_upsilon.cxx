@@ -273,6 +273,7 @@ void AMPT_upsilon::Make()
     mChain_Input->GetEntry(i_event);
 
     Int_t refMult = 0;
+    TVector3 track;
     for(Int_t i_track = 0; i_track < Mult; i_track++) // refMult calculation
     {
       if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
