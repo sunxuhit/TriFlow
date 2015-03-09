@@ -272,6 +272,19 @@ void AMPT_upsilon::Make()
 
     mChain_Input->GetEntry(i_event);
 
+    Int_t refMult = 0;
+    for(Int_t i_track = 0; i_track < Mult; i_track++) // refMult calculation
+    {
+      if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
+      track.SetXYZ(Px[i_track],Py[i_track],Pz[i_track]);
+      Float_t eta_track = track.Eta();
+      // track selection
+      if(TMath::Abs(PID[i_track]) == 211 || TMath::Abs(PID[i_track]) == 321 || TMath::Abs(PID[i_track]) == 2212) // pi^{+/-}, K^{+/-}, p and pbar
+      {
+	if(TMath::Abs(eta_track) < 0.5) refMult++; // refMult calculation
+      }
+    }
+
     Int_t cent9 = getCentrality(refMult);
     Float_t res[2]; // 0 for 2nd, 1 for 3rd
     res[0] = getResolution(0,cent9);
