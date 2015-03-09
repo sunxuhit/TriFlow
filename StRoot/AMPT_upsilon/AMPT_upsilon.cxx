@@ -271,29 +271,30 @@ void AMPT_upsilon::Make()
     Float_t mean_R2X[2] = {0.0,0.0};
     Float_t mean_R2Y[2] = {0.0,0.0};
     Float_t mean_R2 = 0.0;
-    Int_t nPart = 0;
-    Int_t nParT = Npartp+Npartt;
+    Int_t nPart = Npartp+Npartt;
 
     for(Int_t i_par = 0; i_par < Nab; i_par++)
     {
       if(Stat[i_par] > 0) // participant
       {
-	nPart++; // cumulant participant
-
 	particle.SetXYZ(Nx[i_par],Ny[i_par],Nz[i_par]);
 	Float_t R = particle.Perp(); // return the transverse component (R in cylindrical coordinate system) 
 	Float_t phi = particle.Phi(); // return the  azimuth angle. returns phi from -pi to pi
 
-	mean_R2 += R*R;
+	mean_R2 += R*R/nPart;
 	for(Int_t i_order = 0; i_order < 2; i_order++)
 	{
-	  mean_R2X[i_order] += R*R*TMath::Cos(Order[i_order]*phi);
-	  mean_R2Y[i_order] += R*R*TMath::Sin(Order[i_order]*phi);
+	  mean_R2X[i_order] += R*R*TMath::Cos(Order[i_order]*phi)/nPart;
+	  mean_R2Y[i_order] += R*R*TMath::Sin(Order[i_order]*phi)/nPart;
 	}
       }
     }
-    cout << "nPart from counting = " << nPart << ", nPart from Data = " << nParT << endl;
-
+    for(Int_t i_order = 0; i_order < 2; i_order++)
+    {
+      upsilon[i_order] = TMath::Sqrt(mean_R2X[i_order]*mean_R2X[i_order]+mean_R2Y[i_order]*mean_R2Y[i_order])/mean_R2;
+      cout << "upsilon " << (Int_t)Order[i_order] << " = " << upsilon[i_order] << endl;
+    }
+    cout << endl;
   }
 
   cout << "." << flush;
