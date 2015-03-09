@@ -57,6 +57,10 @@ class AMPT_upsilon // TODO: change the Tree structure
     // resolution
     TProfile *p_mRes[2];
 
+    // Upsilon
+    TProfile *p_mUpsilon9[2]; // 0 for 2nd, 1 for 3rd
+    TProfile *p_mUpsilon4[2]; // 0 for 2nd, 1 for 3rd
+
     //---------------------------------------------------------------
     TChain         *mChain_Input;
     Int_t           fCurrent; //!current Tree number in a TChain

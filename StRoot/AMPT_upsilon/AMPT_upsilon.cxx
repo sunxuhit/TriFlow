@@ -86,11 +86,11 @@ AMPT_upsilon::AMPT_upsilon(Int_t Energy, Int_t Mode, Int_t Screen, Int_t List, L
   TString OutPutFile;
   if(mMode == 0)
   {
-    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Flow/%s_%s/Flow_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Upsilon/%s_%s/Upsilon_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
   }
   if(mMode == 1)
   {
-    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Flow/%s_%s/%s/Flow_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mScreenMass_AMPT[mScreen].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Upsilon/%s_%s/%s/Upsilon_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mScreenMass_AMPT[mScreen].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
   }
   SetOutPutFile(OutPutFile); // set output file
 }
@@ -163,6 +163,13 @@ void AMPT_upsilon::Init()
   p_mRes[1] = (TProfile*)mFile_Res->Get("p_mRes3"); // 3rd event plane resolution
 
   mFile_OutPut = new TFile(mOutPutFile.Data(),"RECREATE");
+
+  // initialize Upsilon9 and Upsilon4
+  p_mUpsilon9[0] = new TProfile("p_mUpsilon9_2nd","p_mUpsilon9_2nd",9,-0.5,8.5);
+  p_mUpsilon9[1] = new TProfile("p_mUpsilon9_3rd","p_mUpsilon9_3rd",9,-0.5,8.5);
+
+  p_mUpsilon4[0] = new TProfile("p_mUpsilon4_2nd","p_mUpsilon4_2nd",4,-0.5,3.5);
+  p_mUpsilon4[1] = new TProfile("p_mUpsilon4_3rd","p_mUpsilon4_3rd",4,-0.5,3.5);
 
   // QA Plot
 
@@ -265,6 +272,11 @@ void AMPT_upsilon::Make()
 
     mChain_Input->GetEntry(i_event);
 
+    Int_t cent9 = getCentrality(refMult);
+    Float_t res[2]; // 0 for 2nd, 1 for 3rd
+    res[0] = getResolution(0,cent9);
+    res[1] = getResolution(1,cent9);
+
     TVector3 particle;
     Float_t upsilon[2]; // 0: 2nd upsilon, 1: 3rd upsilon
     Float_t Order[2] = {2.0,3.0};
@@ -292,9 +304,25 @@ void AMPT_upsilon::Make()
     for(Int_t i_order = 0; i_order < 2; i_order++)
     {
       upsilon[i_order] = TMath::Sqrt(mean_R2X[i_order]*mean_R2X[i_order]+mean_R2Y[i_order]*mean_R2Y[i_order])/mean_R2;
-      cout << "upsilon " << (Int_t)Order[i_order] << " = " << upsilon[i_order] << endl;
     }
-    cout << endl;
+    if(cent9 > -1)
+    {
+      for(Int_t i_order = 0; i_order < 2; i_order++)
+      {
+	if(res[i_order] > 0.0) 
+	{
+	  p_mUpsilon9[i_order]->Fill(cent9,upsilon[i_order]); // calculate upsilon for narrow centrality bin
+
+	  for(Int_t i_cent = AMPT_upsilon::Centrality_start; i_cent < AMPT_upsilon::Centrality_stop; i_cent++) // calculate upsilon for wide centrality bin
+	  {
+	    if(cent9 >= AMPT_upsilon::cent_low[i_cent] && cent9 <= AMPT_upsilon::cent_up[i_cent])
+	    {
+	      p_mUpsilon4[i_order]->Fill(i_cent,upsilon[i_order]); // calculate upsilon for narrow centrality bin
+	    }
+	  }
+	}
+      }
+    }
   }
 
   cout << "." << flush;
@@ -307,5 +335,10 @@ void AMPT_upsilon::Finish()
   mFile_Res->Close();
 
   mFile_OutPut->cd();
+  for(Int_t i_order = 0; i_order < 2; i_order++)
+  {
+    p_mUpsilon9[i_order]->Write();
+    p_mUpsilon4[i_order]->Write();
+  }
   mFile_OutPut->Close();
 }
