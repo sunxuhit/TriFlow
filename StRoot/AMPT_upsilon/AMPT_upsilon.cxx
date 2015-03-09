@@ -165,8 +165,6 @@ void AMPT_upsilon::Init()
   mFile_OutPut = new TFile(mOutPutFile.Data(),"RECREATE");
 
   // QA Plot
-  h_mPartp = new TH1F("h_mPartp","h_mPartp",200,-0.5,199.5);
-  h_mPartt = new TH1F("h_mPartt","h_mPartt",200,-0.5,199.5);
 
   // initialize the TChain
   if (!mInPutList.IsNull())   // if input file is ok

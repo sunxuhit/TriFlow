@@ -53,8 +53,9 @@ class AMPT_upsilon // TODO: change the Tree structure
     TFile *mFile_Res;
 
     // QA Plot
-    TH1F *h_mPartp; // participant in projectile 
-    TH1F *h_mPartt; // participant in target
+
+    // resolution
+    TProfile *p_mRes[2];
 
     //---------------------------------------------------------------
     TChain         *mChain_Input;
