@@ -1,4 +1,4 @@
-#include "AMPT_upsilon.h"
+#include "AMPT_epsilon.h"
 #include "TString.h"
 #include "TFile.h"
 #include "TTree.h"
@@ -9,13 +9,13 @@
 #include "TVector3.h"
 #include "TMath.h"
 
-ClassImp(AMPT_upsilon)
+ClassImp(AMPT_epsilon)
 
-Int_t AMPT_upsilon::mInput_flag = 1;
-TString AMPT_upsilon::mBeamEnergy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
-TString AMPT_upsilon::mMode_AMPT[2] = {"Default","StringMelting"};
-TString AMPT_upsilon::mScreenMass_AMPT[3] = {"1mb","3mb","6mb"};
-Int_t AMPT_upsilon::mRefMult[2][7][10] = {
+Int_t AMPT_epsilon::mInput_flag = 1;
+TString AMPT_epsilon::mBeamEnergy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
+TString AMPT_epsilon::mMode_AMPT[2] = {"Default","StringMelting"};
+TString AMPT_epsilon::mScreenMass_AMPT[3] = {"1mb","3mb","6mb"};
+Int_t AMPT_epsilon::mRefMult[2][7][10] = {
 	    				   { // Default
 					     {9,16,27,42,63,92,130,182,219,329}, //  7GeV
 					     {9,17,30,48,72,104,147,205,243,378}, // 11GeV
@@ -45,14 +45,14 @@ Int_t AMPT_upsilon::mRefMult[2][7][10] = {
 					   }
 				         }; // 80%,70%,60%,50%,40%,30%,20%,10%,5%,0%
 // Centrality bin
-Int_t AMPT_upsilon::cent_low[4] = {0,7,4,0}; // 0 = 0-80%, 1 = 0-10%, 2 = 10-40%, 3 = 40-80%
-Int_t AMPT_upsilon::cent_up[4]  = {8,8,6,3}; // 0 = 0-80%, 1 = 0-10%, 2 = 10-40%, 3 = 40-80%
-Int_t AMPT_upsilon::mList_start[25] = {  1,101,201,301,401,501,601,701,801, 901,1001,1101,1201,1301,1401,1501,1601,1701,1801,1901,2001,2101,2201,2301,2401};
-Int_t AMPT_upsilon::mList_stop[25]  = {100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500};
-Int_t AMPT_upsilon::Centrality_start = 0;
-Int_t AMPT_upsilon::Centrality_stop  = 4;
+Int_t AMPT_epsilon::cent_low[4] = {0,7,4,0}; // 0 = 0-80%, 1 = 0-10%, 2 = 10-40%, 3 = 40-80%
+Int_t AMPT_epsilon::cent_up[4]  = {8,8,6,3}; // 0 = 0-80%, 1 = 0-10%, 2 = 10-40%, 3 = 40-80%
+Int_t AMPT_epsilon::mList_start[25] = {  1,101,201,301,401,501,601,701,801, 901,1001,1101,1201,1301,1401,1501,1601,1701,1801,1901,2001,2101,2201,2301,2401};
+Int_t AMPT_epsilon::mList_stop[25]  = {100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500};
+Int_t AMPT_epsilon::Centrality_start = 0;
+Int_t AMPT_epsilon::Centrality_stop  = 4;
 //------------------------------------------------------------
-AMPT_upsilon::AMPT_upsilon(Int_t Energy, Int_t Mode, Int_t Screen, Int_t List, Long64_t StartEvent, Long64_t StopEvent)
+AMPT_epsilon::AMPT_epsilon(Int_t Energy, Int_t Mode, Int_t Screen, Int_t List, Long64_t StartEvent, Long64_t StopEvent)
 {
   mEnergy = Energy;
   mMode = Mode;
@@ -86,50 +86,50 @@ AMPT_upsilon::AMPT_upsilon(Int_t Energy, Int_t Mode, Int_t Screen, Int_t List, L
   TString OutPutFile;
   if(mMode == 0)
   {
-    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Upsilon/%s_%s/Upsilon_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Epsilon/%s_%s/Epsilon_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
   }
   if(mMode == 1)
   {
-    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Upsilon/%s_%s/%s/Upsilon_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mScreenMass_AMPT[mScreen].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Epsilon/%s_%s/%s/Epsilon_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mScreenMass_AMPT[mScreen].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
   }
   SetOutPutFile(OutPutFile); // set output file
 }
 
-AMPT_upsilon::~AMPT_upsilon()
+AMPT_epsilon::~AMPT_epsilon()
 {
 }
 //------------------------------------------------------------
-void AMPT_upsilon::SetInPutList(const TString inputlist)
+void AMPT_epsilon::SetInPutList(const TString inputlist)
 {
   mInPutList= inputlist.Copy();
   cout << "Input list was set to: " << mInPutList.Data() << endl;
 }
 
-void AMPT_upsilon::SetOutPutFile(const TString outputfile)
+void AMPT_epsilon::SetOutPutFile(const TString outputfile)
 {
   mOutPutFile = outputfile.Copy();
   cout << "Output file was set to: " << mOutPutFile.Data() << endl;
 }
 
-void AMPT_upsilon::SetInPutRes(const TString inputres)
+void AMPT_epsilon::SetInPutRes(const TString inputres)
 {
   mInPutRes = inputres.Copy();
   cout << "Input resolution file was set to: " << mInPutRes.Data() << endl;
 }
 
-void AMPT_upsilon::SetStartEvent(const Long64_t StartEvent)
+void AMPT_epsilon::SetStartEvent(const Long64_t StartEvent)
 {
   mStartEvent = StartEvent;
   cout << "nStartEvent = " << mStartEvent << endl;
 }
 
-void AMPT_upsilon::SetStopEvent(const Long64_t StopEvent)
+void AMPT_epsilon::SetStopEvent(const Long64_t StopEvent)
 {
   mStopEvent = StopEvent;
   cout << "nStopEvent = " << mStopEvent << endl;
 }
 //------------------------------------------------------------
-Float_t AMPT_upsilon::getResolution(Int_t order, Int_t i_cent) // 0 for 2nd, 1 for 3rd
+Float_t AMPT_epsilon::getResolution(Int_t order, Int_t i_cent) // 0 for 2nd, 1 for 3rd
 {
   Float_t res = -999.9;
   if(p_mRes[order]->GetBinContent(p_mRes[order]->FindBin(i_cent)) > 0.0)
@@ -139,7 +139,7 @@ Float_t AMPT_upsilon::getResolution(Int_t order, Int_t i_cent) // 0 for 2nd, 1 f
   return res;
 }
 
-Int_t AMPT_upsilon::getCentrality(Int_t refMult)
+Int_t AMPT_epsilon::getCentrality(Int_t refMult)
 {
   Int_t cent9 = -1;
 
@@ -155,7 +155,7 @@ Int_t AMPT_upsilon::getCentrality(Int_t refMult)
   return cent9;
 }
 //------------------------------------------------------------
-void AMPT_upsilon::Init()
+void AMPT_epsilon::Init()
 {
   // initialize the resolution
   mFile_Res = TFile::Open(mInPutRes.Data());
@@ -164,12 +164,12 @@ void AMPT_upsilon::Init()
 
   mFile_OutPut = new TFile(mOutPutFile.Data(),"RECREATE");
 
-  // initialize Upsilon9 and Upsilon4
-  p_mUpsilon9[0] = new TProfile("p_mUpsilon9_2nd","p_mUpsilon9_2nd",9,-0.5,8.5);
-  p_mUpsilon9[1] = new TProfile("p_mUpsilon9_3rd","p_mUpsilon9_3rd",9,-0.5,8.5);
+  // initialize Epsilon9 and Epsilon4
+  p_mEpsilon9[0] = new TProfile("p_mEpsilon9_2nd","p_mEpsilon9_2nd",9,-0.5,8.5);
+  p_mEpsilon9[1] = new TProfile("p_mEpsilon9_3rd","p_mEpsilon9_3rd",9,-0.5,8.5);
 
-  p_mUpsilon4[0] = new TProfile("p_mUpsilon4_2nd","p_mUpsilon4_2nd",4,-0.5,3.5);
-  p_mUpsilon4[1] = new TProfile("p_mUpsilon4_3rd","p_mUpsilon4_3rd",4,-0.5,3.5);
+  p_mEpsilon4[0] = new TProfile("p_mEpsilon4_2nd","p_mEpsilon4_2nd",4,-0.5,3.5);
+  p_mEpsilon4[1] = new TProfile("p_mEpsilon4_3rd","p_mEpsilon4_3rd",4,-0.5,3.5);
 
   // QA Plot
 
@@ -251,7 +251,7 @@ void AMPT_upsilon::Init()
   }
 }
 //------------------------------------------------------------
-void AMPT_upsilon::Make()
+void AMPT_epsilon::Make()
 {
   Long64_t start_event_use = mStartEvent;
   Long64_t stop_event_use = mStopEvent;
@@ -266,7 +266,7 @@ void AMPT_upsilon::Make()
       if((stop_event_use-start_event_use) > 0)
       {
 	Double_t event_percent = 100.0*((Double_t)(i_event-start_event_use))/((Double_t)(stop_event_use-start_event_use));
-	cout << " " << i_event-start_event_use << " (" << event_percent << "%) " << "\n" << "==> Processing data (AMPT_upsilon) " << flush;
+	cout << " " << i_event-start_event_use << " (" << event_percent << "%) " << "\n" << "==> Processing data (AMPT_epsilon) " << flush;
       }
     }
 
@@ -292,7 +292,7 @@ void AMPT_upsilon::Make()
     res[1] = getResolution(1,cent9);
 
     TVector3 particle;
-    Float_t upsilon[2]; // 0: 2nd upsilon, 1: 3rd upsilon
+    Float_t epsilon[2]; // 0: 2nd epsilon, 1: 3rd epsilon
     Float_t Order[2] = {2.0,3.0};
     Float_t mean_R2X[2] = {0.0,0.0};
     Float_t mean_R2Y[2] = {0.0,0.0};
@@ -317,7 +317,7 @@ void AMPT_upsilon::Make()
     }
     for(Int_t i_order = 0; i_order < 2; i_order++)
     {
-      upsilon[i_order] = TMath::Sqrt(mean_R2X[i_order]*mean_R2X[i_order]+mean_R2Y[i_order]*mean_R2Y[i_order])/mean_R2;
+      epsilon[i_order] = TMath::Sqrt(mean_R2X[i_order]*mean_R2X[i_order]+mean_R2Y[i_order]*mean_R2Y[i_order])/mean_R2;
     }
     if(cent9 > -1)
     {
@@ -325,13 +325,13 @@ void AMPT_upsilon::Make()
       {
 	if(res[i_order] > 0.0) 
 	{
-	  p_mUpsilon9[i_order]->Fill(cent9,upsilon[i_order]); // calculate upsilon for narrow centrality bin
+	  p_mEpsilon9[i_order]->Fill(cent9,epsilon[i_order]); // calculate epsilon for narrow centrality bin
 
-	  for(Int_t i_cent = AMPT_upsilon::Centrality_start; i_cent < AMPT_upsilon::Centrality_stop; i_cent++) // calculate upsilon for wide centrality bin
+	  for(Int_t i_cent = AMPT_epsilon::Centrality_start; i_cent < AMPT_epsilon::Centrality_stop; i_cent++) // calculate epsilon for wide centrality bin
 	  {
-	    if(cent9 >= AMPT_upsilon::cent_low[i_cent] && cent9 <= AMPT_upsilon::cent_up[i_cent])
+	    if(cent9 >= AMPT_epsilon::cent_low[i_cent] && cent9 <= AMPT_epsilon::cent_up[i_cent])
 	    {
-	      p_mUpsilon4[i_order]->Fill(i_cent,upsilon[i_order]); // calculate upsilon for narrow centrality bin
+	      p_mEpsilon4[i_order]->Fill(i_cent,epsilon[i_order]); // calculate epsilon for narrow centrality bin
 	    }
 	  }
 	}
@@ -344,15 +344,15 @@ void AMPT_upsilon::Make()
   cout << endl;
 }
 
-void AMPT_upsilon::Finish()
+void AMPT_epsilon::Finish()
 {
   mFile_Res->Close();
 
   mFile_OutPut->cd();
   for(Int_t i_order = 0; i_order < 2; i_order++)
   {
-    p_mUpsilon9[i_order]->Write();
-    p_mUpsilon4[i_order]->Write();
+    p_mEpsilon9[i_order]->Write();
+    p_mEpsilon4[i_order]->Write();
   }
   mFile_OutPut->Close();
 }

@@ -1,5 +1,5 @@
-#ifndef AMPT_upsilon_h
-#define AMPT_upsilon_h
+#ifndef AMPT_epsilon_h
+#define AMPT_epsilon_h
 #include "StMessMgr.h"
 #include "TString.h"
 
@@ -10,11 +10,11 @@ class TProfile;
 class TFile;
 class TH1F;
 
-class AMPT_upsilon // TODO: change the Tree structure
+class AMPT_epsilon // TODO: change the Tree structure
 {
   public:
-    AMPT_upsilon(Int_t Energy, Int_t Mode, Int_t Screen, Int_t List, Long64_t StartEvent, Long64_t StopEvent); // read in energy, AMPT mode, data list, StartEvent and StopEvent
-    ~AMPT_upsilon();
+    AMPT_epsilon(Int_t Energy, Int_t Mode, Int_t Screen, Int_t List, Long64_t StartEvent, Long64_t StopEvent); // read in energy, AMPT mode, data list, StartEvent and StopEvent
+    ~AMPT_epsilon();
 
     void SetInPutList(const TString inputlist);
     void SetOutPutFile(const TString outputfile);
@@ -57,9 +57,9 @@ class AMPT_upsilon // TODO: change the Tree structure
     // resolution
     TProfile *p_mRes[2];
 
-    // Upsilon
-    TProfile *p_mUpsilon9[2]; // 0 for 2nd, 1 for 3rd
-    TProfile *p_mUpsilon4[2]; // 0 for 2nd, 1 for 3rd
+    // Epsilon
+    TProfile *p_mEpsilon9[2]; // 0 for 2nd, 1 for 3rd
+    TProfile *p_mEpsilon4[2]; // 0 for 2nd, 1 for 3rd
 
     //---------------------------------------------------------------
     TChain         *mChain_Input;
@@ -121,6 +121,6 @@ class AMPT_upsilon // TODO: change the Tree structure
     TBranch        *b_ZZ;   //!
     TBranch        *b_TT;   //!
 
-  ClassDef(AMPT_upsilon,1)
+  ClassDef(AMPT_epsilon,1)
 };
 #endif
