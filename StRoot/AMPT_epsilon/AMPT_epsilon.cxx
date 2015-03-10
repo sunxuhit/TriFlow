@@ -325,13 +325,13 @@ void AMPT_epsilon::Make()
       {
 	if(res[i_order] > 0.0) 
 	{
-	  p_mEpsilon9[i_order]->Fill(cent9,epsilon[i_order]); // calculate epsilon for narrow centrality bin
+	  p_mEpsilon9[i_order]->Fill(cent9,epsilon[i_order],refMult); // calculate epsilon for narrow centrality bin
 
 	  for(Int_t i_cent = AMPT_epsilon::Centrality_start; i_cent < AMPT_epsilon::Centrality_stop; i_cent++) // calculate epsilon for wide centrality bin
 	  {
 	    if(cent9 >= AMPT_epsilon::cent_low[i_cent] && cent9 <= AMPT_epsilon::cent_up[i_cent])
 	    {
-	      p_mEpsilon4[i_order]->Fill(i_cent,epsilon[i_order]); // calculate epsilon for narrow centrality bin
+	      p_mEpsilon4[i_order]->Fill(i_cent,epsilon[i_order],refMult); // calculate epsilon for narrow centrality bin
 	    }
 	  }
 	}
