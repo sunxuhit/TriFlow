@@ -23,62 +23,6 @@ Double_t ErrDiv(Float_t x, Float_t y, Float_t dx, Float_t dy)
   return x/y*ErrorAdd(dx/x,dy/y);
 }
 
-Double_t PtFitFunc2_mod_x(Double_t* x_val, Double_t* par)
-{
-  Double_t x, y, m0, Temp, Ampl, shift;
-  m0    = par[0];
-  Temp  = par[1];
-  Ampl  = par[2];
-  shift = par[3];
-  x = x_val[0];
-  y = x*(Ampl*(x-shift)*sqrt((x-shift)*(x-shift)+m0*m0)*TMath::Exp(-(sqrt((x-shift)*(x-shift)+m0*m0)-m0)/Temp)) + par[4]*x + par[5]*x*x;
-  return y;
-}
-
-//Blast Wave Fit for spectra
-Double_t SpectraFunc(Double_t* x_val, Double_t* par)
-{
-  Double_t pt, alpha, beta, rho, rho_0, rho_a, phi,phi_p, T, s2, R, Inte, Norm;
-  pt = x_val[0];
-  Int_t PID = (Int_t)par[5];
-  Float_t mass[10] = {0.1396,0.1396,0.4937,0.4937,0.9382,0.9382,1.116,1.116,0.4976,1.019};
-  Double_t mt = TMath::Sqrt(pt*pt + mass[PID]*mass[PID]);
-  Int_t nbins_phi = 10;
-  Double_t phi_start = 0.0;
-  Double_t phi_stop = 2.0*TMath::Pi();
-  Double_t delta_phi = (phi_stop - phi_start)/((Double_t)nbins_phi);
-  T = par[0];
-  rho_0 = par[1];
-  rho_a = par[2];
-  rho_a = 0.0;
-  s2 = par[3];
-  s2 = 0.0;
-  R = par[4];
-  Norm = par[6];
-  Double_t r;
-  Int_t nbins_r = 10;
-  Double_t delta_r = R/((Double_t)nbins_r);
-  Double_t n_power = 2./3.;
-  
-  Inte = 0.0;
-
-  for(Int_t i = 0; i < nbins_phi + 1; i++)
-  {
-    phi = phi_start + i*delta_phi;
-    for(Int_t j = 0; j < nbins_r + 1 ; j++)
-    {
-      r = j*delta_r;
-      rho = TMath::ATanH(TMath::TanH(rho_0)*TMath::Power((r/R),n_power)) + TMath::ATanH(TMath::TanH(rho_a)*TMath::Power((r/R),n_power))*TMath::Cos(2.0*phi);
-      //    rho = TMath::ATanH(TMath::TanH(rho_0)*(r/R)) + TMath::ATanH(TMath::TanH(rho_a)*(r/R))*TMath::Cos(2.0*phi);
-      alpha = (pt/T)*TMath::SinH(rho);
-      beta = (mt/T)*TMath::CosH(rho);
-
-      Inte += Norm*pt*r*mt*delta_phi*delta_r*TMath::BesselK1(beta)*(1.0 + 2.0*s2*TMath::Cos(2.0*phi))*TMath::BesselI0(alpha);
-    }    
-  }
-  return Inte;
-}
-
 static TString Mode[2] = {"Default","StringMelting"};
 static TString ScreenMass[3] = {"1mb","3mb","6mb"};
 static TString Energy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
@@ -86,10 +30,6 @@ static TString Order[2] = {"2nd","3rd"};
 static TString Centrality[4] = {"0080","0010","1040","4080"};
 static TString ParType[10] = {"pi_plus","pi_minus","K_plus","K_minus","p","pbar","Lambda","Lambdabar","K0s","phi"};
 static Float_t ParMass[10] = {0.1396,0.1396,0.4937,0.4937,0.9382,0.9382,1.116,1.116,0.4976,1.019};
-static Int_t ParOrder[5] = {1,3,5,7,9};
-static Int_t ParStyle[5] = {24,26,32,30,28};
-static Int_t ParColor[5] = {1,kRed,kAzure+4,kOrange+7,kGray+3};
-static TString ParName[5] = {"#pi^{-}","K^{-}","#bar{p}","#bar{#Lambda}","#phi"};
 
 static const Int_t mOrder_Total = 2;
 static Int_t mOrder_Start = 0;
