@@ -7,6 +7,7 @@
 #include "TProfile.h"
 #include "TVector2.h"
 #include "TVector3.h"
+#include "TLorentzVector.h"
 #include "TMath.h"
 
 ClassImp(AMPT_epsilon)
@@ -164,6 +165,22 @@ void AMPT_epsilon::Init()
 
   mFile_OutPut = new TFile(mOutPutFile.Data(),"RECREATE");
 
+  // initialize dN/dy
+  for(Int_t i_cent = 0; i_cent < 9; i_cent++)
+  {
+    TString HistName = Form("h_mRapNarrow_%d",i_cent);
+    h_mRapNarrow[i_cent] = new TH1F(HistName.Data(),HistName.Data(),1001,-10.01,10.01);
+  }
+  for(Int_t i_cent = 0; i_cent < 4; i_cent++)
+  {
+    TString HistName = Form("h_mRapWide_%d",i_cent);
+    h_mRapWide[i_cent] = new TH1F(HistName.Data(),HistName.Data(),1001,-10.01,10.01);
+  }
+
+  // initialize Transverse Overlap Area
+  p_mAreaT9 = new TProfile("p_mAreaT9","p_mAreaT9",9,-0.5,8.5);
+  p_mAreaT4 = new TProfile("p_mAreaT4","p_mAreaT4",4,-0.5,3.5);
+
   // initialize Epsilon9 and Epsilon4
   p_mEpsilon9[0] = new TProfile("p_mEpsilon9_2nd","p_mEpsilon9_2nd",9,-0.5,8.5);
   p_mEpsilon9[1] = new TProfile("p_mEpsilon9_3rd","p_mEpsilon9_3rd",9,-0.5,8.5);
@@ -274,6 +291,7 @@ void AMPT_epsilon::Make()
 
     Int_t refMult = 0;
     TVector3 track;
+    TLorentzVector lTrack;
     for(Int_t i_track = 0; i_track < Mult; i_track++) // refMult calculation
     {
       if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
@@ -287,6 +305,26 @@ void AMPT_epsilon::Make()
     }
 
     Int_t cent9 = getCentrality(refMult);
+
+    // Fill dN/dy distribution
+    for(Int_t i_track = 0; i_track < Mult; i_track++) // refMult calculation
+    {
+      if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
+      lTrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],Mass[i_track]);
+      Float_t rapidity = lTrack.Rapidity();
+      if(cent9 > -1)
+      {
+	h_mRapNarrow[cent9]->Fill(rapidity);
+	for(Int_t i_cent = AMPT_epsilon::Centrality_start; i_cent < AMPT_epsilon::Centrality_stop; i_cent++) // Fill dN/dy for wide centrality bins
+	{
+	  if(cent9 >= AMPT_epsilon::cent_low[i_cent] && cent9 <= AMPT_epsilon::cent_up[i_cent])
+	  {
+	    h_mRapWide[i_cent]->Fill(rapidity);
+	  }
+	}
+      }
+    }
+
     Float_t res[2]; // 0 for 2nd, 1 for 3rd
     res[0] = getResolution(0,cent9);
     res[1] = getResolution(1,cent9);
@@ -298,6 +336,10 @@ void AMPT_epsilon::Make()
     Float_t mean_R2Y[2] = {0.0,0.0};
     Float_t mean_R2 = 0.0;
     Int_t nPart = Npartp+Npartt;
+
+    Float_t area;
+    Float_t mean_X2 = 0.0;
+    Float_t mean_Y2 = 0.0;
 
     for(Int_t i_par = 0; i_par < Nab; i_par++)
     {
@@ -313,12 +355,18 @@ void AMPT_epsilon::Make()
 	  mean_R2X[i_order] += R*R*TMath::Cos(Order[i_order]*phi)/nPart;
 	  mean_R2Y[i_order] += R*R*TMath::Sin(Order[i_order]*phi)/nPart;
 	}
+
+	mean_X2 += Nx[i_par]*Nx[i_par]/nPart;
+	mean_Y2 += Ny[i_par]*Ny[i_par]/nPart;
       }
     }
+
     for(Int_t i_order = 0; i_order < 2; i_order++)
     {
       epsilon[i_order] = TMath::Sqrt(mean_R2X[i_order]*mean_R2X[i_order]+mean_R2Y[i_order]*mean_R2Y[i_order])/mean_R2;
+      if(i_order == 0) area = 4.0*TMath::Pi()*TMath::Sqrt(mean_X2*mean_Y2);
     }
+
     if(cent9 > -1)
     {
       for(Int_t i_order = 0; i_order < 2; i_order++)
@@ -326,12 +374,14 @@ void AMPT_epsilon::Make()
 	if(res[i_order] > 0.0) 
 	{
 	  p_mEpsilon9[i_order]->Fill(cent9,epsilon[i_order],refMult); // calculate epsilon for narrow centrality bin
+	  if(i_order == 0) p_mAreaT9->Fill(cent9,area,refMult); // calculate Transverse Overlap Area for narrow centrality bin
 
 	  for(Int_t i_cent = AMPT_epsilon::Centrality_start; i_cent < AMPT_epsilon::Centrality_stop; i_cent++) // calculate epsilon for wide centrality bin
 	  {
 	    if(cent9 >= AMPT_epsilon::cent_low[i_cent] && cent9 <= AMPT_epsilon::cent_up[i_cent])
 	    {
-	      p_mEpsilon4[i_order]->Fill(i_cent,epsilon[i_order],refMult); // calculate epsilon for narrow centrality bin
+	      p_mEpsilon4[i_order]->Fill(i_cent,epsilon[i_order],refMult); // calculate epsilon for wide centrality bin
+	      if(i_order == 0) p_mAreaT4->Fill(i_cent,area,refMult); // calculate Transverse Overlap Area for wide centrality bin
 	    }
 	  }
 	}
@@ -349,6 +399,19 @@ void AMPT_epsilon::Finish()
   mFile_Res->Close();
 
   mFile_OutPut->cd();
+  for(Int_t i_cent = 0; i_cent < 9; i_cent++)
+  {
+    h_mRapNarrow[i_cent]->Write();
+  }
+
+  for(Int_t i_cent = 0; i_cent < 4; i_cent++)
+  {
+    h_mRapWide[i_cent]->Write();
+  }
+
+  p_mAreaT9->Write();
+  p_mAreaT4->Write();
+
   for(Int_t i_order = 0; i_order < 2; i_order++)
   {
     p_mEpsilon9[i_order]->Write();

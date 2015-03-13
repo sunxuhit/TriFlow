@@ -52,10 +52,16 @@ class AMPT_epsilon // TODO: change the Tree structure
     TFile *mFile_OutPut;
     TFile *mFile_Res;
 
-    // QA Plot
-
     // resolution
     TProfile *p_mRes[2];
+
+    // dN/dy|[-0.5,0.5]
+    TH1F *h_mRapNarrow[9]; // 9 narrow centrality bins
+    TH1F *h_mRapWide[4]; // 4 wide centrality bins
+
+    // Transverse overlap area
+    TProfile *p_mAreaT9;
+    TProfile *p_mAreaT4;
 
     // Epsilon
     TProfile *p_mEpsilon9[2]; // 0 for 2nd, 1 for 3rd
