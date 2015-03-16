@@ -67,6 +67,9 @@ class AMPT_epsilon // TODO: change the Tree structure
     TProfile *p_mEpsilon9[2]; // 0 for 2nd, 1 for 3rd
     TProfile *p_mEpsilon4[2]; // 0 for 2nd, 1 for 3rd
 
+    // Event Counter
+    TH1F *h_mEventCounter;
+
     //---------------------------------------------------------------
     TChain         *mChain_Input;
     Int_t           fCurrent; //!current Tree number in a TChain

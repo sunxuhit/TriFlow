@@ -188,7 +188,8 @@ void AMPT_epsilon::Init()
   p_mEpsilon4[0] = new TProfile("p_mEpsilon4_2nd","p_mEpsilon4_2nd",4,-0.5,3.5);
   p_mEpsilon4[1] = new TProfile("p_mEpsilon4_3rd","p_mEpsilon4_3rd",4,-0.5,3.5);
 
-  // QA Plot
+  // initialize Event Counter
+  h_mEventCounter = new TH1F("h_mEventCounter","h_mEventCounter",1,0.5,1.5);
 
   // initialize the TChain
   if (!mInPutList.IsNull())   // if input file is ok
@@ -307,13 +308,14 @@ void AMPT_epsilon::Make()
     Int_t cent9 = getCentrality(refMult);
 
     // Fill dN/dy distribution
-    for(Int_t i_track = 0; i_track < Mult; i_track++) // refMult calculation
+    if(cent9 > -1)
     {
-      if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
-      lTrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],Mass[i_track]);
-      Float_t rapidity = lTrack.Rapidity();
-      if(cent9 > -1)
+      h_mEventCounter->Fill(1);
+      for(Int_t i_track = 0; i_track < Mult; i_track++) // refMult calculation
       {
+	if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
+	lTrack.SetXYZM(Px[i_track],Py[i_track],Pz[i_track],Mass[i_track]);
+	Float_t rapidity = lTrack.Rapidity();
 	h_mRapNarrow[cent9]->Fill(rapidity);
 	for(Int_t i_cent = AMPT_epsilon::Centrality_start; i_cent < AMPT_epsilon::Centrality_stop; i_cent++) // Fill dN/dy for wide centrality bins
 	{
@@ -417,5 +419,6 @@ void AMPT_epsilon::Finish()
     p_mEpsilon9[i_order]->Write();
     p_mEpsilon4[i_order]->Write();
   }
+  h_mEventCounter->Write();
   mFile_OutPut->Close();
 }
