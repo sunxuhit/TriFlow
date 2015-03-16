@@ -40,7 +40,7 @@ Double_t sigma(Double_t *x_val, Double_t *par)
   return sigma_Cs;
 }
 
-void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 1) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19.6 GeV, 3: 27 GeV, 4: 39 GeV, 5: 62.4 GeV, 6: 200 GeV | 0: Default, 1: String Melting | 0: 1mb, 1: 3mb, 2: 6mb
+void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 2) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19.6 GeV, 3: 27 GeV, 4: 39 GeV, 5: 62.4 GeV, 6: 200 GeV | 0: Default, 1: String Melting | 0: 1mb, 1: 3mb, 2: 6mb
 {
   TString inputfile;
   if(mMode == 0)
@@ -92,7 +92,7 @@ void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 1) // 0: 7.7 Ge
   TH1F *h_Knudsen = new TH1F("h_Knudsen","h_Knudsen",4,-0.5,3.5);
   for(Int_t i_cent = 0; i_cent < 4; i_cent++)
   {
-    Double_t Knudsen = Sigma_Cs*dNdy[i_cent]*AreaT[i_cent];
+    Double_t Knudsen = Sigma_Cs*dNdy[i_cent]/AreaT[i_cent];
     Double_t err_Knudsen = ErrDiv(dNdy[i_cent],AreaT[i_cent],err_dNdy[i_cent],err_AreaT[i_cent]);
     h_Knudsen->SetBinContent(i_cent+1,Knudsen);
     h_Knudsen->SetBinError(i_cent+1,err_Knudsen);

@@ -189,7 +189,8 @@ void AMPT_epsilon::Init()
   p_mEpsilon4[1] = new TProfile("p_mEpsilon4_3rd","p_mEpsilon4_3rd",4,-0.5,3.5);
 
   // initialize Event Counter
-  h_mEventCounter = new TH1F("h_mEventCounter","h_mEventCounter",1,0.5,1.5);
+  h_mEventCounter9 = new TH1F("h_mEventCounter9","h_mEventCounter9",9,-0.5,8.5);
+  h_mEventCounter4 = new TH1F("h_mEventCounter4","h_mEventCounter4",4,-0.5,3.5);
 
   // initialize the TChain
   if (!mInPutList.IsNull())   // if input file is ok
@@ -310,7 +311,6 @@ void AMPT_epsilon::Make()
     // Fill dN/dy distribution
     if(cent9 > -1)
     {
-      h_mEventCounter->Fill(1);
       for(Int_t i_track = 0; i_track < Mult; i_track++) // refMult calculation
       {
 	if(Px[i_track] == 0. && Py[i_track] == 0.) continue;
@@ -377,6 +377,7 @@ void AMPT_epsilon::Make()
 	{
 	  p_mEpsilon9[i_order]->Fill(cent9,epsilon[i_order],refMult); // calculate epsilon for narrow centrality bin
 	  if(i_order == 0) p_mAreaT9->Fill(cent9,area,refMult); // calculate Transverse Overlap Area for narrow centrality bin
+	  if(i_order == 0) h_mEventCounter9->Fill(cent9); // calculate Transverse Overlap Area for narrow centrality bin
 
 	  for(Int_t i_cent = AMPT_epsilon::Centrality_start; i_cent < AMPT_epsilon::Centrality_stop; i_cent++) // calculate epsilon for wide centrality bin
 	  {
@@ -384,6 +385,7 @@ void AMPT_epsilon::Make()
 	    {
 	      p_mEpsilon4[i_order]->Fill(i_cent,epsilon[i_order],refMult); // calculate epsilon for wide centrality bin
 	      if(i_order == 0) p_mAreaT4->Fill(i_cent,area,refMult); // calculate Transverse Overlap Area for wide centrality bin
+	      if(i_order == 0) h_mEventCounter4->Fill(i_cent); // calculate Transverse Overlap Area for wide centrality bin
 	    }
 	  }
 	}
@@ -419,6 +421,7 @@ void AMPT_epsilon::Finish()
     p_mEpsilon9[i_order]->Write();
     p_mEpsilon4[i_order]->Write();
   }
-  h_mEventCounter->Write();
+  h_mEventCounter9->Write();
+  h_mEventCounter4->Write();
   mFile_OutPut->Close();
 }
