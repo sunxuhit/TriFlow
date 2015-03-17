@@ -8,8 +8,8 @@
 #include "TVector2.h"
 #include "TVector3.h"
 #include "TMath.h"
-#include "TH1F.h"
-#include "TH2F.h"
+#include "TH1D.h"
+#include "TH2D.h"
 
 ClassImp(AMPT_resolution)
 
@@ -116,25 +116,25 @@ void AMPT_resolution::Init()
   p_mRes3 = new TProfile("p_mRes3","p_mRes3",9,-0.5,8.5);
 
   // QA Plot
-  h_mPart = new TH1F("h_mPart","h_mPart",2000,0,2000.0);
-  h_mMult = new TH1F("h_mMult","h_mMult",10000,0,10000.0);
-  h_mRefMult = new TH1F("h_mRefMult","h_mRefMult",10000,-0.5,9999.5);
-  h_mEta = new TH1F("h_mEta","h_mEta",1001,-10.01,10.01);
+  h_mPart = new TH1D("h_mPart","h_mPart",2000,0,2000.0);
+  h_mMult = new TH1D("h_mMult","h_mMult",10000,0,10000.0);
+  h_mRefMult = new TH1D("h_mRefMult","h_mRefMult",10000,-0.5,9999.5);
+  h_mEta = new TH1D("h_mEta","h_mEta",1001,-10.01,10.01);
   for(Int_t i_cent = 0; i_cent < 9; i_cent++)
   {
     TString HistName;
     HistName = Form("h_mPsi2_East_%d",i_cent);
-    h_mPsi2_East[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    h_mPsi2_East[i_cent] = new TH1D(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
     HistName = Form("h_mPsi2_West_%d",i_cent);
-    h_mPsi2_West[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    h_mPsi2_West[i_cent] = new TH1D(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
     HistName = Form("h_mPsi3_East_%d",i_cent);
-    h_mPsi3_East[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    h_mPsi3_East[i_cent] = new TH1D(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
     HistName = Form("h_mPsi3_West_%d",i_cent);
-    h_mPsi3_West[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    h_mPsi3_West[i_cent] = new TH1D(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
     HistName = Form("h_mPsi2_%d",i_cent);
-    h_mPsi2[i_cent] = new TH2F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi(),100,-TMath::Pi(),TMath::Pi());
+    h_mPsi2[i_cent] = new TH2D(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi(),100,-TMath::Pi(),TMath::Pi());
     HistName = Form("h_mPsi3_%d",i_cent);
-    h_mPsi3[i_cent] = new TH2F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi(),100,-TMath::Pi(),TMath::Pi());
+    h_mPsi3[i_cent] = new TH2D(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi(),100,-TMath::Pi(),TMath::Pi());
   }
 
   // initialize the TChain

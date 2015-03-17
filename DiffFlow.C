@@ -1,7 +1,7 @@
 #include "TFile.h"
 #include "TString.h"
 #include "TProfile.h"
-#include "TH1F.h"
+#include "TH1D.h"
 
 Double_t ErrorAdd(Float_t x, Float_t y)
 {
@@ -44,12 +44,12 @@ void DiffFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 G
   // flow for pi, K, p, Lambda, K0s by using eta_sub event plane method
   // pi_plus,pi_minus,K_plus,K_minus,p,pbar,Lambda,Lambdabar,K0s,phi
   TProfile *p_mFlow[10][2][4]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
-  TH1F *h_mFlow[10][2][4]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
+  TH1D *h_mFlow[10][2][4]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
 
   // pt spectra 
-  TH1F *h_mPt[10][2][4]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
+  TH1D *h_mPt[10][2][4]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
 
-  // Read in flow TProfile => transfer to TH1F | Read in pt Spectra
+  // Read in flow TProfile => transfer to TH1D | Read in pt Spectra
   for(Int_t i_par = 0; i_par < 10; i_par++)
   {
     for(Int_t i_order = 0; i_order < 2; i_order++)
@@ -64,7 +64,7 @@ void DiffFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 G
 	ProName = Form("Flow_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
 	p_mFlow[i_par][i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
 	HistName = Form("h_Flow_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data());
-	h_mFlow[i_par][i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+	h_mFlow[i_par][i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 	for(Int_t i_bin = 1; i_bin < 101; i_bin++)
 	{
 	  h_mFlow[i_par][i_order][i_cent]->SetBinContent(i_bin,p_mFlow[i_par][i_order][i_cent]->GetBinContent(i_bin));
@@ -76,13 +76,13 @@ void DiffFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 G
   }
 
   // Calculate differential ratio v2/v3 => could be merged into loop above => using individual loop to be more clear
-  TH1F *h_ratio[10][4];
+  TH1D *h_ratio[10][4];
   for(Int_t i_par = 0; i_par < 10; i_par++)
   {
     for(Int_t i_cent = 0; i_cent < 4; i_cent++)
     {
       TString HistName = Form("h_ratio_%s_%s",ParType[i_par].Data(),Centrality[i_cent].Data());
-      h_ratio[i_par][i_cent] = (TH1F*)h_mFlow[i_par][0][i_cent]->Clone(HistName.Data());
+      h_ratio[i_par][i_cent] = (TH1D*)h_mFlow[i_par][0][i_cent]->Clone(HistName.Data());
       h_ratio[i_par][i_cent]->Divide(h_mFlow[i_par][1][i_cent]);
     }
   }

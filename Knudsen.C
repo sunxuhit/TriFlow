@@ -1,6 +1,6 @@
 #include "TString.h"
 #include "TFile.h"
-#include "TH1F.h"
+#include "TH1D.h"
 #include "TProfile.h"
 #include "TMath.h"
 #include "TF1.h"
@@ -56,8 +56,8 @@ void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 0) // 0: 7.7 Ge
   TFile *File_input = TFile::Open(inputfile.Data());
 
   // dNdy calculation
-  TH1F *h_mEventCounter4 = (TH1F*)File_input->Get("h_mEventCounter4");
-  TH1F *h_mRapWide[4];
+  TH1D *h_mEventCounter4 = (TH1D*)File_input->Get("h_mEventCounter4");
+  TH1D *h_mRapWide[4];
   Double_t dNdy[4] = {0.0,0.0,0.0,0.0};
   Double_t err_dNdy[4] = {0.0,0.0,0.0,0.0};
   Double_t y_start = -0.5;
@@ -66,11 +66,11 @@ void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 0) // 0: 7.7 Ge
   {
     Float_t Event_Counter = h_mEventCounter4->GetBinContent(i_cent+1);
     TString HistName = Form("h_mRapWide_%d",i_cent);
-    h_mRapWide[i_cent] = (TH1F*)File_input->Get(HistName.Data());
+    h_mRapWide[i_cent] = (TH1D*)File_input->Get(HistName.Data());
     h_mRapWide[i_cent]->Scale(1/Event_Counter);
     Int_t bin_start = h_mRapWide[i_cent]->FindBin(y_start);
     Int_t bin_stop  = h_mRapWide[i_cent]->FindBin(y_stop);
-    dNdy[i_cent] = h_mRapWide[i_cent]->IntegralAndError(bin_start,bin_stop,err_dNdy[i_cent],"width");
+    dNdy[i_cent] = h_mRapWide[i_cent]->IntegralAndError(bin_start,bin_stop,err_dNdy[i_cent],"");
     cout << "dNdy = " << dNdy[i_cent] << " +/- " << err_dNdy[i_cent] << endl;
   }
 
@@ -93,7 +93,7 @@ void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 0) // 0: 7.7 Ge
   Double_t Sigma_Cs = f_sigma->Eval(mu[mScreen]);
   cout << "sigma*Cs = " << Sigma_Cs << endl;
 
-  TH1F *h_Knudsen = new TH1F("h_Knudsen","h_Knudsen",4,-0.5,3.5);
+  TH1D *h_Knudsen = new TH1D("h_Knudsen","h_Knudsen",4,-0.5,3.5);
   for(Int_t i_cent = 0; i_cent < 4; i_cent++)
   {
     Double_t Knudsen = Sigma_Cs*dNdy[i_cent]/AreaT[i_cent];
@@ -101,9 +101,7 @@ void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 0) // 0: 7.7 Ge
     h_Knudsen->SetBinContent(i_cent+1,Knudsen);
     h_Knudsen->SetBinError(i_cent+1,err_Knudsen);
   }
-  h_Knudsen->Draw();
 
-  /*
   // write Histogram into Output file
   TString outputfile;
   if(mMode == 0)
@@ -117,6 +115,6 @@ void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 0) // 0: 7.7 Ge
   cout << "OutPut File: " << outputfile.Data() << endl;
   TFile *File_output = new TFile(outputfile.Data(),"RECREATE");
   File_output->cd();
+  h_Knudsen->Write();
   File_output->Close();
-  */
 }

@@ -1,6 +1,6 @@
 #include "TString.h"
 #include "TFile.h"
-#include "TH1F.h"
+#include "TH1D.h"
 #include "TF1.h"
 
 //----------------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ void SpecFit(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 
   cout << "Input File: " << inputfile.Data() << endl;
   TFile *File_input = TFile::Open(inputfile.Data());
 
-  TH1F *h_spec[mOrder_Total][mCentrality_Total][mParType_Total];
+  TH1D *h_spec[mOrder_Total][mCentrality_Total][mParType_Total];
   TF1 *f_spec[mOrder_Total][mCentrality_Total][mParType_Total];
   for(Int_t i_order = mOrder_Start; i_order < mOrder_Stop; i_order++)
   {
@@ -91,7 +91,7 @@ void SpecFit(Int_t mEnergy = 4, Int_t mMode = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 
       for(Int_t i_par = mParType_Start; i_par < mParType_Stop; i_par++)
       {
 	TString HistName = Form("Pt_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data());
-	h_spec[i_order][i_cent][i_par] = (TH1F*)File_input->Get(HistName.Data());
+	h_spec[i_order][i_cent][i_par] = (TH1D*)File_input->Get(HistName.Data());
 	TString FuncName = Form("f_Pt_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data());
 	f_spec[i_order][i_cent][i_par] = new TF1(FuncName.Data(),PtFitFunc2_mod_x,0,5.0,4);
 	f_spec[i_order][i_cent][i_par]->SetParameter(0,ParMass[i_par]);

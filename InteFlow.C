@@ -1,7 +1,7 @@
 #include "TFile.h"
 #include "TString.h"
 #include "TProfile.h"
-#include "TH1F.h"
+#include "TH1D.h"
 #include "TF1.h"
 #include "Math/MinimizerOptions.h"
 #include "TCanvas.h"
@@ -68,17 +68,17 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 G
   // flow for pi, K, p, Lambda, K0s by using eta_sub event plane method
   // pi_plus,pi_minus,K_plus,K_minus,p,pbar,Lambda,Lambdabar,K0s,phi
   TProfile *p_mFlow[mParType_Total][mOrder_Total][mCentrality_Total]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
-  TH1F *h_mFlow[mParType_Total][mOrder_Total][mCentrality_Total]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
+  TH1D *h_mFlow[mParType_Total][mOrder_Total][mCentrality_Total]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
 
   // pt spectra 
-  TH1F *h_mPt[mParType_Total][mOrder_Total][mCentrality_Total]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
+  TH1D *h_mPt[mParType_Total][mOrder_Total][mCentrality_Total]; // Particle types | 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
 //  TF1 *f_mPt[mParType_Total][mOrder_Total][mCentrality_Total];
 
   // Integrated v2 and v3
-  TH1F *h_mInteFlow[mOrder_Total][mCentrality_Total]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
+  TH1D *h_mInteFlow[mOrder_Total][mCentrality_Total]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
 
 
-  // Read in flow TProfile => transfer to TH1F | Read in pt Spectra
+  // Read in flow TProfile => transfer to TH1D | Read in pt Spectra
   for(Int_t i_par = 0; i_par < 10; i_par++)
   {
     for(Int_t i_order = 0; i_order < 2; i_order++)
@@ -93,7 +93,7 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 G
 	ProName = Form("Flow_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
 	p_mFlow[i_par][i_order][i_cent] = (TProfile*)File_input->Get(ProName.Data());
 	HistName = Form("h_Flow_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data());
-	h_mFlow[i_par][i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+	h_mFlow[i_par][i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 	for(Int_t i_bin = 1; i_bin < 26; i_bin++)
 	{
 	  h_mFlow[i_par][i_order][i_cent]->SetBinContent(i_bin,p_mFlow[i_par][i_order][i_cent]->GetBinContent(i_bin));
@@ -101,7 +101,7 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 G
 	}
 
 	HistName = Form("Pt_%s_%s_%s",ParType[i_par].Data(),Order[i_order].Data(),Centrality[i_cent].Data());
-	h_mPt[i_par][i_order][i_cent] = (TH1F*)File_input->Get(HistName.Data());
+	h_mPt[i_par][i_order][i_cent] = (TH1D*)File_input->Get(HistName.Data());
 
 	h_mFlow[i_par][i_order][i_cent]->Multiply(h_mPt[i_par][i_order][i_cent]);
 	//--------------------------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 G
     for(Int_t i_cent = 0; i_cent < 4; i_cent++)
     {
       TString HistName = Form("h_mInteFlow_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mInteFlow[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),10,-0.5,9.5);
+      h_mInteFlow[i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),10,-0.5,9.5);
       for(Int_t i_par = 0; i_par < 10; i_par++)
       {
 	Double_t Inte_flow = 0.0;
@@ -135,11 +135,11 @@ void InteFlow(Int_t mEnergy = 4, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 G
   }
 
   // Calculate ratio of integrated v2 and v3
-  TH1F *h_ratio[4];
+  TH1D *h_ratio[4];
   for(Int_t i_cent = 0; i_cent < 4; i_cent++)
   {
     TString HistName = Form("h_ratio_%s",Centrality[i_cent].Data());
-    h_ratio[i_cent] = (TH1F*)h_mInteFlow[0][i_cent]->Clone(HistName.Data());
+    h_ratio[i_cent] = (TH1D*)h_mInteFlow[0][i_cent]->Clone(HistName.Data());
     h_ratio[i_cent]->Divide(h_mInteFlow[1][i_cent]);
   }
 

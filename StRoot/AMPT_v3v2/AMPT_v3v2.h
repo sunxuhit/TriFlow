@@ -8,7 +8,7 @@ class TChain;
 class TBranch;
 class TProfile;
 class TFile;
-class TH1F;
+class TH1D;
 
 class AMPT_v3v2 // TODO: change the Tree structure
 {
@@ -53,15 +53,15 @@ class AMPT_v3v2 // TODO: change the Tree structure
     TFile *mFile_Res;
 
     // QA Plot
-    TH1F *h_mPart;
-    TH1F *h_mMult;
-    TH1F *h_mRefMult;
-    TH1F *h_mEta;
-    TH1F *h_mPsi2_East[9];
-    TH1F *h_mPsi2_West[9];
-    TH1F *h_mPsi3_East[9];
-    TH1F *h_mPsi3_West[9];
-    TH1F *h_mCentrality;
+    TH1D *h_mPart;
+    TH1D *h_mMult;
+    TH1D *h_mRefMult;
+    TH1D *h_mEta;
+    TH1D *h_mPsi2_East[9];
+    TH1D *h_mPsi2_West[9];
+    TH1D *h_mPsi3_East[9];
+    TH1D *h_mPsi3_West[9];
+    TH1D *h_mCentrality;
 
     // resolution
     TProfile *p_mRes[2];
@@ -92,16 +92,16 @@ class AMPT_v3v2 // TODO: change the Tree structure
     TProfile *p_mFlow_phi_RP[2][4];
 
     // pt spectra for pi, K, p, Lambda, K0s
-    TH1F *h_mPt_pi_plus[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
-    TH1F *h_mPt_pi_minus[2][4];
-    TH1F *h_mPt_K_plus[2][4];
-    TH1F *h_mPt_K_minus[2][4];
-    TH1F *h_mPt_p[2][4];
-    TH1F *h_mPt_pbar[2][4];
-    TH1F *h_mPt_Lambda[2][4];
-    TH1F *h_mPt_Lambdabar[2][4];
-    TH1F *h_mPt_K0s[2][4];
-    TH1F *h_mPt_phi[2][4];
+    TH1D *h_mPt_pi_plus[2][4]; // 0 for 2nd, 1 for 3rd | 0 for 0-80%, 1 for 0-10%, 2 for 10-40%, 3 for 40-80%
+    TH1D *h_mPt_pi_minus[2][4];
+    TH1D *h_mPt_K_plus[2][4];
+    TH1D *h_mPt_K_minus[2][4];
+    TH1D *h_mPt_p[2][4];
+    TH1D *h_mPt_pbar[2][4];
+    TH1D *h_mPt_Lambda[2][4];
+    TH1D *h_mPt_Lambdabar[2][4];
+    TH1D *h_mPt_K0s[2][4];
+    TH1D *h_mPt_phi[2][4];
 
     //---------------------------------------------------------------
     TChain         *mChain_Input;

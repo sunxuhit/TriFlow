@@ -8,8 +8,8 @@ class TChain;
 class TBranch;
 class TProfile;
 class TFile;
-class TH1F;
-class TH2F;
+class TH1D;
+class TH2D;
 
 class AMPT_resolution // TODO: change the Tree structure
 {
@@ -46,16 +46,16 @@ class AMPT_resolution // TODO: change the Tree structure
     TFile *mFile_OutPut;
 
     // QA Plot
-    TH1F *h_mPart;
-    TH1F *h_mMult;
-    TH1F *h_mRefMult;
-    TH1F *h_mEta;
-    TH1F *h_mPsi2_East[9];
-    TH1F *h_mPsi2_West[9];
-    TH1F *h_mPsi3_East[9];
-    TH1F *h_mPsi3_West[9];
-    TH2F *h_mPsi2[9];
-    TH2F *h_mPsi3[9];
+    TH1D *h_mPart;
+    TH1D *h_mMult;
+    TH1D *h_mRefMult;
+    TH1D *h_mEta;
+    TH1D *h_mPsi2_East[9];
+    TH1D *h_mPsi2_West[9];
+    TH1D *h_mPsi3_East[9];
+    TH1D *h_mPsi3_West[9];
+    TH2D *h_mPsi2[9];
+    TH2D *h_mPsi3[9];
 
     //---------------------------------------------------------------
     TChain         *mChain_Input;

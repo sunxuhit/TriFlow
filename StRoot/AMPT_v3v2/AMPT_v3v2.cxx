@@ -178,52 +178,52 @@ void AMPT_v3v2::Init()
       ProName = Form("Flow_pi_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
       p_mFlow_pi_plus[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),25,0.0,5.0);
       HistName = Form("Pt_pi_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_pi_plus[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+      h_mPt_pi_plus[i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 
       ProName = Form("Flow_pi_minus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // pi_minus
       p_mFlow_pi_minus[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),25,0.0,5.0);
       HistName = Form("Pt_pi_minus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_pi_minus[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+      h_mPt_pi_minus[i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 
       ProName = Form("Flow_K_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // K_plus
       p_mFlow_K_plus[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),25,0.0,5.0);
       HistName = Form("Pt_K_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_K_plus[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+      h_mPt_K_plus[i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 
       ProName = Form("Flow_K_minus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // K_minus
       p_mFlow_K_minus[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),25,0.0,5.0);
       HistName = Form("Pt_K_minus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_K_minus[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+      h_mPt_K_minus[i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 
       ProName = Form("Flow_p_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // p
       p_mFlow_p[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),25,0.0,5.0);
       HistName = Form("Pt_p_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_p[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+      h_mPt_p[i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 
       ProName = Form("Flow_pbar_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // pbar
       p_mFlow_pbar[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),25,0.0,5.0);
       HistName = Form("Pt_pbar_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_pbar[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+      h_mPt_pbar[i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 
       ProName = Form("Flow_Lambda_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // Lambda
       p_mFlow_Lambda[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),25,0.0,5.0);
       HistName = Form("Pt_Lambda_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_Lambda[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+      h_mPt_Lambda[i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 
       ProName = Form("Flow_Lambdabar_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // Lambdabar
       p_mFlow_Lambdabar[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),25,0.0,5.0);
       HistName = Form("Pt_Lambdabar_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_Lambdabar[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+      h_mPt_Lambdabar[i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 
       ProName = Form("Flow_K0s_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // K0s
       p_mFlow_K0s[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),25,0.0,5.0);
       HistName = Form("Pt_K0s_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_K0s[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+      h_mPt_K0s[i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 
       ProName = Form("Flow_phi_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // phi
       p_mFlow_phi[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),25,0.0,5.0);
       HistName = Form("Pt_phi_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
-      h_mPt_phi[i_order][i_cent] = new TH1F(HistName.Data(),HistName.Data(),25,0.0,5.0);
+      h_mPt_phi[i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 
       // flow relative to Reaction Plane
       ProName = Form("Flow_pi_plus_%s_%s_RP",Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
@@ -259,23 +259,23 @@ void AMPT_v3v2::Init()
   }
 
   // QA Plot
-  h_mPart = new TH1F("h_mPart","h_mPart",2000,0,2000.0);
-  h_mMult = new TH1F("h_mMult","h_mMult",10000,0,10000.0);
-  h_mRefMult = new TH1F("h_mRefMult","h_mRefMult",10000,0,10000.0);
-  h_mEta = new TH1F("h_mEta","h_mEta",1001,-10.01,10.01);
+  h_mPart = new TH1D("h_mPart","h_mPart",2000,0,2000.0);
+  h_mMult = new TH1D("h_mMult","h_mMult",10000,0,10000.0);
+  h_mRefMult = new TH1D("h_mRefMult","h_mRefMult",10000,0,10000.0);
+  h_mEta = new TH1D("h_mEta","h_mEta",1001,-10.01,10.01);
   for(Int_t i_cent = 0; i_cent < 9; i_cent++)
   {
     TString HistName;
     HistName = Form("h_mPsi2_East_%d",i_cent);
-    h_mPsi2_East[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    h_mPsi2_East[i_cent] = new TH1D(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
     HistName = Form("h_mPsi2_West_%d",i_cent);
-    h_mPsi2_West[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    h_mPsi2_West[i_cent] = new TH1D(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
     HistName = Form("h_mPsi3_East_%d",i_cent);
-    h_mPsi3_East[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    h_mPsi3_East[i_cent] = new TH1D(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
     HistName = Form("h_mPsi3_West_%d",i_cent);
-    h_mPsi3_West[i_cent] = new TH1F(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
+    h_mPsi3_West[i_cent] = new TH1D(HistName.Data(),HistName.Data(),100,-TMath::Pi(),TMath::Pi());
   }
-  h_mCentrality = new TH1F("h_mCentrality","h_mCentrality",9,-0.5,8.5);
+  h_mCentrality = new TH1D("h_mCentrality","h_mCentrality",9,-0.5,8.5);
 
   // initialize the TChain
   if (!mInPutList.IsNull())   // if input file is ok

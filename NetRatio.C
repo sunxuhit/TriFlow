@@ -1,6 +1,6 @@
 #include "TString.h"
 #include "TFile.h"
-#include "TH1F.h"
+#include "TH1D.h"
 
 static TString Mode[2] = {"Default","StringMelting"};
 static TString ScreenMass[3] = {"1mb","3mb","6mb"};
@@ -29,25 +29,25 @@ void NetRatio(Int_t mEnergy = 6, Int_t mMode = 0, Int_t mScreen = 0) // 0: 7.7 G
   TFile *File_input_flow = TFile::Open(inputfile_flow.Data());
   TFile *File_input_eps  = TFile::Open(inputfile_eps.Data());
 
-  TH1F *h_ratio[4]; // 0: 0-80%, 1: 0-10%, 2: 10-40%, 3: 40-80%
-  TH1F *h_Inte_v2[4]; // 0: 0-80%, 1: 0-10%, 2: 10-40%, 3: 40-80%
-  TH1F *h_Eps2;
-  TH1F *h_Inte_v3[4]; // 0: 0-80%, 1: 0-10%, 2: 10-40%, 3: 40-80%
-  TH1F *h_Eps3;
+  TH1D *h_ratio[4]; // 0: 0-80%, 1: 0-10%, 2: 10-40%, 3: 40-80%
+  TH1D *h_Inte_v2[4]; // 0: 0-80%, 1: 0-10%, 2: 10-40%, 3: 40-80%
+  TH1D *h_Eps2;
+  TH1D *h_Inte_v3[4]; // 0: 0-80%, 1: 0-10%, 2: 10-40%, 3: 40-80%
+  TH1D *h_Eps3;
 
   for(Int_t i_cent = 0; i_cent < 4; i_cent++)
   {
     TString HistName_ratio = Form("h_ratio_%s",Centrality[i_cent].Data());
-    h_ratio[i_cent] = (TH1F*)File_input_flow->Get(HistName_ratio.Data());
+    h_ratio[i_cent] = (TH1D*)File_input_flow->Get(HistName_ratio.Data());
 
     TString HistName_v2 = Form("h_mInteFlow_2nd_%s",Centrality[i_cent].Data());
-    h_Inte_v2[i_cent] = (TH1F*)File_input_flow->Get(HistName_v2.Data());
+    h_Inte_v2[i_cent] = (TH1D*)File_input_flow->Get(HistName_v2.Data());
 
     TString HistName_v3 = Form("h_mInteFlow_3rd_%s",Centrality[i_cent].Data());
-    h_Inte_v3[i_cent] = (TH1F*)File_input_flow->Get(HistName_v3.Data());
+    h_Inte_v3[i_cent] = (TH1D*)File_input_flow->Get(HistName_v3.Data());
   }
-  h_Eps2 = (TH1F*)File_input_eps->Get("p_mEpsilon4_2nd");
-  h_Eps3 = (TH1F*)File_input_eps->Get("p_mEpsilon4_3rd");
+  h_Eps2 = (TH1D*)File_input_eps->Get("p_mEpsilon4_2nd");
+  h_Eps3 = (TH1D*)File_input_eps->Get("p_mEpsilon4_3rd");
 
   for(Int_t i_cent = 0; i_cent < 4; i_cent++) // calculate flow/epsilon
   {
