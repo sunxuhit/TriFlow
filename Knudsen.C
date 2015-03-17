@@ -35,12 +35,12 @@ Double_t sigma(Double_t *x_val, Double_t *par)
   Double_t z = mu*mu/s;
   Double_t sigma_0 = 9*TMath::Pi()*alpha_s*alpha_s/(2*mu*mu);
   Double_t sigma_t = sigma_0*4*z*(1+z)*((2*z+1)*TMath::Log(1+1/z)-2);
-  Double_t sigma_Cs = 1.5*sigma_t*TMath::Sqrt(3);
+  Double_t sigma_Cs = 1.5*sigma_t/TMath::Sqrt(3);
   
   return sigma_Cs;
 }
 
-void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 2) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19.6 GeV, 3: 27 GeV, 4: 39 GeV, 5: 62.4 GeV, 6: 200 GeV | 0: Default, 1: String Melting | 0: 1mb, 1: 3mb, 2: 6mb
+void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 0) // 0: 7.7 GeV, 1: 11.5 GeV, 2: 19.6 GeV, 3: 27 GeV, 4: 39 GeV, 5: 62.4 GeV, 6: 200 GeV | 0: Default, 1: String Melting | 0: 1mb, 1: 3mb, 2: 6mb
 {
   TString inputfile;
   if(mMode == 0)
@@ -56,6 +56,7 @@ void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 2) // 0: 7.7 Ge
   TFile *File_input = TFile::Open(inputfile.Data());
 
   // dNdy calculation
+  TH1F *h_mEventCounter4 = (TH1F*)File_input->Get("h_mEventCounter4");
   TH1F *h_mRapWide[4];
   Double_t dNdy[4] = {0.0,0.0,0.0,0.0};
   Double_t err_dNdy[4] = {0.0,0.0,0.0,0.0};
@@ -63,8 +64,10 @@ void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 2) // 0: 7.7 Ge
   Double_t y_stop  = 0.5;
   for(Int_t i_cent = 0; i_cent < 4; i_cent++)
   {
+    Float_t Event_Counter = h_mEventCounter4->GetBinContent(i_cent+1);
     TString HistName = Form("h_mRapWide_%d",i_cent);
     h_mRapWide[i_cent] = (TH1F*)File_input->Get(HistName.Data());
+    h_mRapWide[i_cent]->Scale(1/Event_Counter);
     Int_t bin_start = h_mRapWide[i_cent]->FindBin(y_start);
     Int_t bin_stop  = h_mRapWide[i_cent]->FindBin(y_stop);
     dNdy[i_cent] = h_mRapWide[i_cent]->IntegralAndError(bin_start,bin_stop,err_dNdy[i_cent],"width");
@@ -88,6 +91,7 @@ void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 2) // 0: 7.7 Ge
   f_sigma->FixParameter(0,0.35); // s
   f_sigma->FixParameter(1,0.4714); // alpha_s
   Double_t Sigma_Cs = f_sigma->Eval(mu[mScreen]);
+  cout << "sigma*Cs = " << Sigma_Cs << endl;
 
   TH1F *h_Knudsen = new TH1F("h_Knudsen","h_Knudsen",4,-0.5,3.5);
   for(Int_t i_cent = 0; i_cent < 4; i_cent++)

@@ -8,7 +8,7 @@ class TChain;
 class TBranch;
 class TProfile;
 class TFile;
-class TH1F;
+class TH1D;
 
 class AMPT_epsilon // TODO: change the Tree structure
 {
@@ -56,8 +56,8 @@ class AMPT_epsilon // TODO: change the Tree structure
     TProfile *p_mRes[2];
 
     // dN/dy|[-0.5,0.5]
-    TH1F *h_mRapNarrow[9]; // 9 narrow centrality bins
-    TH1F *h_mRapWide[4]; // 4 wide centrality bins
+    TH1D *h_mRapNarrow[9]; // 9 narrow centrality bins
+    TH1D *h_mRapWide[4]; // 4 wide centrality bins
 
     // Transverse overlap area
     TProfile *p_mAreaT9;
@@ -68,8 +68,8 @@ class AMPT_epsilon // TODO: change the Tree structure
     TProfile *p_mEpsilon4[2]; // 0 for 2nd, 1 for 3rd
 
     // Event Counter
-    TH1F *h_mEventCounter9;
-    TH1F *h_mEventCounter4;
+    TH1D *h_mEventCounter9;
+    TH1D *h_mEventCounter4;
 
     //---------------------------------------------------------------
     TChain         *mChain_Input;

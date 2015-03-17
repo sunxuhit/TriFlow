@@ -169,12 +169,12 @@ void AMPT_epsilon::Init()
   for(Int_t i_cent = 0; i_cent < 9; i_cent++)
   {
     TString HistName = Form("h_mRapNarrow_%d",i_cent);
-    h_mRapNarrow[i_cent] = new TH1F(HistName.Data(),HistName.Data(),1001,-10.01,10.01);
+    h_mRapNarrow[i_cent] = new TH1D(HistName.Data(),HistName.Data(),1001,-10.01,10.01);
   }
   for(Int_t i_cent = 0; i_cent < 4; i_cent++)
   {
     TString HistName = Form("h_mRapWide_%d",i_cent);
-    h_mRapWide[i_cent] = new TH1F(HistName.Data(),HistName.Data(),1001,-10.01,10.01);
+    h_mRapWide[i_cent] = new TH1D(HistName.Data(),HistName.Data(),1001,-10.01,10.01);
   }
 
   // initialize Transverse Overlap Area
@@ -189,8 +189,8 @@ void AMPT_epsilon::Init()
   p_mEpsilon4[1] = new TProfile("p_mEpsilon4_3rd","p_mEpsilon4_3rd",4,-0.5,3.5);
 
   // initialize Event Counter
-  h_mEventCounter9 = new TH1F("h_mEventCounter9","h_mEventCounter9",9,-0.5,8.5);
-  h_mEventCounter4 = new TH1F("h_mEventCounter4","h_mEventCounter4",4,-0.5,3.5);
+  h_mEventCounter9 = new TH1D("h_mEventCounter9","h_mEventCounter9",9,-0.5,8.5);
+  h_mEventCounter4 = new TH1D("h_mEventCounter4","h_mEventCounter4",4,-0.5,3.5);
 
   // initialize the TChain
   if (!mInPutList.IsNull())   // if input file is ok
