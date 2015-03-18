@@ -8,6 +8,7 @@
 static TString Mode[2] = {"Default","StringMelting"};
 static TString ScreenMass[3] = {"1mb","3mb","6mb"};
 static TString Energy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
+static Double_t alpha_s[3] = {0.33,0.4714,.4714}; // 1.5mb, 3mb, 6mb
 static Double_t mu[3] = {3.2,3.2264,2.2814}; // 1.5mb, 3mb, 6mb
 
 Double_t ErrorAdd(Float_t x, Float_t y)
@@ -89,7 +90,7 @@ void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 0) // 0: 7.7 Ge
   // sigma calculation
   TF1 *f_sigma = new TF1("f_sigma",sigma,0.0,5.0,2);
   f_sigma->FixParameter(0,0.35); // s
-  f_sigma->FixParameter(1,0.4714); // alpha_s
+  f_sigma->FixParameter(1,alpha_s[mScreen]); // alpha_s
   Double_t Sigma_Cs = f_sigma->Eval(mu[mScreen]);
   cout << "sigma*Cs = " << Sigma_Cs << endl;
 
