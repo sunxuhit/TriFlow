@@ -8,7 +8,7 @@
 static TString Mode[2] = {"Default","StringMelting"};
 static TString ScreenMass[3] = {"1mb","3mb","6mb"};
 static TString Energy[7] = {"7GeV","11GeV","19GeV","27GeV","39GeV","62GeV","200GeV"};
-static Double_t alpha_s[3] = {0.33,0.4714,.4714}; // 1.5mb, 3mb, 6mb
+static Double_t alpha_s[3] = {0.33,0.4714,0.4714}; // 1.5mb, 3mb, 6mb
 static Double_t mu[3] = {3.2,3.2264,2.2814}; // 1.5mb, 3mb, 6mb
 
 Double_t ErrorAdd(Float_t x, Float_t y)
@@ -97,8 +97,14 @@ void Knudsen(Int_t mEnergy = 6, Int_t mMode = 1, Int_t mScreen = 0) // 0: 7.7 Ge
   TH1D *h_Knudsen = new TH1D("h_Knudsen","h_Knudsen",4,-0.5,3.5);
   for(Int_t i_cent = 0; i_cent < 4; i_cent++)
   {
-    Double_t Knudsen = Sigma_Cs*dNdy[i_cent]/AreaT[i_cent];
-    Double_t err_Knudsen = ErrDiv(dNdy[i_cent],AreaT[i_cent],err_dNdy[i_cent],err_AreaT[i_cent]);
+    Double_t dNdy_AreaT = dNdy[i_cent]/AreaT[i_cent];
+    Double_t err_dNdy_AreaT = ErrDiv(dNdy[i_cent],AreaT[i_cent],err_dNdy[i_cent],err_AreaT[i_cent]);
+//    cout << "dNdy/AreaT = " << dNdy_AreaT << " +/- " << err_dNdy_AreaT << endl;
+
+    Double_t Knudsen = Sigma_Cs*dNdy_AreaT;
+    Double_t err_Knudsen = ErrTimes(Sigma_Cs,dNdy_AreaT,0.0,err_dNdy_AreaT);
+    cout << "Knudsen = " << Knudsen << " +/- " << err_Knudsen << endl;
+
     h_Knudsen->SetBinContent(i_cent+1,Knudsen);
     h_Knudsen->SetBinError(i_cent+1,err_Knudsen);
   }
