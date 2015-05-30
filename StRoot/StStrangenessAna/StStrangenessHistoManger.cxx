@@ -104,7 +104,7 @@ void StStrangenessHistoManger::Fill(Float_t pt, Int_t Cent9, Int_t eta_gap, Floa
 	    {
 	      if(phi_psi2 >= Strangeness::Psi2_low[psi_bin] && phi_psi2 < Strangeness::Psi2_up[psi_bin])
 	      {
-		Float_t phi_psi2_final = phi_psi2 - (psi_bin-1)*2.0*TMath::Pi()/2.0;
+		Double_t phi_psi2_final = phi_psi2 - (psi_bin-1)*2.0*TMath::Pi()/2.0;
 		for(Int_t m = 0; m < Strangeness::Phi_Psi_total; m++) // phi-psi2 bin
 		{
 		  if(TMath::Abs(phi_psi2_final) >= Strangeness::phi_Psi2_low[m] && TMath::Abs(phi_psi2_final) < Strangeness::phi_Psi2_up[m])
@@ -137,7 +137,7 @@ void StStrangenessHistoManger::Fill(Float_t pt, Int_t Cent9, Int_t eta_gap, Floa
 	    {
 	      if(phi_psi3 >= Strangeness::Psi3_low[psi_bin] && phi_psi3 < Strangeness::Psi3_up[psi_bin])
 	      {
-		Float_t phi_psi3_final = phi_psi3 - (psi_bin-2)*2.0*TMath::Pi()/3.0;
+		Double_t phi_psi3_final = phi_psi3 - (psi_bin-2)*2.0*TMath::Pi()/3.0;
 		for(Int_t m = 0; m < Strangeness::Phi_Psi_total; m++) // phi-psi3 bin
 		{
 		  if(TMath::Abs(phi_psi3_final) >= Strangeness::phi_Psi3_low[m] && TMath::Abs(phi_psi3_final) < Strangeness::phi_Psi3_up[m])
@@ -172,7 +172,7 @@ void StStrangenessHistoManger::Fill_sub(Float_t pt, Int_t Cent9, Int_t eta_gap, 
 	    {
 	      if(phi_psi2 >= Strangeness::Psi2_low[psi_bin] && phi_psi2 < Strangeness::Psi2_up[psi_bin])
 	      {
-		Float_t phi_psi2_final = phi_psi2 - (psi_bin-1)*2.0*TMath::Pi()/2.0;
+		Double_t phi_psi2_final = phi_psi2 - (psi_bin-1)*2.0*TMath::Pi()/2.0;
 		for(Int_t m = 0; m < Strangeness::Phi_Psi_total; m++) // phi-psi2 bin
 		{
 		  if(TMath::Abs(phi_psi2_final) >= Strangeness::phi_Psi2_low[m] && TMath::Abs(phi_psi2_final) < Strangeness::phi_Psi2_up[m])
@@ -205,7 +205,7 @@ void StStrangenessHistoManger::Fill_sub(Float_t pt, Int_t Cent9, Int_t eta_gap, 
 	    {
 	      if(phi_psi3 >= Strangeness::Psi3_low[psi_bin] && phi_psi3 < Strangeness::Psi3_up[psi_bin])
 	      {
-		Float_t phi_psi3_final = phi_psi3 - (psi_bin-2)*2.0*TMath::Pi()/3.0;
+		Double_t phi_psi3_final = phi_psi3 - (psi_bin-2)*2.0*TMath::Pi()/3.0;
 		for(Int_t m = 0; m < Strangeness::Phi_Psi_total; m++) // phi-psi3 bin
 		{
 		  if(TMath::Abs(phi_psi3_final) >= Strangeness::phi_Psi3_low[m] && TMath::Abs(phi_psi3_final) < Strangeness::phi_Psi3_up[m])
