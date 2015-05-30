@@ -569,8 +569,8 @@ Double_t StTriFlow2ndVertexFinder::calculateMinimumDistanceStraightToPoint(StThr
 
 void StTriFlow2ndVertexFinder::fHelixABdca_start_params(StPhysicalHelixD helixA, StPhysicalHelixD helixB, Float_t &pathA, Float_t &pathB, Float_t &dcaAB, Float_t path_in_A, Float_t path_in_B)
 {
-    Float_t pA[2] = {(Float_t)path_in_A+2.0,(Float_t)path_in_A-2.0};
-    Float_t pB[2] = {(Float_t)path_in_B+2.0,(Float_t)path_in_B-2.0}; // the two start values for pathB, 0.0 is the origin of the helix at the first measured point
+    Float_t pA[2] = {path_in_A+2,path_in_A-2};
+    Float_t pB[2] = {path_in_B+2,path_in_B-2}; // the two start values for pathB, 0.0 is the origin of the helix at the first measured point
     Float_t distarray[2];
     StThreeVectorF testA, testB;
     for(Int_t r = 0; r < 2; r++)
@@ -742,7 +742,7 @@ void StTriFlow2ndVertexFinder::fHelixABdca(StPhysicalHelixD helixA, StPhysicalHe
 
 void StTriFlow2ndVertexFinder::fHelixAtoPointdca_start_params(StThreeVectorF space_vec, StPhysicalHelixD helixA, Float_t &pathA, Float_t &dcaAB, Float_t path_in_A)
 {
-    Float_t pA[2] = {(Float_t)path_in_A+2.0,(Float_t)path_in_A-2.0}; // the two start values for pathB, 0.0 is the origin of the helix at the first measured point
+    Float_t pA[2] = {path_in_A+2,path_in_A-2}; // the two start values for pathB, 0.0 is the origin of the helix at the first measured point
     Float_t distarray[2];
     StThreeVectorF testA;
     for(Int_t r = 0; r < 2; r++)
