@@ -204,7 +204,7 @@ void StTriFlowHistoManger::FillHist(Float_t pt, Int_t Cent9, Int_t charge_bin, I
 	      if(phi_psi2 >= TriFlow::Psi2_low[psi_bin] && phi_psi2 < TriFlow::Psi2_up[psi_bin])
 	      {
 //		cout << "phi_psi2 = " << phi_psi2 << endl;
-		Float_t phi_psi2_final = phi_psi2 - (psi_bin-1)*2.0*TMath::Pi()/2.0;
+		Double_t phi_psi2_final = phi_psi2 - (psi_bin-1)*2.0*TMath::Pi()/2.0;
 //		cout << "phi_psi2_final = " << phi_psi2_final << endl;
 		for(Int_t m = 0; m < 7; m++) // phi-psi2 bin
 		{
@@ -240,7 +240,7 @@ void StTriFlowHistoManger::FillHist(Float_t pt, Int_t Cent9, Int_t charge_bin, I
 	      if(phi_psi3 >= TriFlow::Psi3_low[psi_bin] && phi_psi3 < TriFlow::Psi3_up[psi_bin])
 	      {
 //		cout << "phi_psi3 = " << phi_psi3 << endl;
-		Float_t phi_psi3_final = phi_psi3 - (psi_bin-2)*2.0*TMath::Pi()/3.0;
+		Double_t phi_psi3_final = phi_psi3 - (psi_bin-2)*2.0*TMath::Pi()/3.0;
 //		cout << "phi_psi3_final = " << phi_psi3_final << endl;
 		for(Int_t m = 0; m < 7; m++) // phi-psi3 bin
 		{
@@ -281,7 +281,7 @@ void StTriFlowHistoManger::FillProton(Float_t pt, Int_t Cent9, Int_t charge_bin,
 	      if(phi_psi2 >= TriFlow::Psi2_low[psi_bin] && phi_psi2 < TriFlow::Psi2_up[psi_bin])
 	      {
 //		cout << "phi_psi2 = " << phi_psi2 << endl;
-		Float_t phi_psi2_final = phi_psi2 - (psi_bin-1)*2.0*TMath::Pi()/2.0;
+		Double_t phi_psi2_final = phi_psi2 - (psi_bin-1)*2.0*TMath::Pi()/2.0;
 //		cout << "phi_psi2_final = " << phi_psi2_final << endl;
 		for(Int_t m = 0; m < 7; m++) // phi-psi2 bin
 		{
@@ -317,7 +317,7 @@ void StTriFlowHistoManger::FillProton(Float_t pt, Int_t Cent9, Int_t charge_bin,
 	      if(phi_psi3 >= TriFlow::Psi3_low[psi_bin] && phi_psi3 < TriFlow::Psi3_up[psi_bin])
 	      {
 //		cout << "phi_psi3 = " << phi_psi3 << endl;
-		Float_t phi_psi3_final = phi_psi3 - (psi_bin-2)*2.0*TMath::Pi()/3.0;
+		Double_t phi_psi3_final = phi_psi3 - (psi_bin-2)*2.0*TMath::Pi()/3.0;
 //		cout << "phi_psi3_final = " << phi_psi3_final << endl;
 		for(Int_t m = 0; m < 7; m++) // phi-psi3 bin
 		{
