@@ -179,6 +179,14 @@ void StTriFlowHistoManger::InitYields()
 }
 //-------------------------------------------------------------------------------------------
 
+//-------------------------------------------------------------------------------------------
+void StTriFlowHistoManger::InitQA_Detector()
+{
+  h_mDEdx = new TH2F("h_mDEdx","h_mDEdx",400,0,4.0,400,0,10);
+  h_mMass2 = new TH2F("h_mMass2","h_mMass2",400,0,4.0,400,-0.3,1.7);
+}
+//-------------------------------------------------------------------------------------------
+
 void StTriFlowHistoManger::FillHist(Float_t pt, Int_t Cent9, Int_t charge_bin, Int_t eta_gap, Float_t phi_psi2, Float_t Res2, Float_t phi_psi3, Float_t Res3, Float_t New_X, Float_t New_Y, Double_t reweight)
 {
   if(Res2 > 0.0)
@@ -356,6 +364,12 @@ void StTriFlowHistoManger::FillQA_after(Int_t eta_gap, Float_t Mass2, Float_t dE
   h_mMass2_pq_after[eta_gap]->Fill(pq,Mass2);
 }
 
+void StTriFlowHistoManger::FillQA_Detector(Float_t dEdx, Float_t Mass2, Float_t p)
+{
+  h_mDEdx->Fill(p,dEdx);
+  h_mMass2->Fill(p,Mass2);
+}
+
 //-------------------------------------------------------------------------------------------
 
 void StTriFlowHistoManger::FillToFLocal(StPicoTrack *track)
@@ -493,5 +507,11 @@ void StTriFlowHistoManger::WriteQA()
   }
   h_mRefMult->Write();
   h_mVz->Write();
+}
+
+void StTriFlowHistoManger::WriteQA_Detector()
+{
+  h_mDEdx->Write();
+  h_mMass2->Write();
 }
 //-------------------------------------------------------------------------------------------

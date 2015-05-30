@@ -125,6 +125,7 @@ Int_t StTriFlowMaker::Init()
     mFile_ReCenterPar = new TFile(mOutPut_ReCenterPar.Data(),"RECREATE");
     mFile_ReCenterPar->cd();
     mTriFlowProManger->InitReCenter();
+    mTriFlowHistoManger->InitQA_Detector();
   }
 
   if(mMode == 1)
@@ -203,6 +204,7 @@ Int_t StTriFlowMaker::Finish()
     {
       mFile_ReCenterPar->cd();
       mTriFlowProManger->WriteReCenter();
+      mTriFlowHistoManger->WriteQA_Detector();
       mFile_ReCenterPar->Close();
     }
   }
@@ -382,6 +384,11 @@ Int_t StTriFlowMaker::Make()
 	      mTriFlowProManger->FillTrackWest(q2Vector_West,q3Vector_West,cent9,runIndex,vz_sign,j,pt);
 	    }
 	  }
+
+	  Float_t Mass2 = mTriFlowCut->getMass2(track);
+	  Float_t dEdx = track->dEdx();
+	  Float_t p = track->pMom().mag();
+	  mTriFlowHistoManger->FillQA_Detector(dEdx,Mass2,p);
 	}
 
 	if(mMode == 1 || mMode == 2 || mMode == 3 || mMode == 4 || mMode == 5 || mMode == 6 || mMode == 7) // calculate Q Vector after recentering for full event and eta sub event

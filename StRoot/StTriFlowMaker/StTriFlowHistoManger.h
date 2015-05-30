@@ -17,6 +17,7 @@ class StTriFlowHistoManger
     void InitHist();
     void InitProton();
     void InitYields();
+    void InitQA_Detector();
 
     void FillHist(Float_t pt, Int_t Cent9, Int_t charge_bin, Int_t eta_gap, Float_t phi_psi2, Float_t Res2, Float_t phi_psi3, Float_t Res3, Float_t New_X, Float_t New_Y, Double_t reweight);
     void FillProton(Float_t pt, Int_t Cent9, Int_t charge_bin, Int_t eta_gap, Float_t phi_psi2, Float_t Res2, Float_t phi_psi3, Float_t Res3, Float_t Mass2, Double_t reweight);
@@ -26,11 +27,13 @@ class StTriFlowHistoManger
     void FillQA_after(Int_t eta_gap, Float_t Mass2, Float_t dEdx, Float_t pq);
     void FillToFLocal(StPicoTrack*);
     void FillQA_Event(Int_t RefMult, Float_t Vz);
+    void FillQA_Detector(Float_t dEdx, Float_t Mass2, Float_t p);
 
     void WriteHist();
     void WriteProton();
     void WriteYileds();
     void WriteQA();
+    void WriteQA_Detector();
     
   private:
     // 0 = pt bin
@@ -75,6 +78,10 @@ class StTriFlowHistoManger
     TH2F *h_mDEdx_pq_after[4];
     TH2F *h_mMass2_pq_before[4];
     TH2F *h_mMass2_pq_after[4];
+
+    // QA plots
+    TH2F *h_mDEdx;
+    TH2F *h_mMass2;
 
     TH2F *h_mMass2_pt;
     TH1F *h_mRefMult;
