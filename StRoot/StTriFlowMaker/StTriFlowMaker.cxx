@@ -359,10 +359,14 @@ Int_t StTriFlowMaker::Make()
 
       if(mMode == 0)
       {
-	Float_t Mass2 = mTriFlowCut->getMass2(track);
-	Float_t dEdx = track->dEdx();
-	Float_t p = track->pMom().mag();
-	mTriFlowHistoManger->FillQA_Detector(dEdx,Mass2,p);
+	Float_t eta = track->pMom().pseudoRapidity();
+	if(fabs(eta) < TriFlow::mEtaMax && track->dca() < 3.0)
+	{
+	  Float_t Mass2 = mTriFlowCut->getMass2(track);
+	  Float_t dEdx = track->dEdx();
+	  Float_t p = track->pMom().mag();
+	  mTriFlowHistoManger->FillQA_Detector(dEdx,Mass2,p);
+	}
       }
       if(mTriFlowCut->passTrackEP(track)) // track cut
       {
