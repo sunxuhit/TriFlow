@@ -182,7 +182,7 @@ void StTriFlowHistoManger::InitYields()
 //-------------------------------------------------------------------------------------------
 void StTriFlowHistoManger::InitQA_Detector()
 {
-  h_mDEdx = new TH2F("h_mDEdx","h_mDEdx",1000,0,4.0,1000,0,10);
+  h_mDEdx = new TH2F("h_mDEdx","h_mDEdx",1000,0,4.0,1000,0,40);
   h_mMass2 = new TH2F("h_mMass2","h_mMass2",1000,0,4.0,1000,-0.3,1.7);
 }
 //-------------------------------------------------------------------------------------------
