@@ -115,7 +115,7 @@ bool StTriFlowCut::passEventCut(StPicoDst *pico)
 //    {
 //      return kTRUE;
 //    }
-    if(track->dca() > 3) // primary track
+    if(track->dca() > 3) // global track
     {
       nN_non_prim++;
     }
