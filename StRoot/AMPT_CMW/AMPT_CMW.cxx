@@ -363,7 +363,7 @@ void AMPT_CMW::Init()
 void AMPT_CMW::Make()
 {
   TRandom3 Ran;
-  Ran->SetSeed(0);
+  Ran.SetSeed(0);
 //  gRandom->GetSeed(0);
   TF1* f_eff_30_40 = new TF1("f_eff_30_40",eff_function,0,12,3);
   f_eff_30_40->SetParameter(0,0.84606);
