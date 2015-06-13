@@ -80,22 +80,22 @@ AMPT_CMW::AMPT_CMW(Int_t Energy, Int_t Mode, Int_t Screen, Int_t List, Long64_t 
   TString InPutRes;
   if(mMode == 0)
   {
-    InPutRes = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Res_CMW/%s_Resolution/Resolution_%s.root",mMode_AMPT[Mode].Data(),mBeamEnergy[Energy].Data(),mBeamEnergy[Energy].Data());
+    InPutRes = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Resolution/%s_Resolution/Resolution_%s.root",mMode_AMPT[Mode].Data(),mBeamEnergy[Energy].Data(),mBeamEnergy[Energy].Data());
   }
   if(mMode == 1)
   {
-    InPutRes = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Res_CMW/%s_Resolution/%s/Resolution_%s.root",mMode_AMPT[Mode].Data(),mBeamEnergy[Energy].Data(),mScreenMass_AMPT[mScreen].Data(),mBeamEnergy[Energy].Data());
+    InPutRes = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Resolution/%s_Resolution/%s/Resolution_%s.root",mMode_AMPT[Mode].Data(),mBeamEnergy[Energy].Data(),mScreenMass_AMPT[mScreen].Data(),mBeamEnergy[Energy].Data());
   }
   SetInPutRes(InPutRes); // set input resolution
 
   TString OutPutFile;
   if(mMode == 0)
   {
-    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Flow/%s_%s/Flow_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Flow_CMW/%s_%s/Flow_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
   }
   if(mMode == 1)
   {
-    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Flow/%s_%s/%s/Flow_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mScreenMass_AMPT[mScreen].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
+    OutPutFile = Form("/project/projectdirs/star/xusun/OutPut/AMPT_%s/Flow_CMW/%s_%s/%s/Flow_%s_%d_%d.root",mMode_AMPT[Mode].Data(),mBeamEnergy[mEnergy].Data(),mMode_AMPT[Mode].Data(),mScreenMass_AMPT[mScreen].Data(),mBeamEnergy[mEnergy].Data(),mList_start[List],mList_stop[List]);
   }
   SetOutPutFile(OutPutFile); // set output file
 }
