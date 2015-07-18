@@ -181,7 +181,7 @@ void AMPT_v3v2::Init()
       // flow relative to event plane
       ProName = Form("Flow_pi_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
 //      p_mFlow_pi_plus[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),25,0.0,5.0);
-      p_mFlow_pi_plus[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),10,pt_bin[]);
+      p_mFlow_pi_plus[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),10,pt_bin);
       HistName = Form("Pt_pi_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
       h_mPt_pi_plus[i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 
