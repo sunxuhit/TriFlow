@@ -166,8 +166,8 @@ void AMPT_v3v2::Init()
 
   mFile_OutPut = new TFile(mOutPutFile.Data(),"RECREATE");
 
-  Float_t pt_bin[14] = {0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,2.0,2.4,2.8,3.2,3.8};
-  Int_t N_pt_bin = 13;
+  Float_t pt_bin[13] = {0.0,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,2.0,2.6,3.2,3.8};
+  Int_t N_pt_bin = 12;
 
   // flow TProfile
   for(Int_t i_order = 0; i_order < 2; i_order++)
