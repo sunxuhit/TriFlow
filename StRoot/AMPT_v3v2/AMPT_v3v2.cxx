@@ -166,6 +166,8 @@ void AMPT_v3v2::Init()
 
   mFile_OutPut = new TFile(mOutPutFile.Data(),"RECREATE");
 
+  Float_t pt_bin[11] = {0.0,0.2,0.4,0.6,0.8,1.0,1.4,1.8,2.2,2.8,3.6};
+
   // flow TProfile
   for(Int_t i_order = 0; i_order < 2; i_order++)
   {
@@ -178,7 +180,8 @@ void AMPT_v3v2::Init()
 
       // flow relative to event plane
       ProName = Form("Flow_pi_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data()); // pi_plus
-      p_mFlow_pi_plus[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),25,0.0,5.0);
+//      p_mFlow_pi_plus[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),25,0.0,5.0);
+      p_mFlow_pi_plus[i_order][i_cent] = new TProfile(ProName.Data(),ProName.Data(),10,pt_bin[]);
       HistName = Form("Pt_pi_plus_%s_%s",Order[i_order].Data(),Centrality[i_cent].Data());
       h_mPt_pi_plus[i_order][i_cent] = new TH1D(HistName.Data(),HistName.Data(),25,0.0,5.0);
 
