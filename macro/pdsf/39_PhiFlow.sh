@@ -43,9 +43,9 @@ if [ $# -eq 0 ]
 #      echo 3')'"'" >> run$Name$counter.csh  # K0s
 ##############################Partilce##################################
 
-      qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G,projectio=1 -o /project/projectdirs/star/xusun/OutPut/AuAu39GeV/Log/Lambda/flow_Lambda/job$Name$counter.log -e /project/projectdirs/star/xusun/OutPut/AuAu39GeV/Log/Lambda/flow_Lambda/job$Name$counter.err ./run$Name$counter.csh
+      qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G,projectio=1 -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/Log/Lambda/flow_Lambda/job$Name$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/Log/Lambda/flow_Lambda/job$Name$counter.err ./run$Name$counter.csh
 
-      mv run$Name$counter.csh /project/projectdirs/star/xusun/OutPut/AuAu39GeV/Script/PhiFlow/
+      mv run$Name$counter.csh /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/Script/PhiFlow/
     done
 
   else

@@ -5,9 +5,9 @@ date
 
 if [ $# -eq 0 ]
   then
-    Name="_200GeV_Lambda0_ME_"
+    Name="_200GeV_Lambda0_SE_"
     suffix=".root"
-    List="/project/projectdirs/star/xusun/OutPut/AuAu200GeV/List/run_list/200GeV_"
+    List="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/run_list/200GeV_"
     suffixlist=".list"
     for((counter=1;counter<=1030;counter=counter+1))
 #    for((counter=111;counter<=155;counter=counter+1))
@@ -28,17 +28,22 @@ if [ $# -eq 0 ]
 ###############################mode###################################
 
 ###############################energy###################################
-      echo -n 0')' >> run$Name$counter.csh  # 200GeV
-#      echo -n 1')' >> run$Name$counter.csh  # 39GeV
-#      echo -n 2')' >> run$Name$counter.csh  # 27GeV
+      echo -n 0',' >> run$Name$counter.csh  # 200GeV
+#      echo -n 1',' >> run$Name$counter.csh  # 39GeV
+#      echo -n 2',' >> run$Name$counter.csh  # 27GeV
 ###############################energy###################################
-      echo -n "' > /project/projectdirs/star/xusun/OutPut/AuAu200GeV/Log/Correction/run" >> run$Name$counter.csh
+
+###############################flag_ME###################################
+      echo -n 0')' >> run$Name$counter.csh  # Same Event
+#      echo -n 1')' >> run$Name$counter.csh  # Mixed Event
+###############################flag_ME###################################
+      echo -n "' > /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/Log/Correction/run" >> run$Name$counter.csh
       echo -n $Name$counter >> run$Name$counter.csh
       echo ".log" >> run$Name$counter.csh
 
-      qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G -o /project/projectdirs/star/xusun/OutPut/AuAu39GeV/Log/Correction/job$Name$counter.log -e /project/projectdirs/star/xusun/OutPut/AuAu39GeV/Log/Correction/job$Name$counter.err ./run$Name$counter.csh
+      qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/Log/Correction/job$Name$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/Log/Correction/job$Name$counter.err ./run$Name$counter.csh
 
-      mv run$Name$counter.csh /project/projectdirs/star/xusun/OutPut/AuAu200GeV/Script/TriFlow/ 
+      mv run$Name$counter.csh /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/Script/TriFlow/ 
     done
 
   else

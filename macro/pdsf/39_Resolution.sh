@@ -26,7 +26,7 @@ if [ $# -eq 1 ]
 
 	qsub ./run$Name$counter.csh
 
-	mv run$Name$counter.csh /project/projectdirs/star/xusun/OutPut/AuAu39GeV/Script/PhiFlow/
+	mv run$Name$counter.csh /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/Script/PhiFlow/
       done
     done
 
