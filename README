@@ -1,17 +1,17 @@
 v3 analysis:
 
 Copy Code:
-git clone /global/project/projectdirs/starprod/rnc/xusun/gitrepo/Analysis_v3/ ./Analysis_v3 (Recommended, then you can get updates by simply doint git pull origin master:master)
+git clone /global/project/projectdirs/starprod/rnc/xusun/gitrepo/Analysis_v3.git ./Analysis_v3 (Recommended, then you can get updates by simply doint git pull origin master:master)
 Or copy it directly from: /global/homes/x/xusun/STAR/Analysis_v3
 
 Fill Histogram for v3 analysis: TriFlow.C (use 39 GeV as an example)
 
-root4star -b -q 'TriFlow.C("39GeV_111.list",111,1,0)'
+root4star -b -q 'TriFlow.C("39GeV_111.list",111,1,0,0)'
 first argument is inputlist
 second argument is jobCounter
 third argument is analysis mode: 0 for re-center correction, 1 for shift correction, 2 for charged hadron, 3 for pion and kaon, 4 for proton, 5 for phi meson, 6 for Lambda, 7 for antiLambda
 fourth argument is energy: 0 for 200 GeV, 1 for 39 GeV, 2 for 27 GeV (on progress)
-NOTICE: for v0 analysis, there is a Flag_ME in StTriFlowConstants.h to switch between Same Event and Mixed Event. You need to re-compile after you switch, and maybe need to change the name of submission script. Sorry for the inconvenience
+fifth argument is flag_ME: 0 for Same Event, 1 for Mixed Event
 
 The scripts to submit jobs are in /macro/pdsf/ (the script to submit on carver is on progress)
 . ./39_TriFlow.sh (you can change submit jobs in script)

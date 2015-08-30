@@ -18,7 +18,7 @@ class StTriFlowV0;
 
 class StTriFlowMaker : public StMaker {
   public:
-    StTriFlowMaker(const char *name, StPicoDstMaker *picoMaker, const Int_t jobCounter, const Int_t Mode, const Int_t Energy);
+    StTriFlowMaker(const char *name, StPicoDstMaker *picoMaker, const Int_t jobCounter, const Int_t Mode, const Int_t Energy, const Int_t Flag_ME);
     virtual ~StTriFlowMaker();
     
     virtual Int_t Init();
@@ -41,6 +41,7 @@ class StTriFlowMaker : public StMaker {
     
     Int_t mMode;
     Int_t mEnergy;
+    Int_t mFlag_ME;
 
     TString mInPut_Corr_ReCenter;
 

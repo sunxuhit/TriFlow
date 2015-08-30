@@ -681,7 +681,7 @@ void StTriFlowV0::doLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_P
 	      h_Mass2_K0s->Fill(trackCB.Perp(),InvMassCB);
 	      h_Mass2->Fill(trackAB.Perp(),InvMassAB);
 
-	      // fill Lambda candidate into mTree_Phi | the InvMass cut already done
+	      // fill Lambda candidate into mTree_Lambda | the InvMass cut already done
 	      mV0Track = mV0Event->createTrack();
 	      mV0Track->setMass2A(Mass2_proton); // proton
 	      mV0Track->setMass2B(Mass2_pion); // pi_minus
@@ -1071,13 +1071,13 @@ void StTriFlowV0::doAntiLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t B
       mV0Event->setVzVpd(mVzVpd[cent9][Bin_vz][Bin_Psi2][Bin_Event]);
 
       // start to select antiLambda candidate in a event
-      for(Int_t n_antiproton = 0; n_antiproton < mHelix_Proton[key_antiproton].size(); n_antiproton++) // first track loop over proton candidates
+      for(Int_t n_antiproton = 0; n_antiproton < mHelix_Proton[key_antiproton].size(); n_antiproton++) // first track loop over antiproton candidates
       {
         helixA = mHelix_Proton[key_antiproton][n_antiproton]; // anti-Proton global track
 	MomentumA = mMomentum[key_antiproton][n_antiproton];
 	dcaA = mDca[key_antiproton][n_antiproton];
 
-	for(Int_t n_pi_plus = 0; n_pi_plus < mHelix_Pion[key_pi_plus].size(); n_pi_plus++) // second track loop over pion minus candidates
+	for(Int_t n_pi_plus = 0; n_pi_plus < mHelix_Pion[key_pi_plus].size(); n_pi_plus++) // second track loop over pion plus candidates
 	{
 	  helixB = mHelix_Pion[key_pi_plus][n_pi_plus]; // Pion Plus global track
 	  MomentumB = mMomentum[key_pi_plus][n_pi_plus];
@@ -1156,20 +1156,20 @@ void StTriFlowV0::doAntiLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t B
 	      h_Mass2_K0s->Fill(trackCB.Perp(),InvMassCB);
 	      h_Mass2->Fill(trackAB.Perp(),InvMassAB);
 
-	      // fill Lambda candidate into mTree_Phi | the InvMass cut already done
+	      // fill Lambda candidate into mTree_AntiLambda | the InvMass cut already done
 	      mV0Track = mV0Event->createTrack();
-	      mV0Track->setMass2A(Mass2_proton); // proton
-	      mV0Track->setMass2B(Mass2_pion); // pi_minus
-	      mV0Track->setNSigA(mNSigmaProton[key_antiproton][n_antiproton]); // proton
-	      mV0Track->setNSigB(mNSigmaPion[key_pi_plus][n_pi_plus]); // pi_minus
-	      mV0Track->setDcaA(mDca[key_antiproton][n_antiproton]); // proton
-	      mV0Track->setDcaB(mDca[key_pi_plus][n_pi_plus]); // pi_minus
-	      mV0Track->setGTrackA(ltrackA); // proton
-	      mV0Track->setGTrackB(ltrackB); // pi_minus
-	      mV0Track->setPTrackA(mLPTrack[key_antiproton][n_antiproton]); // proton
-	      mV0Track->setPTrackB(mLPTrack[key_pi_plus][n_pi_plus]); // pi_minus
-	      mV0Track->setFlagA(Bin_Event); // proton
-	      mV0Track->setFlagB(Bin_Event); // pi_minus
+	      mV0Track->setMass2A(Mass2_proton); // antiproton
+	      mV0Track->setMass2B(Mass2_pion); // pi_plus
+	      mV0Track->setNSigA(mNSigmaProton[key_antiproton][n_antiproton]); // antiproton
+	      mV0Track->setNSigB(mNSigmaPion[key_pi_plus][n_pi_plus]); // pi_plus
+	      mV0Track->setDcaA(mDca[key_antiproton][n_antiproton]); // antiproton
+	      mV0Track->setDcaB(mDca[key_pi_plus][n_pi_plus]); // pi_plus
+	      mV0Track->setGTrackA(ltrackA); // antiproton
+	      mV0Track->setGTrackB(ltrackB); // pi_plus
+	      mV0Track->setPTrackA(mLPTrack[key_antiproton][n_antiproton]); // antiproton
+	      mV0Track->setPTrackB(mLPTrack[key_pi_plus][n_pi_plus]); // pi_plus
+	      mV0Track->setFlagA(Bin_Event); // antiproton
+	      mV0Track->setFlagB(Bin_Event); // pi_plus
 	      mV0Track->setDcaAB(dcaAB);
 	      mV0Track->setDecayLength(VerdistX);
 	      mV0Track->setDcaV0(VerdistY);
@@ -1269,7 +1269,7 @@ void StTriFlowV0::doAntiLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t B
 	    MomentumB = mMomentum[key_B_pi_plus][n_pi_plus];
 	    dcaB = mDca[key_B_pi_plus][n_pi_plus];
 
-	    VertexFinder->Find2ndVertex(helixA,helixB,vectorprim,MomentumA,MomentumB,ltrackA,ltrackB,VerdistX,VerdistY,vectorAB,dcaAB,1); // Lambda mode
+	    VertexFinder->Find2ndVertex(helixA,helixB,vectorprim,MomentumA,MomentumB,ltrackA,ltrackB,VerdistX,VerdistY,vectorAB,dcaAB,1); // antiLambda mode
 
 	    // Invariant mass calculations
 	    TLorentzVector trackAB = ltrackA+ltrackB; // mother particle
@@ -1345,18 +1345,18 @@ void StTriFlowV0::doAntiLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t B
 
 		// fill Lambda candidate into mTree_Phi
 		mV0Track = mV0Event->createTrack();
-		mV0Track->setMass2A(mMass2[key_A_antiproton][n_antiproton]); // proton
-		mV0Track->setMass2B(mMass2[key_B_pi_plus][n_pi_plus]); // pi_minus
-		mV0Track->setNSigA(mNSigmaProton[key_A_antiproton][n_antiproton]); // proton
-		mV0Track->setNSigB(mNSigmaPion[key_B_pi_plus][n_pi_plus]); // pi_minus
-		mV0Track->setDcaA(mDca[key_A_antiproton][n_antiproton]); // proton
-		mV0Track->setDcaB(mDca[key_B_pi_plus][n_pi_plus]); // pi_minus
-		mV0Track->setGTrackA(ltrackA); // proton
-		mV0Track->setGTrackB(ltrackB); // pi_minus
-		mV0Track->setPTrackA(mLPTrack[key_A_antiproton][n_antiproton]); // proton
-		mV0Track->setPTrackB(mLPTrack[key_B_pi_plus][n_pi_plus]); // pi_minus
-		mV0Track->setFlagA(Bin_Event_A); // proton
-		mV0Track->setFlagB(Bin_Event_B); // pi_minus
+		mV0Track->setMass2A(mMass2[key_A_antiproton][n_antiproton]); // antiproton
+		mV0Track->setMass2B(mMass2[key_B_pi_plus][n_pi_plus]); // pi_plus
+		mV0Track->setNSigA(mNSigmaProton[key_A_antiproton][n_antiproton]); // antiproton
+		mV0Track->setNSigB(mNSigmaPion[key_B_pi_plus][n_pi_plus]); // pi_plus
+		mV0Track->setDcaA(mDca[key_A_antiproton][n_antiproton]); // antiproton
+		mV0Track->setDcaB(mDca[key_B_pi_plus][n_pi_plus]); // pi_plus
+		mV0Track->setGTrackA(ltrackA); // antiproton
+		mV0Track->setGTrackB(ltrackB); // pi_plus
+		mV0Track->setPTrackA(mLPTrack[key_A_antiproton][n_antiproton]); // antiproton
+		mV0Track->setPTrackB(mLPTrack[key_B_pi_plus][n_pi_plus]); // pi_plus
+		mV0Track->setFlagA(Bin_Event_A); // antiproton
+		mV0Track->setFlagB(Bin_Event_B); // pi_plus
 		mV0Track->setDcaAB(dcaAB);
 		mV0Track->setDecayLength(VerdistX);
 		mV0Track->setDcaV0(VerdistY);

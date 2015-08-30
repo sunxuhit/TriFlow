@@ -27,13 +27,14 @@ ClassImp(StTriFlowMaker)
 
 StRefMultCorr* StTriFlowMaker::mRefMultCorr = NULL;
 //-----------------------------------------------------------------------------
-StTriFlowMaker::StTriFlowMaker(const char* name, StPicoDstMaker *picoMaker, const Int_t jobCounter, const Int_t Mode, const Int_t energy)
+StTriFlowMaker::StTriFlowMaker(const char* name, StPicoDstMaker *picoMaker, const Int_t jobCounter, const Int_t Mode, const Int_t energy, const Int_t flag_ME)
   : StMaker(name)
 {
   mPicoDstMaker = picoMaker;
   mPicoDst = 0;
   mMode = Mode;
   mEnergy = energy;
+  mFlag_ME = flag_ME;
 
 
   if(mMode == 0)
@@ -85,19 +86,19 @@ StTriFlowMaker::StTriFlowMaker(const char* name, StPicoDstMaker *picoMaker, cons
   }
   if(mMode == 5)
   {
-    mOutPut_Phi = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Phi/file_%s_Phi_%s_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::MixEvent[TriFlow::Flag_ME].Data()); 
+    mOutPut_Phi = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Phi/file_%s_Phi_%s_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::MixEvent[mFlag_ME].Data()); 
     mOutPut_Phi += jobCounter;
     mOutPut_Phi += ".root";
   }
   if(mMode == 6)
   {
-    mOutPut_Lambda = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Lambda/file_%s_Lambda_%s_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::MixEvent[TriFlow::Flag_ME].Data()); 
+    mOutPut_Lambda = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Lambda/file_%s_Lambda_%s_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::MixEvent[mFlag_ME].Data()); 
     mOutPut_Lambda += jobCounter;
     mOutPut_Lambda += ".root";
   }
   if(mMode == 7)
   {
-    mOutPut_AntiLambda = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/AntiLambda/file_%s_AntiLambda_%s_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::MixEvent[TriFlow::Flag_ME].Data()); 
+    mOutPut_AntiLambda = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/AntiLambda/file_%s_AntiLambda_%s_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::MixEvent[mFlag_ME].Data()); 
     mOutPut_AntiLambda += jobCounter;
     mOutPut_AntiLambda += ".root";
   }
@@ -824,7 +825,7 @@ Int_t StTriFlowMaker::Make()
 	mTriFlowV0->passNumTrackEast(NumTrackEast[0],NumTrackEast[1],NumTrackEast[2],NumTrackEast[3]);
 	mTriFlowV0->passNumTrackWest(NumTrackWest[0],NumTrackWest[1],NumTrackWest[2],NumTrackWest[3]);
 
-	mTriFlowV0->MixEvent_Phi(TriFlow::Flag_ME,mPicoDst,cent9,vz,Psi2_East);
+	mTriFlowV0->MixEvent_Phi(mFlag_ME,mPicoDst,cent9,vz,Psi2_East);
       }
       mTriFlowCorrection->clear();
     }
@@ -882,8 +883,8 @@ Int_t StTriFlowMaker::Make()
 	mTriFlowV0->passNumTrackWest(NumTrackWest[0],NumTrackWest[1],NumTrackWest[2],NumTrackWest[3]);
 
 //	cout << "cent9 = " << cent9 << endl;
-	if(mMode == 6) mTriFlowV0->MixEvent_Lambda(TriFlow::Flag_ME,mPicoDst,cent9,vz,Psi2_East);
-	if(mMode == 7) mTriFlowV0->MixEvent_AntiLambda(TriFlow::Flag_ME,mPicoDst,cent9,vz,Psi2_East);
+	if(mMode == 6) mTriFlowV0->MixEvent_Lambda(mFlag_ME,mPicoDst,cent9,vz,Psi2_East);
+	if(mMode == 7) mTriFlowV0->MixEvent_AntiLambda(mFlag_ME,mPicoDst,cent9,vz,Psi2_East);
       }
       mTriFlowCorrection->clear();
     }

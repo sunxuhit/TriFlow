@@ -7,12 +7,15 @@ class StPicoDstMaker;
 
 
 StChain *chain;
-void TriFlow(const Char_t *inputFile="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/run_list/200GeV_511.list", const Int_t jobCounter = 511, const Int_t Mode = 6, const Int_t energy = 0)
+void TriFlow(const Char_t *inputFile="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/run_list/200GeV_511.list", const Int_t jobCounter = 511, const Int_t Mode = 6, const Int_t energy = 0, const Int_t flag_ME = 0)
 //void TriFlow(const Char_t *inputFile="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/List/run_list/39GeV_511.list", const Int_t jobCounter = 511, const Int_t Mode = 7, const Int_t energy = 1)
-//void TriFlow(const Char_t *inputFile="./List/27GeV/run_list/27GeV_134.list", const Int_t jobCounter = 134, const Int_t Mode = 3, const Int_t energy = 2)
 {
+// Mode: 0 for re-center correction, 1 for shift correction, 2 for charged hadron, 3 for pion and kaon, 4 for proton, 5 for phi meson, 6 for Lambda, 7 for antiLambda, 8 for K0S (on progress)
+// energy: 0 for 200 GeV, 1 for 39 GeV, 2 for 27 GeV (on progress)
+// flag_ME: 0 for Same Event, 1 for Mixed Event
+
 //        Int_t nEvents = 10000000;
-	Int_t nEvents = 50000;
+	Int_t nEvents = 5000;
 	
         gROOT->LoadMacro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
 	loadSharedLibraries();
@@ -30,7 +33,7 @@ void TriFlow(const Char_t *inputFile="/global/project/projectdirs/starprod/rnc/x
 
 	StPicoDstMaker *picoMaker = new StPicoDstMaker(0,inputFile,"picoDst");
 
-        StTriFlowMaker *TriFlowMaker = new StTriFlowMaker("TriFlow",picoMaker,jobCounter,Mode,energy);
+        StTriFlowMaker *TriFlowMaker = new StTriFlowMaker("TriFlow",picoMaker,jobCounter,Mode,energy,flag_ME);
 
 	chain->Init();
 	cout<<"chain->Init();"<<endl;

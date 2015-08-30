@@ -93,7 +93,7 @@ class TriFlow
   static Int_t Bin_VertexZ; // 10
   static Int_t Bin_Phi_Psi; // 5
   static Int_t Buffer_depth; // 3
-  static Int_t Flag_ME; // 0 for same event, 1 for mix event
+//  static Int_t Flag_ME; // 0 for same event, 1 for mix event
   static TString MixEvent[2];
 
 
