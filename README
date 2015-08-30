@@ -1,7 +1,7 @@
 v3 analysis:
 
 Copy Code:
-git clone /project/projectdirs/star/xusun/gitrepo/Analysis_v3/ ./Analysis_v3 (Recommended, then you can get updates by simply doint git pull origin master:master)
+git clone /global/project/projectdirs/starprod/rnc/xusun/gitrepo/Analysis_v3/ ./Analysis_v3 (Recommended, then you can get updates by simply doint git pull origin master:master)
 Or copy it directly from: /global/homes/x/xusun/STAR/Analysis_v3
 
 Fill Histogram for v3 analysis: TriFlow.C (use 39 GeV as an example)
@@ -94,9 +94,9 @@ NOTICE: please CHANGE the input files to your own v0 histogram and create some o
 
 Output Directory sturcture
 
-Please check: /project/projectdirs/star/xusun/OutPut/AuAu39GeV
+Please check: /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV
 
-You may need to generate your own List to submit the jobs and the examples are in /project/projectdirs/star/xusun/OutPut/AuAu39GeV/List.
+You may need to generate your own List to submit the jobs and the examples are in /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/List.
 NOTICE: all the corrections are run by run basis, therefore, it is good to submit jobs run by run when calculate the correction factors. But when you try to calculate v0 like Lambda and anti-Lambda, run by run calculation is not possible anymore as the calculate time will exceed 24 hours and pdsf will kill your jobs. Then you need to split your jobs. You can find all the examples in the directory above.
 
 ------------------------------------------------------------------------
