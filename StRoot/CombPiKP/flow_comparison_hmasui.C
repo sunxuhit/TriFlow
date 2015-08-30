@@ -57,11 +57,11 @@ void flow_comparison_hmasui(Int_t mEnergy = 0)
   TString Energy[2] = {"200GeV","39GeV"};
 
   TFile *file_pik_pos, *file_pik_neg, *file_proton;
-  file_pik_pos = TFile::Open(Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Flow_pik_0080_charge_0_etagap_0.root",Energy[mEnergy].Data()));
-  file_pik_neg = TFile::Open(Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Flow_pik_0080_charge_1_etagap_0.root",Energy[mEnergy].Data()));
-  file_proton = TFile::Open(Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_Proton/merged_file/flow_proton/Flow_proton_0080_etagap_0.root",Energy[mEnergy].Data()));
+  file_pik_pos = TFile::Open(Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Flow_pik_0080_charge_0_etagap_0.root",Energy[mEnergy].Data()));
+  file_pik_neg = TFile::Open(Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Flow_pik_0080_charge_1_etagap_0.root",Energy[mEnergy].Data()));
+  file_proton = TFile::Open(Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_Proton/merged_file/flow_proton/Flow_proton_0080_etagap_0.root",Energy[mEnergy].Data()));
 
-  TFile *file_hmasui = TFile::Open("/project/projectdirs/star/xusun/OutPut/AuAu200GeV/Mass2_nSigmaPion/merged_file/flow_pik/v2pt_pikp_K0sLambda_preliminary_Results_Jul25_2012.root");
+  TFile *file_hmasui = TFile::Open("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/Mass2_nSigmaPion/merged_file/flow_pik/v2pt_pikp_K0sLambda_preliminary_Results_Jul25_2012.root");
   TGraphAsymmErrors *g_flow_hmasui[N_Species+1];
   g_flow_hmasui[0] = (TGraphAsymmErrors*)file_hmasui->Get("gv2pt_5_0"); // pion
   g_flow_hmasui[1] = (TGraphAsymmErrors*)file_hmasui->Get("gv2pt_5_1"); // kaon

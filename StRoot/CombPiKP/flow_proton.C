@@ -84,7 +84,7 @@ void flow_proton(Int_t mEnergy = 0, Int_t mCentrality = 0)
   Float_t pt_cut_up[pt_total]  = {1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.20,1.2,1.2,1.20,1.400,1.400,1.400,1.400,1.400};
 
   TString Energy[3] = {"200GeV","39GeV","27GeV"};
-  TString inputfile = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_Proton/merged_file/merged_file_%s_M2_Proton_%s_etagap_00.root",Energy[mEnergy].Data(),Energy[mEnergy].Data(),Centrality[mCentrality].Data());
+  TString inputfile = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_Proton/merged_file/merged_file_%s_M2_Proton_%s_etagap_00.root",Energy[mEnergy].Data(),Energy[mEnergy].Data(),Centrality[mCentrality].Data());
   cout << inputfile.Data() << endl;
   TFile *file_input = TFile::Open(inputfile.Data());
 
@@ -421,7 +421,7 @@ void flow_proton(Int_t mEnergy = 0, Int_t mCentrality = 0)
     }
   }
   // save flow
-  TString output_proton = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_Proton/merged_file/flow_proton/Flow_proton_%s_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),eta_start);
+  TString output_proton = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_Proton/merged_file/flow_proton/Flow_proton_%s_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),eta_start);
   TFile *file_output = new TFile(output_proton.Data(),"RECREATE");
   file_output->cd();
   for(Int_t cent = cent_start[mCentrality]; cent < cent_stop[mCentrality]; cent++)

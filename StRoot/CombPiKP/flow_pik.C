@@ -58,7 +58,7 @@ void flow_pik(Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mCentrality = 0)
   TString Energy[2] = {"200GeV","39GeV"};
   TString Centrality[4] = {"0080","0010","1040","4080"};
 
-  TString inputfile = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Counts_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),mCharge,eta_start);
+  TString inputfile = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Counts_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),mCharge,eta_start);
   TFile *file_input = TFile::Open(inputfile.Data());
 
   // pt bin
@@ -320,7 +320,7 @@ void flow_pik(Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mCentrality = 0)
     }
   }
   // save flow
-  TString output_pik = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Flow_pik_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),mCharge,eta_start);
+  TString output_pik = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Flow_pik_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),mCharge,eta_start);
   TFile *file_output = new TFile(output_pik.Data(),"RECREATE");
   file_output->cd();
   for(Int_t cent = cent_start[mCentrality]; cent < cent_stop[mCentrality]; cent++)
@@ -366,7 +366,7 @@ void flow_pik(Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mCentrality = 0)
     plotTopLegend((char*)"My result",0.25,0.148,0.03,1,0.0,42,0);
     Draw_TGAE_Point_new_Symbol(0.2,0.14,0.0,0.0,0.0,0.0,20,1,0.8);
     plotTopLegend((char*)"Phys. Rev. C 88, 014902 (2013)",0.25,0.138,0.03,1,0.0,42,0);
-    c_flow2_pion[charge]->SaveAs((Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/%s.gif",Energy[mEnergy].Data(),CanName_pion.Data())).Data());
+    c_flow2_pion[charge]->SaveAs((Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/%s.gif",Energy[mEnergy].Data(),CanName_pion.Data())).Data());
 
     TString CanName_kaon = Form("c_flow2_%s_charge_%d_etagap_%d_kaon",Centrality[mCentrality].Data(),charge,eta_start);
     c_flow2_kaon[charge] = new TCanvas(CanName_kaon.Data(),CanName_kaon.Data(),10,10,800,800);
@@ -390,7 +390,7 @@ void flow_pik(Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mCentrality = 0)
     plotTopLegend((char*)"My result",0.25,0.148,0.03,1,0.0,42,0);
     Draw_TGAE_Point_new_Symbol(0.2,0.14,0.0,0.0,0.0,0.0,20,1,0.8);
     plotTopLegend((char*)"Phys. Rev. C 88, 014902 (2013)",0.25,0.138,0.03,1,0.0,42,0);
-    c_flow2_kaon[charge]->SaveAs(("/project/projectdirs/star/xusun/OutPut/AuAu200GeV/Mass2_nSigmaPion/merged_file/figures/"+CanName_kaon+".gif").Data());
+    c_flow2_kaon[charge]->SaveAs(("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/Mass2_nSigmaPion/merged_file/figures/"+CanName_kaon+".gif").Data());
   }
   
   TCanvas *c_flow3_pik[2], *c_flow3_pion, *c_flow3_kaon;

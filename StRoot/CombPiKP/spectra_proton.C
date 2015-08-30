@@ -124,7 +124,7 @@ void spectra_proton(Int_t mEnergy = 0)
   Float_t pt_cut_up[pt_total]  = {1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.20,1.2,1.2,1.20,1.400,1.400,1.400,1.400,1.400};
 
   TString Energy[2] = {"200GeV","39GeV"};
-  TString inputfile = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_Proton/merged_file/merged_file_%s_M2_Proton_0080_etagap_00.root",Energy[mEnergy].Data(),Energy[mEnergy].Data());
+  TString inputfile = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_Proton/merged_file/merged_file_%s_M2_Proton_0080_etagap_00.root",Energy[mEnergy].Data(),Energy[mEnergy].Data());
   cout << inputfile.Data() << endl;
   TFile *file_input = TFile::Open(inputfile.Data());
 

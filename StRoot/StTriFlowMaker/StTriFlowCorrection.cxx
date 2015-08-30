@@ -49,7 +49,7 @@ StTriFlowCorrection::~StTriFlowCorrection()
 
 void StTriFlowCorrection::InitReCenterCorrection(Int_t mEnergy)
 {
-  TString InPutFile = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/RecenterParameter/file_%s_ReCenterPar.root",TriFlow::Energy[mEnergy].Data(),TriFlow::Energy[mEnergy].Data());
+  TString InPutFile = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/RecenterParameter/file_%s_ReCenterPar.root",TriFlow::Energy[mEnergy].Data(),TriFlow::Energy[mEnergy].Data());
 
   mInPutFile = TFile::Open(InPutFile.Data());
 
@@ -93,10 +93,10 @@ void StTriFlowCorrection::InitReCenterCorrection(Int_t mEnergy)
 
 void StTriFlowCorrection::InitShiftCorrection(Int_t mEnergy)
 {
-  TString InPutFile_Shift = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Correction/Shift/file_%s_Corr_Shift.root",TriFlow::Energy[mEnergy].Data(),TriFlow::Energy[mEnergy].Data());
+  TString InPutFile_Shift = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Correction/Shift/file_%s_Corr_Shift.root",TriFlow::Energy[mEnergy].Data(),TriFlow::Energy[mEnergy].Data());
   mInPutFile_Shift = TFile::Open(InPutFile_Shift.Data());
 
-  TString InPutFile_Res = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Resolution/file_%s_Resolution.root",TriFlow::Energy[mEnergy].Data(),TriFlow::Energy[mEnergy].Data());
+  TString InPutFile_Res = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Resolution/file_%s_Resolution.root",TriFlow::Energy[mEnergy].Data(),TriFlow::Energy[mEnergy].Data());
   mInPutFile_Res = TFile::Open(InPutFile_Res.Data());
 }
 

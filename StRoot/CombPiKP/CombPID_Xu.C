@@ -169,7 +169,7 @@ void CombPID_Xu(Int_t mode = 1,Int_t mEnergy = 1, Int_t mCharge = 0, Int_t mCent
   const Int_t fill_color_proton = 2;
   const Int_t fill_style_proton = 3004;
 
-  TString inputname = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/merged_file_%s_M2_nSigPion_%s_etagap_00.root",Energy[mEnergy].Data(),Energy[mEnergy].Data(),Centrality[mCentrality].Data()); 
+  TString inputname = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/merged_file_%s_M2_nSigPion_%s_etagap_00.root",Energy[mEnergy].Data(),Energy[mEnergy].Data(),Centrality[mCentrality].Data()); 
 
   for(Int_t pt_bin = 0; pt_bin < pt_total; pt_bin ++)
   {
@@ -1556,7 +1556,7 @@ void CombPID_Xu(Int_t mode = 1,Int_t mEnergy = 1, Int_t mCharge = 0, Int_t mCent
   //-----------------------------------------------------------------------------------------
   */
   cout << "Save Histogram to the file!!" << endl;
-  TString output_hist = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Mass2_nSigmaPion_cut_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),charge_start,eta_start);
+  TString output_hist = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Mass2_nSigmaPion_cut_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),charge_start,eta_start);
   TFile *File_hist = new TFile(output_hist.Data(),"RECREATE");
   File_hist->cd();
   for(Int_t pt_bin = 0; pt_bin < pt_total; pt_bin ++)
@@ -1580,7 +1580,7 @@ void CombPID_Xu(Int_t mode = 1,Int_t mEnergy = 1, Int_t mCharge = 0, Int_t mCent
   }
   File_hist->Close();
 
-  TString output_par = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/parfit_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),charge_start,eta_start);
+  TString output_par = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/parfit_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),charge_start,eta_start);
   cout << output_par.Data() << endl;
   TFile *File_par = new TFile(output_par.Data(),"RECREATE");
   File_par->cd();
@@ -1611,25 +1611,25 @@ void CombPID_Xu(Int_t mode = 1,Int_t mEnergy = 1, Int_t mCharge = 0, Int_t mCent
       {
 	for(Int_t flow_bin = 0; flow_bin < flow_total; flow_bin++)
 	{
-	  TString CanName_total = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_XY_cent_%d_charge_%d_etagap_%d_total_%s_EP.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,Order[flow_bin].Data());
+	  TString CanName_total = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_XY_cent_%d_charge_%d_etagap_%d_total_%s_EP.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,Order[flow_bin].Data());
 	  c_XY_total[cent][charge][eta_bin][flow_bin]->SaveAs(CanName_total.Data());
 	  for(Int_t phi_psi_bin = 0; phi_psi_bin < phi_psi_total; phi_psi_bin++)
 	  {
-	    TString CanName = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_XY_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
+	    TString CanName = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_XY_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
 	    c_XY[cent][charge][eta_bin][phi_psi_bin][flow_bin]->SaveAs(CanName.Data());
-	    TString CanName_X = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_X_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
+	    TString CanName_X = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_X_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
 	    c_X[cent][charge][eta_bin][phi_psi_bin][flow_bin]->SaveAs(CanName_X.Data());
-	    TString CanName_Y = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_Y_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
+	    TString CanName_Y = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_Y_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
 	    c_Y[cent][charge][eta_bin][phi_psi_bin][flow_bin]->SaveAs(CanName_Y.Data());
 
-	    TString CanName_sub = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_XY_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP_sub.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
+	    TString CanName_sub = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_XY_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP_sub.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
 	    c_XY_sub[cent][charge][eta_bin][phi_psi_bin][flow_bin]->SaveAs(CanName_sub.Data());
 
-	    TString CanName_cut = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_XY_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP_cut.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
+	    TString CanName_cut = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_XY_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP_cut.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
 	    c_XY_cut[cent][charge][eta_bin][phi_psi_bin][flow_bin]->SaveAs(CanName_cut.Data());
-	    TString CanName_cut_X = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_X_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP_cut.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
+	    TString CanName_cut_X = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_X_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP_cut.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
 	    c_X_cut[cent][charge][eta_bin][phi_psi_bin][flow_bin]->SaveAs(CanName_cut_X.Data());
-	    TString CanName_cut_Y = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_Y_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP_cut.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
+	    TString CanName_cut_Y = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/figures/c_Y_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP_cut.gif",Energy[mEnergy].Data(),cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());
 	    c_Y_cut[cent][charge][eta_bin][phi_psi_bin][flow_bin]->SaveAs(CanName_cut_Y.Data());
 	    
 //	    TString CanName_pik = Form("/u/xusun/STAR/Analysis_v3/StRoot/CombPiKP//figures/c_pik_cent_%d_charge_%d_etagap_%d_phi_psi_%d_%s_EP.gif",cent,charge,eta_bin,phi_psi_bin,Order[flow_bin].Data());

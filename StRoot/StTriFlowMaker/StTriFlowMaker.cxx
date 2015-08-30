@@ -38,29 +38,29 @@ StTriFlowMaker::StTriFlowMaker(const char* name, StPicoDstMaker *picoMaker, cons
 
   if(mMode == 0)
   {
-    mOutPut_ReCenterPar = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/RecenterParameter/file_%s_ReCenterPar_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data());
+    mOutPut_ReCenterPar = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/RecenterParameter/file_%s_ReCenterPar_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data());
     mOutPut_ReCenterPar += jobCounter;
     mOutPut_ReCenterPar += ".root";
   }
   if(mMode == 1)
   {
-    mOutPut_Corr_Shift = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Correction/Shift/file_%s_Corr_Shift_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data()); 
+    mOutPut_Corr_Shift = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Correction/Shift/file_%s_Corr_Shift_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data()); 
     mOutPut_Corr_Shift += jobCounter;
     mOutPut_Corr_Shift += ".root";
 
-    mOutPut_Corr_ReCenter = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Correction/ReCenter/file_%s_Corr_ReCenter_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data()); 
+    mOutPut_Corr_ReCenter = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Correction/ReCenter/file_%s_Corr_ReCenter_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data()); 
     mOutPut_Corr_ReCenter += jobCounter;
     mOutPut_Corr_ReCenter += ".root";
   }
   if(mMode == 2)
   {
-    mOutPut_ChargedFLow = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/ChargedFlow/file_%s_ChargedFlow_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data()); 
+    mOutPut_ChargedFLow = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/ChargedFlow/file_%s_ChargedFlow_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data()); 
     mOutPut_ChargedFLow += jobCounter;
     mOutPut_ChargedFLow += ".root";
   }
   if(mMode == 3)
   {
-    mOutPut_M2_nSigPion = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/file_%s_M2_nSigPion_%s_etagap_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::Centrality_01[TriFlow::Centrality_start].Data()); 
+    mOutPut_M2_nSigPion = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/file_%s_M2_nSigPion_%s_etagap_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::Centrality_01[TriFlow::Centrality_start].Data()); 
     mOutPut_M2_nSigPion += TriFlow::EtaGap_start;
     mOutPut_M2_nSigPion += TriFlow::EtaGap_stop-1;
     mOutPut_M2_nSigPion += "_";
@@ -69,14 +69,14 @@ StTriFlowMaker::StTriFlowMaker(const char* name, StPicoDstMaker *picoMaker, cons
   }
   if(mMode == 4)
   {
-    mOutPut_M2_Proton = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_Proton/file_%s_M2_Proton_%s_etagap_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::Centrality_01[TriFlow::Centrality_start].Data()); 
+    mOutPut_M2_Proton = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_Proton/file_%s_M2_Proton_%s_etagap_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::Centrality_01[TriFlow::Centrality_start].Data()); 
     mOutPut_M2_Proton += TriFlow::EtaGap_start;
     mOutPut_M2_Proton += TriFlow::EtaGap_stop-1;
     mOutPut_M2_Proton += "_";
     mOutPut_M2_Proton += jobCounter;
     mOutPut_M2_Proton += ".root";
 
-    mOutPut_Yields = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Yields/file_%s_Yields_%s_etagap_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::Centrality_01[TriFlow::Centrality_start].Data()); 
+    mOutPut_Yields = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Yields/file_%s_Yields_%s_etagap_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::Centrality_01[TriFlow::Centrality_start].Data()); 
     mOutPut_Yields += TriFlow::EtaGap_start;
     mOutPut_Yields += TriFlow::EtaGap_stop-1;
     mOutPut_Yields += "_";
@@ -85,19 +85,19 @@ StTriFlowMaker::StTriFlowMaker(const char* name, StPicoDstMaker *picoMaker, cons
   }
   if(mMode == 5)
   {
-    mOutPut_Phi = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Phi/file_%s_Phi_%s_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::MixEvent[TriFlow::Flag_ME].Data()); 
+    mOutPut_Phi = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Phi/file_%s_Phi_%s_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::MixEvent[TriFlow::Flag_ME].Data()); 
     mOutPut_Phi += jobCounter;
     mOutPut_Phi += ".root";
   }
   if(mMode == 6)
   {
-    mOutPut_Lambda = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Lambda/file_%s_Lambda_%s_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::MixEvent[TriFlow::Flag_ME].Data()); 
+    mOutPut_Lambda = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Lambda/file_%s_Lambda_%s_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::MixEvent[TriFlow::Flag_ME].Data()); 
     mOutPut_Lambda += jobCounter;
     mOutPut_Lambda += ".root";
   }
   if(mMode == 7)
   {
-    mOutPut_AntiLambda = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/AntiLambda/file_%s_AntiLambda_%s_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::MixEvent[TriFlow::Flag_ME].Data()); 
+    mOutPut_AntiLambda = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/AntiLambda/file_%s_AntiLambda_%s_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::MixEvent[TriFlow::Flag_ME].Data()); 
     mOutPut_AntiLambda += jobCounter;
     mOutPut_AntiLambda += ".root";
   }

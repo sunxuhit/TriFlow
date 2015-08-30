@@ -23,7 +23,7 @@ StStrangenessCorr::~StStrangenessCorr()
 // ReCenter Correction
 void StStrangenessCorr::InitReCenterCorrection(Int_t mEnergy)
 {
-  TString InPutFile_ReCenter = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/RecenterParameter/file_%s_ReCenterPar.root",Strangeness::Energy[mEnergy].Data(),Strangeness::Energy[mEnergy].Data());
+  TString InPutFile_ReCenter = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/RecenterParameter/file_%s_ReCenterPar.root",Strangeness::Energy[mEnergy].Data(),Strangeness::Energy[mEnergy].Data());
 
   mInPutFile_ReCenter = TFile::Open(InPutFile_ReCenter.Data());
 }
@@ -111,10 +111,10 @@ Float_t StStrangenessCorr::getWeight(TLorentzVector lTrack)
 // Shift Correction
 void StStrangenessCorr::InitShiftCorrection(Int_t mEnergy)
 {
-  TString InPutFile_Shift = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Correction/Shift/file_%s_Corr_Shift.root",Strangeness::Energy[mEnergy].Data(),Strangeness::Energy[mEnergy].Data());
+  TString InPutFile_Shift = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Correction/Shift/file_%s_Corr_Shift.root",Strangeness::Energy[mEnergy].Data(),Strangeness::Energy[mEnergy].Data());
   mInPutFile_Shift = TFile::Open(InPutFile_Shift.Data());
 
-  TString InPutFile_Res = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Resolution/file_%s_Resolution.root",Strangeness::Energy[mEnergy].Data(),Strangeness::Energy[mEnergy].Data());
+  TString InPutFile_Res = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Resolution/file_%s_Resolution.root",Strangeness::Energy[mEnergy].Data(),Strangeness::Energy[mEnergy].Data());
   mInPutFile_Res = TFile::Open(InPutFile_Res.Data());
 }
 

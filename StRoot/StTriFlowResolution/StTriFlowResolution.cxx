@@ -18,11 +18,11 @@ TString StTriFlowResolution::mVStr[2] = {"pos","neg"};
 StTriFlowResolution::StTriFlowResolution(const Int_t jobCounter, const Int_t energy)
 {
   mEnergy = energy;
-  mInPut_Corr_ReCenter = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Correction/ReCenter/file_%s_Corr_ReCenter_%d.root",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),jobCounter);
+  mInPut_Corr_ReCenter = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Correction/ReCenter/file_%s_Corr_ReCenter_%d.root",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),jobCounter);
 
-  mOutPut_Resolution = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Resolution/file_%s_Resolution_%d.root",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),jobCounter);
+  mOutPut_Resolution = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Resolution/file_%s_Resolution_%d.root",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),jobCounter);
 
-  mOutPut_EventPlane = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/EventPlane/file_%s_EventPlane_%d.root",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),jobCounter);
+  mOutPut_EventPlane = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/EventPlane/file_%s_EventPlane_%d.root",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),jobCounter);
 }
 
 StTriFlowResolution::~StTriFlowResolution()
@@ -231,7 +231,7 @@ void StTriFlowResolution::InitReCenterNutple(TString InPutName)
 
 void StTriFlowResolution::InitShiftCorrection(Int_t mEnergy)
 {
-  TString InPutFile_Shift = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Correction/Shift/file_%s_Corr_Shift.root",TriFlow::Energy[mEnergy].Data(),TriFlow::Energy[mEnergy].Data());
+  TString InPutFile_Shift = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Correction/Shift/file_%s_Corr_Shift.root",TriFlow::Energy[mEnergy].Data(),TriFlow::Energy[mEnergy].Data());
   mInPutFile_Shift = TFile::Open(InPutFile_Shift.Data());
 }
 

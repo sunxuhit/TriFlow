@@ -99,7 +99,7 @@ void CombPID_1d(Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mCentrality = 0)
   Float_t y_low[pt_total] = {-0.15,-0.2,-0.3,-0.45,-0.6,-0.8,-1.0,-1.3,-1.5,-1.7,-1.8,-1.8,-2.0,-2.0,-2.0,-2.0};
   Float_t y_up[pt_total]  = { 0.15, 0.2, 0.2, 0.20, 0.3, 0.4, 0.6, 1.0, 1.0, 1.0, 1.2, 1.2, 1.4, 1.4, 1.4, 1.4};
   //-----------------------------------------------------------------------------------------
-  TString inputname_hist = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Mass2_nSigmaPion_cut_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),mCharge,eta_start);
+  TString inputname_hist = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Mass2_nSigmaPion_cut_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),mCharge,eta_start);
   TFile *File_hist = TFile::Open(inputname_hist.Data());
   TH2F *h_XY_cut[pt_total][cent_total][charge_total][eta_total][phi_psi_total][flow_total];
   for(Int_t pt_bin = 0; pt_bin < pt_total; pt_bin ++)
@@ -151,7 +151,7 @@ void CombPID_1d(Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mCentrality = 0)
     }
   }
 
-  TString inputname_par = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/parfit_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),mCharge,eta_start);
+  TString inputname_par = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/parfit_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),mCharge,eta_start);
   TFile *File_par = TFile::Open(inputname_par.Data());
   Double_t parfit_1st[pt_total][cent_total][charge_total][eta_total][flow_total][19];
   Double_t parfit_2nd[pt_total][cent_total][charge_total][eta_total][flow_total][19];
@@ -772,7 +772,7 @@ void CombPID_1d(Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mCentrality = 0)
       }
     }
   }
-  TString output = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Counts_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),mCharge,eta_start);
+  TString output = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/merged_file/flow_pik/Counts_%s_charge_%d_etagap_%d.root",Energy[mEnergy].Data(),Centrality[mCentrality].Data(),mCharge,eta_start);
   TFile *File_counts = new TFile(output.Data(),"RECREATE");
   File_counts->cd();
   for(Int_t pt_bin = 0; pt_bin < pt_total; pt_bin++)

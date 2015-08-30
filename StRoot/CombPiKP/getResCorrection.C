@@ -31,7 +31,7 @@ void getResCorrection(Int_t mEnergy = 0, Int_t mCentrality = 0)
 
   TString Energy[3] = {"200GeV","39GeV","27GeV"};
   TString Centrality[4] = {"0080","0010","1040","4080"};
-  TString inputfile = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Yields/merged_file/merged_file_%s_Yields_0070_etagap_00.root",Energy[mEnergy].Data(),Energy[mEnergy].Data());
+  TString inputfile = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Yields/merged_file/merged_file_%s_Yields_0070_etagap_00.root",Energy[mEnergy].Data(),Energy[mEnergy].Data());
   TFile *file_input = TFile::Open(inputfile.Data());
 
 
@@ -140,7 +140,7 @@ void getResCorrection(Int_t mEnergy = 0, Int_t mCentrality = 0)
   }
 
   // Resolution Correction
-  TString input_res = Form("/project/projectdirs/star/xusun/OutPut/AuAu%s/Resolution/file_%s_Resolution.root",Energy[mEnergy].Data(),Energy[mEnergy].Data());
+  TString input_res = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Resolution/file_%s_Resolution.root",Energy[mEnergy].Data(),Energy[mEnergy].Data());
   TFile *input = TFile::Open(input_res.Data());
   TProfile *p_res2[eta_total];
   TProfile *p_res3[eta_total];
