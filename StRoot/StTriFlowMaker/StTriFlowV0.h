@@ -45,6 +45,7 @@ class StTriFlowV0
     void PrintTopoCut();
     void clear_Lambda(Int_t,Int_t,Int_t);
     void clear_AntiLambda(Int_t,Int_t,Int_t);
+    void clear_K0S(Int_t,Int_t,Int_t);
 
     void WritePhiMass2();
     void WriteLambdaMass2();
