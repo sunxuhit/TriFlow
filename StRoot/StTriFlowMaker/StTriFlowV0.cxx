@@ -120,6 +120,31 @@ void StTriFlowV0::InitAntiLambda()
   mTree_AntiLambda->Branch("antiLambda_flow_branch","StV0Event",&mV0Event);
   mTree_AntiLambda->SetAutoSave(5000000);
 }
+
+void StTriFlowV0::InitK0S()
+{
+  mTriFlowCut = new StTriFlowCut(mEnergy);
+  mTofCorr = new StV0TofCorrection();
+  h_Mass2 = new TH2F("h_Mass2","h_Mass2",20,0.2,5.0,200,1.06,1.20);
+  h_Mass2_p = new TH2F("h_Mass2_p","h_Mass2_p",200,-5.0,5.0,200,-0.2,1.2);
+
+  for(Int_t cent = 0; cent < TriFlow::Bin_Centrality; cent++)
+  {
+    for(Int_t vz = 0; vz < TriFlow::Bin_VertexZ; vz++)
+    {
+      for(Int_t phi_psi = 0; phi_psi < TriFlow::Bin_Phi_Psi; phi_psi++)
+      {
+        mEventCounter2[cent][vz][phi_psi] = 0;
+	clear_K0S(cent,vz,phi_psi);
+      }
+    }
+  }
+
+  mV0Event = new StV0Event();
+  mTree_K0S = new TTree("K0SEvent","K0SEvent");
+  mTree_K0S->Branch("K0S_flow_branch","StV0Event",&mV0Event);
+  mTree_K0S->SetAutoSave(5000000);
+}
 //------------------------------------------------------------------------------------------------------------------
 
 void StTriFlowV0::WritePhiMass2()
@@ -144,6 +169,13 @@ void StTriFlowV0::WriteAntiLambdaMass2()
   h_Mass2_K0s->Write();
   h_Mass2_p->Write();
   mTree_AntiLambda->Write("",TObject::kOverwrite);
+}
+
+void StTriFlowV0::WriteK0SMass2()
+{
+  h_Mass2->Write();
+  h_Mass2_p->Write();
+  mTree_K0S->Write("",TObject::kOverwrite);
 }
 //------------------------------------------------------------------------------------------------------------------
 
@@ -334,6 +366,49 @@ void StTriFlowV0::clear_AntiLambda(Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2)
 	mTofBeta[key].clear();
 	mTofHit[key].clear();
       }
+    }
+  }
+  mEventCounter2[cent9][Bin_vz][Bin_Psi2] = 0;
+}
+
+void StTriFlowV0::clear_K0S(Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2)
+{
+  mPrimaryvertex[cent9][Bin_vz][Bin_Psi2].clear();
+  mRefMult[cent9][Bin_vz][Bin_Psi2].clear();
+  mCentrality[cent9][Bin_vz][Bin_Psi2].clear();
+  mRunId[cent9][Bin_vz][Bin_Psi2].clear();
+  mN_prim[cent9][Bin_vz][Bin_Psi2].clear();
+  mN_non_prim[cent9][Bin_vz][Bin_Psi2].clear();
+  mN_Tof_match[cent9][Bin_vz][Bin_Psi2].clear();
+  mZDCx[cent9][Bin_vz][Bin_Psi2].clear();
+  mBBCx[cent9][Bin_vz][Bin_Psi2].clear();
+  mVzVpd[cent9][Bin_vz][Bin_Psi2].clear();
+  mField[cent9][Bin_vz][Bin_Psi2].clear();
+
+  for(Int_t j = 0; j < TriFlow::EtaGap_total; j++)
+  {
+    mQ2East[cent9][Bin_vz][Bin_Psi2][j].clear();
+    mQ2West[cent9][Bin_vz][Bin_Psi2][j].clear();
+    mQ3East[cent9][Bin_vz][Bin_Psi2][j].clear();
+    mQ3West[cent9][Bin_vz][Bin_Psi2][j].clear();
+  }
+
+  for(Int_t Bin_Event = 0; Bin_Event < TriFlow::Buffer_depth; Bin_Event++)
+  {
+    for(Int_t charge = 0; charge < 2; charge++)
+    {
+      MEKey key = MEKey(cent9,Bin_vz,Bin_Psi2,Bin_Event,charge);
+      mHelix_Pion[key].clear();
+      mMomentum[key].clear();
+      mMass2[key].clear();
+      mDca[key].clear();
+      mNHitsFit[key].clear();
+      mNSigmaProton[key].clear();
+      mLPTrack[key].clear();
+      mTofFlag[key].clear();
+      mTofTime[key].clear();
+      mTofBeta[key].clear();
+      mTofHit[key].clear();
     }
   }
   mEventCounter2[cent9][Bin_vz][Bin_Psi2] = 0;
@@ -1966,6 +2041,17 @@ void StTriFlowV0::SetTopoCut(Float_t dca_proton, Float_t dca_pion, Float_t dcaAB
   mDca_pion_Pre   = dca_pion_pre;
   mInvLambda_low  = TriFlow::mMassProton+TriFlow::mMassPion;
   mInvLambda_high = InvLambda_high;
+}
+
+void StTriFlowV0::SetTopoCutK0S(Float_t dca_pion, Float_t dcaAB, Float_t decaylength, Float_t dcaV0, Float_t dca_pion_pre, Float_t InvK0S_high)
+{
+  mDca_pion       = dca_pion;
+  mDcaAB          = dcaAB;
+  mDecayLength     = decaylength;
+  mDcaV0          = dcaV0;
+  mDca_pion_Pre   = dca_pion_pre;
+  mInvK0S_low  = TriFlow::mMassPion+TriFlow::mMassPion;
+  mInvK0S_high = InvK0S_high;
 }
 
 void StTriFlowV0::PrintTopoCut()

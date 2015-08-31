@@ -102,6 +102,12 @@ StTriFlowMaker::StTriFlowMaker(const char* name, StPicoDstMaker *picoMaker, cons
     mOutPut_AntiLambda += jobCounter;
     mOutPut_AntiLambda += ".root";
   }
+  if(mMode == 8)
+  {
+    mOutPut_K0S = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/K0S/file_%s_K0S_%s_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::MixEvent[mFlag_ME].Data()); 
+    mOutPut_K0S += jobCounter;
+    mOutPut_K0S += ".root";
+  }
 }
 
 //----------------------------------------------------------------------------- 
@@ -189,6 +195,16 @@ Int_t StTriFlowMaker::Init()
     mFile_AntiLambda->cd();
     mTriFlowV0->InitAntiLambda();
     mTriFlowV0->SetTopoCut(0.1,0.7,1.0,2.0,1.3,0.7,1.20); // dca_proton, dca_pion, dcaAB, decaylength, dcaV0, dca_pion_pre, InvLambda_low = TriFlow::mMassProton+TriFlow::mMassPion, InvLambda_high
+    mTriFlowCorrection->InitReCenterCorrection(mEnergy);
+    mTriFlowCorrection->InitShiftCorrection(mEnergy);
+  }
+  if(mMode == 8)
+  {
+    mTriFlowV0 = new StTriFlowV0(mEnergy);
+    mFile_K0S = new TFile(mOutPut_K0S.Data(),"RECREATE");
+    mFile_K0S->cd();
+    mTriFlowV0->InitK0S();
+    mTriFlowV0->SetTopoCutK0S(0.7,1.0,2.0,1.3,0.7,0.6); // dca_proton, dca_pion, dcaAB, decaylength, dcaV0, dca_pion_pre, InvLambda_low = TriFlow::mMassProton+TriFlow::mMassPion, InvLambda_high
     mTriFlowCorrection->InitReCenterCorrection(mEnergy);
     mTriFlowCorrection->InitShiftCorrection(mEnergy);
   }
@@ -283,6 +299,15 @@ Int_t StTriFlowMaker::Finish()
       mFile_AntiLambda->cd();
       mTriFlowV0->WriteAntiLambdaMass2();
       mFile_AntiLambda->Close();
+    }
+  }
+  if(mMode == 8)
+  {
+    if(mOutPut_K0S != "")
+    {
+      mFile_K0S->cd();
+      mTriFlowV0->WriteK0SMass2();
+      mFile_K0S->Close();
     }
   }
 

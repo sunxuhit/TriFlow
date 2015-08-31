@@ -55,6 +55,7 @@ class StTriFlowMaker : public StMaker {
     TString mOutPut_Phi;
     TString mOutPut_Lambda;
     TString mOutPut_AntiLambda;
+    TString mOutPut_K0S;
 
     TFile *mFile_ReCenterPar;
     TFile *mFile_Corr_ReCenter;
@@ -66,6 +67,7 @@ class StTriFlowMaker : public StMaker {
     TFile *mFile_Phi;
     TFile *mFile_Lambda;
     TFile *mFile_AntiLambda;
+    TFile *mFile_K0S;
 
     Int_t mUsedTrackCounter;
 
