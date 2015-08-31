@@ -49,6 +49,7 @@ class StTriFlowV0
     void WritePhiMass2();
     void WriteLambdaMass2();
     void WriteAntiLambdaMass2();
+    void WriteK0SMass2();
 
 
     void clearEvent();
