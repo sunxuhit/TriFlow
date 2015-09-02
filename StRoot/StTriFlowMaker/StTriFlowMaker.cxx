@@ -424,7 +424,7 @@ Int_t StTriFlowMaker::Make()
 	  }
 	}
 
-	if(mMode == 1 || mMode == 2 || mMode == 3 || mMode == 4 || mMode == 5 || mMode == 6 || mMode == 7) // calculate Q Vector after recentering for full event and eta sub event
+	if(mMode == 1 || mMode == 2 || mMode == 3 || mMode == 4 || mMode == 5 || mMode == 6 || mMode == 7 || mMode == 8) // calculate Q Vector after recentering for full event and eta sub event
 	{
 	  if(mTriFlowCorrection->passTrackFull(track))
 	  {
@@ -910,6 +910,63 @@ Int_t StTriFlowMaker::Make()
 //	cout << "cent9 = " << cent9 << endl;
 	if(mMode == 6) mTriFlowV0->MixEvent_Lambda(mFlag_ME,mPicoDst,cent9,vz,Psi2_East);
 	if(mMode == 7) mTriFlowV0->MixEvent_AntiLambda(mFlag_ME,mPicoDst,cent9,vz,Psi2_East);
+      }
+      mTriFlowCorrection->clear();
+    }
+    if(mMode == 8)
+    { // K0S
+      Float_t Psi2_East;
+      TVector2 Q2East[TriFlow::EtaGap_total], Q2West[TriFlow::EtaGap_total];
+      TVector2 Q3East[TriFlow::EtaGap_total], Q3West[TriFlow::EtaGap_total]; 
+      Int_t NumTrackEast[TriFlow::EtaGap_total], NumTrackWest[TriFlow::EtaGap_total]; 
+      for(Int_t j = 0; j < TriFlow::EtaGap_total; j++)
+      {
+	Q2East[j].Set(-999.9,-999.9); // initialize Q Vector to unreasonable value
+	Q2West[j].Set(-999.9,-999.9);
+	Q3East[j].Set(-999.9,-999.9);
+	Q3West[j].Set(-999.9,-999.9);
+	NumTrackEast[j] = 0;
+	NumTrackWest[j] = 0;
+	if(mTriFlowCorrection->passTrackEtaNumCut(j))
+	{
+	  // get QVector of sub event
+	  Q2East[j] = mTriFlowCorrection->getQVector(j,0,0); // 0 = eta_gap, 1 = flow type, 2 = east/west
+	  Q2West[j] = mTriFlowCorrection->getQVector(j,0,1); // 0 = eta_gap, 1 = flow type, 2 = east/west
+	  Q3East[j] = mTriFlowCorrection->getQVector(j,1,0); // 0 = eta_gap, 1 = flow type, 2 = east/west
+	  Q3West[j] = mTriFlowCorrection->getQVector(j,1,1); // 0 = eta_gap, 1 = flow type, 2 = east/west
+	  NumTrackEast[j] = mTriFlowCorrection->getNumTrack(j,0); // 0 = eta_gap, 1 = east/west
+	  NumTrackWest[j] = mTriFlowCorrection->getNumTrack(j,1); // 0 = eta_gap, 1 = east/west
+	}
+      }
+
+      if(mTriFlowCorrection->passTrackEtaNumCut(0))
+      {
+	// Event Plane method
+	Psi2_East = mTriFlowCorrection->calShiftAngle2East_EP(runIndex,cent9,vz_sign,0);
+
+	// get N_prim, N_non_prim, N_Tof_match
+	Int_t N_prim = mTriFlowCut->getNpirm();
+	Int_t N_non_prim = mTriFlowCut->getNnonprim();
+	Int_t N_Tof_match = mTriFlowCut->getMatchedToF();
+
+	// pass the event information to StTriFlowV0
+	mTriFlowV0->clearEvent();
+	mTriFlowV0->passEvent(N_prim, N_non_prim, N_Tof_match);
+
+	// 2nd sub event plane
+	mTriFlowV0->passEventPlane2East(Q2East[0],Q2East[1],Q2East[2],Q2East[3]);
+	mTriFlowV0->passEventPlane2West(Q2West[0],Q2West[1],Q2West[2],Q2West[3]);
+
+	// 3rd sub event plane
+	mTriFlowV0->passEventPlane3East(Q3East[0],Q3East[1],Q3East[2],Q3East[3]);
+	mTriFlowV0->passEventPlane3West(Q3West[0],Q3West[1],Q3West[2],Q3West[3]);
+
+	// Number of Track in East and West part of TPC
+	mTriFlowV0->passNumTrackEast(NumTrackEast[0],NumTrackEast[1],NumTrackEast[2],NumTrackEast[3]);
+	mTriFlowV0->passNumTrackWest(NumTrackWest[0],NumTrackWest[1],NumTrackWest[2],NumTrackWest[3]);
+
+//	cout << "cent9 = " << cent9 << endl;
+	mTriFlowV0->MixEvent_K0S(mFlag_ME,mPicoDst,cent9,vz,Psi2_East);
       }
       mTriFlowCorrection->clear();
     }

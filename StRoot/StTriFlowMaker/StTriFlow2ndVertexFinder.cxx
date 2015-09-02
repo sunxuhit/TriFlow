@@ -909,6 +909,11 @@ void StTriFlow2ndVertexFinder::Find2ndVertex(StPhysicalHelixD helixA, StPhysical
     ltrackA_lin.SetXYZM(vectornewA_lin.x(),vectornewA_lin.y(),vectornewA_lin.z(),TriFlow::mMassProton); // set Lorentz vector for proton
     ltrackB_lin.SetXYZM(vectornewB_lin.x(),vectornewB_lin.y(),vectornewB_lin.z(),TriFlow::mMassPion); // set Lorentz vector for pion
   }
+  if(mode == 2) // K0S
+  {
+    ltrackA_lin.SetXYZM(vectornewA_lin.x(),vectornewA_lin.y(),vectornewA_lin.z(),TriFlow::mMassPion); // set Lorentz vector for pi+
+    ltrackB_lin.SetXYZM(vectornewB_lin.x(),vectornewB_lin.y(),vectornewB_lin.z(),TriFlow::mMassPion); // set Lorentz vector for pi-
+  }
   TLorentzVector trackAB_lin      = ltrackA_lin+ltrackB_lin; // mother particle
 
   StThreeVectorF dirY_lin(trackAB_lin.Px(),trackAB_lin.Py(),trackAB_lin.Pz());
@@ -944,6 +949,11 @@ void StTriFlow2ndVertexFinder::Find2ndVertex(StPhysicalHelixD helixA, StPhysical
     if(mode == 0 || mode == 1) // Lambda || anti-Lambda
     {
       ltrackA.SetXYZM(vectornewA.x(),vectornewA.y(),vectornewA.z(),TriFlow::mMassProton);
+      ltrackB.SetXYZM(vectornewB.x(),vectornewB.y(),vectornewB.z(),TriFlow::mMassPion);
+    }
+    if(mode == 2) // K0S
+    {
+      ltrackA.SetXYZM(vectornewA.x(),vectornewA.y(),vectornewA.z(),TriFlow::mMassPion);
       ltrackB.SetXYZM(vectornewB.x(),vectornewB.y(),vectornewB.z(),TriFlow::mMassPion);
     }
 

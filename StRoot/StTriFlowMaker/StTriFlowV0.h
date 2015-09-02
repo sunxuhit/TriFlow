@@ -41,10 +41,13 @@ class StTriFlowV0
     void MixEvent_Lambda(Int_t,StPicoDst*,Int_t,Float_t,Float_t);
     void MixEvent_AntiLambda(Int_t,StPicoDst*,Int_t,Float_t,Float_t);
     void SetTopoCut(Float_t,Float_t,Float_t,Float_t,Float_t,Float_t,Float_t);
-    void SetTopoCutK0S(Float_t,Float_t,Float_t,Float_t,Float_t,Float_t);
     void PrintTopoCut();
     void clear_Lambda(Int_t,Int_t,Int_t);
     void clear_AntiLambda(Int_t,Int_t,Int_t);
+
+    void doK0S(Int_t,Int_t,Int_t,Int_t);
+    void MixEvent_K0S(Int_t,StPicoDst*,Int_t,Float_t,Float_t);
+    void SetTopoCutK0S(Float_t,Float_t,Float_t,Float_t,Float_t,Float_t);
     void clear_K0S(Int_t,Int_t,Int_t);
 
     void WritePhiMass2();
