@@ -1645,6 +1645,19 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	    Float_t Mass2_pi_minus = mMass2[key_pi_minus][n_pi_minus];
 
 	    // final mass2 cut
+	    Float_t Mass2_low_pi_plus;
+	    Float_t Mass2_up_pi_plus;
+	    if(mMomentum[key_pi_plus][n_pi_plus] < 0.75)
+	    {
+	      Mass2_low_pi_plus = -0.013;
+	      Mass2_up_pi_plus  =  0.047;
+	    }
+	    if(mMomentum[key_pi_plus][n_pi_plus] >= 0.75)
+	    {
+	      Mass2_low_pi_plus =  0.053 - 0.088*mMomentum[key_pi_plus][n_pi_plus];
+	      Mass2_up_pi_plus  = -0.004 + 0.068*mMomentum[key_pi_plus][n_pi_plus];
+	    }
+
 	    Float_t Mass2_low_pi_minus;
 	    Float_t Mass2_up_pi_minus;
 	    if(mMomentum[key_pi_minus][n_pi_minus] < 0.75)
@@ -1688,7 +1701,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	    }
 
 	    if(
-	         ((Mass2_pi_plus  > Mass2_low_pi_minus && Mass2_pi_plus  < Mass2_up_pi_minus) || Mass2_pi_plus  < -10.0) // pion_plus  mass2 cut
+	         ((Mass2_pi_plus  > Mass2_low_pi_plus  && Mass2_pi_plus  < Mass2_up_pi_plus ) || Mass2_pi_plus  < -10.0) // pion_plus  mass2 cut
 	      && ((Mass2_pi_minus > Mass2_low_pi_minus && Mass2_pi_minus < Mass2_up_pi_minus) || Mass2_pi_minus < -10.0) // pion_minus mass2 cut
 	      )
 	    {
@@ -1719,7 +1732,6 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
     mTree_K0S->Fill();
   }
 
-  /*
   if(Flag_ME == 1) // mixed event
   {
     StTriFlow2ndVertexFinder *VertexFinder = new StTriFlow2ndVertexFinder();
@@ -1734,7 +1746,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 
     for(Int_t Bin_Event_A = 0; Bin_Event_A < mEventCounter2[cent9][Bin_vz][Bin_Psi2]-1; Bin_Event_A++)
     {
-      MEKey key_A_pi_plus   = MEKey(cent9,Bin_vz,Bin_Psi2,Bin_Event_A,0);
+      MEKey key_A_pi_plus  = MEKey(cent9,Bin_vz,Bin_Psi2,Bin_Event_A,0);
       MEKey key_A_pi_minus = MEKey(cent9,Bin_vz,Bin_Psi2,Bin_Event_A,1);
 
       EventVertexXA = mPrimaryvertex[cent9][Bin_vz][Bin_Psi2][Bin_Event_A].x();
@@ -1743,7 +1755,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
       vectorprim.set(EventVertexXA,EventVertexYA,EventVertexZA);
       for(Int_t Bin_Event_B = Bin_Event_A+1; Bin_Event_B < mEventCounter2[cent9][Bin_vz][Bin_Psi2]; Bin_Event_B++)
       {
-	MEKey key_B_pi_plus   = MEKey(cent9,Bin_vz,Bin_Psi2,Bin_Event_B,0);
+	MEKey key_B_pi_plus  = MEKey(cent9,Bin_vz,Bin_Psi2,Bin_Event_B,0);
 	MEKey key_B_pi_minus = MEKey(cent9,Bin_vz,Bin_Psi2,Bin_Event_B,1);
 
 	EventVertexXB = mPrimaryvertex[cent9][Bin_vz][Bin_Psi2][Bin_Event_B].x();
@@ -1786,10 +1798,10 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	}
 
 	// start to mix events
-	// mix proton candidates from A event with pi_minus candidates from B event
-	for(Int_t n_pi_plus = 0; n_pi_plus < mHelix_Pion[key_A_pi_plus].size(); n_pi_plus++) // first track loop over proton candidates from event A
+	// mix pi_plus candidates from A event with pi_minus candidates from B event
+	for(Int_t n_pi_plus = 0; n_pi_plus < mHelix_Pion[key_A_pi_plus].size(); n_pi_plus++) // first track loop over pi_plus candidates from event A
 	{
-	  helixA = mHelix_Pion[key_A_pi_plus][n_pi_plus]; // proton
+	  helixA = mHelix_Pion[key_A_pi_plus][n_pi_plus]; // pi_plus
 	  MomentumA = mMomentum[key_A_pi_plus][n_pi_plus];
 	  dcaA = mDca[key_A_pi_plus][n_pi_plus];
 
@@ -1803,30 +1815,31 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	    MomentumB = mMomentum[key_B_pi_minus][n_pi_minus];
 	    dcaB = mDca[key_B_pi_minus][n_pi_minus];
 
-	    VertexFinder->Find2ndVertex(helixA,helixB,vectorprim,MomentumA,MomentumB,ltrackA,ltrackB,VerdistX,VerdistY,vectorAB,dcaAB,0); // Lambda mode
+	    VertexFinder->Find2ndVertex(helixA,helixB,vectorprim,MomentumA,MomentumB,ltrackA,ltrackB,VerdistX,VerdistY,vectorAB,dcaAB,2); // Lambda mode
 
 	    // Invariant mass calculations
 	    TLorentzVector trackAB = ltrackA+ltrackB; // mother particle
 	    Double_t InvMassAB     = trackAB.M(); // invariant mass of mother particle
 
-	    //-----------------------------------------------------------------------------
-	    // get K0s by misidentification
-	    TLorentzVector  ltrackC;
-	    ltrackC.SetXYZM(ltrackA.X(),ltrackA.Y(),ltrackA.Z(),TriFlow::mMassPion); // set Lorentz vector for pion from Event A
-
-	    // Invariant mass calculations K0s
-	    TLorentzVector trackCB      = ltrackC+ltrackB; // mother particle
-	    Double_t InvMassCB          = trackCB.M(); // invariant mass of mother particle
-	    //-----------------------------------------------------------------------------
-
-	    if(fabs(dcaA) > mDca_proton && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high)
+	    if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvK0S_low && InvMassAB < mInvK0S_high)
 	    {
-	      Float_t Mass2_proton = mMass2[key_A_pi_plus][n_pi_plus];
-	      Float_t Mass2_pion   = mMass2[key_B_pi_minus][n_pi_minus];
+	      Float_t Mass2_pi_plus  = mMass2[key_A_pi_plus][n_pi_plus];
+	      Float_t Mass2_pi_minus = mMass2[key_B_pi_minus][n_pi_minus];
 
 	      // final mass2 cut
-	      Float_t Mass2_low_proton = 0.7;
-	      Float_t Mass2_up_proton  = 1.1;
+	      Float_t Mass2_low_pi_plus;
+	      Float_t Mass2_up_pi_plus;
+	      if(mMomentum[key_A_pi_plus][n_pi_plus] < 0.75)
+	      {
+		Mass2_low_pi_plus = -0.013;
+		Mass2_up_pi_plus  =  0.047;
+	      }
+	      if(mMomentum[key_A_pi_plus][n_pi_plus] >= 0.75)
+	      {
+		Mass2_low_pi_plus =  0.053 - 0.088*mMomentum[key_A_pi_plus][n_pi_plus];
+		Mass2_up_pi_plus  = -0.004 + 0.068*mMomentum[key_A_pi_plus][n_pi_plus];
+	      }
+
 	      Float_t Mass2_low_pi_minus;
 	      Float_t Mass2_up_pi_minus;
 	      if(mMomentum[key_B_pi_minus][n_pi_minus] < 0.75)
@@ -1852,7 +1865,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 		Float_t Time_after = Time_before;
 		Float_t Beta_after = Beta_before;
 		mTofCorr->correctBeta(helixA,Time_after,Beta_after);
-		if(Beta_after != 0) Mass2_proton = mMomentum[key_A_pi_plus][n_pi_plus]*mMomentum[key_A_pi_plus][n_pi_plus]*(1.0/(Beta_after*Beta_after) - 1.0);
+		if(Beta_after != 0) Mass2_pi_plus = mMomentum[key_A_pi_plus][n_pi_plus]*mMomentum[key_A_pi_plus][n_pi_plus]*(1.0/(Beta_after*Beta_after) - 1.0);
 		mTofCorr->clearContainers();
 	      }
 	      // StV0TofCorrection for pion_minus from Event B
@@ -1865,46 +1878,40 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 		Float_t Time_after = Time_before;
 		Float_t Beta_after = Beta_before;
 		mTofCorr->correctBeta(helixB,Time_after,Beta_after);
-		if(Beta_after != 0) Mass2_pion = mMomentum[key_B_pi_minus][n_pi_minus]*mMomentum[key_B_pi_minus][n_pi_minus]*(1.0/(Beta_after*Beta_after) - 1.0);
+		if(Beta_after != 0) Mass2_pi_minus = mMomentum[key_B_pi_minus][n_pi_minus]*mMomentum[key_B_pi_minus][n_pi_minus]*(1.0/(Beta_after*Beta_after) - 1.0);
 		mTofCorr->clearContainers();
 	      }
 
 	      if(
-		   ((Mass2_proton > Mass2_low_proton && Mass2_proton < Mass2_up_proton) || Mass2_proton < -10.0) // proton mass2 cut
-		&& ((Mass2_pion > Mass2_low_pi_minus && Mass2_pion < Mass2_up_pi_minus) || Mass2_pion < -10.0) // pion_minus mass2 cut
+		   ((Mass2_pi_plus  > Mass2_low_pi_plus  && Mass2_pi_plus  < Mass2_up_pi_plus)  || Mass2_pi_plus  < -10.0) // pion_plus  mass2 cut
+		&& ((Mass2_pi_minus > Mass2_low_pi_minus && Mass2_pi_minus < Mass2_up_pi_minus) || Mass2_pi_minus < -10.0) // pion_minus mass2 cut
 		)
 	      {
-		h_Mass2_K0s->Fill(trackCB.Perp(),InvMassCB);
 		h_Mass2->Fill(trackAB.Perp(),InvMassAB);
 
 		// fill Lambda candidate into mTree_Lambda
 		mV0Track = mV0Event->createTrack();
-		mV0Track->setMass2A(mMass2[key_A_pi_plus][n_pi_plus]); // proton
+		mV0Track->setMass2A(mMass2[key_A_pi_plus][n_pi_plus]); // pi_plus
 		mV0Track->setMass2B(mMass2[key_B_pi_minus][n_pi_minus]); // pi_minus
-		mV0Track->setNSigA(mNSigmaProton[key_A_pi_plus][n_pi_plus]); // proton
+		mV0Track->setNSigA(mNSigmaPion[key_A_pi_plus][n_pi_plus]); // pi_plus
 		mV0Track->setNSigB(mNSigmaPion[key_B_pi_minus][n_pi_minus]); // pi_minus
-		mV0Track->setDcaA(mDca[key_A_pi_plus][n_pi_plus]); // proton
+		mV0Track->setDcaA(mDca[key_A_pi_plus][n_pi_plus]); // pi_plus
 		mV0Track->setDcaB(mDca[key_B_pi_minus][n_pi_minus]); // pi_minus
-		mV0Track->setGTrackA(ltrackA); // proton
+		mV0Track->setGTrackA(ltrackA); // pi_plus
 		mV0Track->setGTrackB(ltrackB); // pi_minus
-		mV0Track->setPTrackA(mLPTrack[key_A_pi_plus][n_pi_plus]); // proton
+		mV0Track->setPTrackA(mLPTrack[key_A_pi_plus][n_pi_plus]); // pi_plus
 		mV0Track->setPTrackB(mLPTrack[key_B_pi_minus][n_pi_minus]); // pi_minus
-		mV0Track->setFlagA(Bin_Event_A); // proton
+		mV0Track->setFlagA(Bin_Event_A); // pi_plus
 		mV0Track->setFlagB(Bin_Event_B); // pi_minus
 		mV0Track->setDcaAB(dcaAB);
 		mV0Track->setDecayLength(VerdistX);
 		mV0Track->setDcaV0(VerdistY);
-
-		if(!(InvMassCB > 0.498-3*0.005 && InvMassCB < 0.498+3*0.005))
-		{
-		  h_Mass2_sub->Fill(trackAB.Perp(),InvMassAB);
-		}
 	      }
 	    }
 	  }
 	}
 
-	// mix pi_minus candidates from A event with proton candidates from B event
+	// mix pi_minus candidates from A event with pi_plus candidates from B event
 	for(Int_t n_pi_minus = 0; n_pi_minus < mHelix_Pion[key_A_pi_minus].size(); n_pi_minus++) // first track loop over pi_minus candidates from event A
 	{
 	  helixA = mHelix_Pion[key_A_pi_minus][n_pi_minus]; // pi_minus
@@ -1921,30 +1928,31 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	    MomentumB = mMomentum[key_B_pi_plus][n_pi_plus];
 	    dcaB = mDca[key_B_pi_plus][n_pi_plus];
 
-	    VertexFinder->Find2ndVertex(helixB,helixA,vectorprim,MomentumB,MomentumA,ltrackB,ltrackA,VerdistX,VerdistY,vectorAB,dcaAB,0); // Lambda mode
+	    VertexFinder->Find2ndVertex(helixB,helixA,vectorprim,MomentumB,MomentumA,ltrackB,ltrackA,VerdistX,VerdistY,vectorAB,dcaAB,2); // Lambda mode
 
 	    // Invariant mass calculations
 	    TLorentzVector trackAB = ltrackA+ltrackB; // mother particle
 	    Double_t InvMassAB     = trackAB.M(); // invariant mass of mother particle
 
-	    //-----------------------------------------------------------------------------
-	    // get K0s by misidentification
-	    TLorentzVector  ltrackC;
-	    ltrackC.SetXYZM(ltrackB.X(),ltrackB.Y(),ltrackB.Z(),TriFlow::mMassPion); // set Lorentz vector for pion from Event B
-
-	    // Invariant mass calculations K0s
-	    TLorentzVector trackCA      = ltrackC+ltrackA; // mother particle
-	    Double_t InvMassCA          = trackCA.M(); // invariant mass of mother particle
-	    //-----------------------------------------------------------------------------
-
-	    if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_proton && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high)
+	    if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvK0S_low && InvMassAB < mInvK0S_high)
 	    {
-	      Float_t Mass2_proton = mMass2[key_B_pi_plus][n_pi_plus];
-	      Float_t Mass2_pion   = mMass2[key_A_pi_minus][n_pi_minus];
+	      Float_t Mass2_pi_plus  = mMass2[key_B_pi_plus][n_pi_plus];
+	      Float_t Mass2_pi_minus = mMass2[key_A_pi_minus][n_pi_minus];
 
 	      // final mass2 cut
-	      Float_t Mass2_low_proton = 0.7;
-	      Float_t Mass2_up_proton  = 1.1;
+	      Float_t Mass2_low_pi_plus;
+	      Float_t Mass2_up_pi_plus;
+	      if(mMomentum[key_B_pi_plus][n_pi_plus] < 0.75)
+	      {
+		Mass2_low_pi_plus = -0.013;
+		Mass2_up_pi_plus  =  0.047;
+	      }
+	      if(mMomentum[key_B_pi_plus][n_pi_plus] >= 0.75)
+	      {
+		Mass2_low_pi_plus =  0.053 - 0.088*mMomentum[key_B_pi_plus][n_pi_plus];
+		Mass2_up_pi_plus  = -0.004 + 0.068*mMomentum[key_B_pi_plus][n_pi_plus];
+	      }
+
 	      Float_t Mass2_low_pi_minus;
 	      Float_t Mass2_up_pi_minus;
 	      if(mMomentum[key_A_pi_minus][n_pi_minus] < 0.75)
@@ -1960,7 +1968,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 
 	      StLorentzVectorD SttrackAB(trackAB.X(),trackAB.Y(),trackAB.Z(),trackAB.E());
 
-	      // StV0TofCorrection for proton from Event B
+	      // StV0TofCorrection for pi_plus from Event B
 	      if(mTofFlag[key_B_pi_plus][n_pi_plus] > 0 && mTofTime[key_B_pi_plus][n_pi_plus] != 0)
 	      {
 		mTofCorr->setVectors3D(vectorprim)(vectorAB)(mTofHit[key_B_pi_plus][n_pi_plus]+vectordiff);
@@ -1970,7 +1978,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 		Float_t Time_after = Time_before;
 		Float_t Beta_after = Beta_before;
 		mTofCorr->correctBeta(helixB,Time_after,Beta_after);
-		if(Beta_after != 0) Mass2_proton = mMomentum[key_B_pi_plus][n_pi_plus]*mMomentum[key_B_pi_plus][n_pi_plus]*(1.0/(Beta_after*Beta_after) - 1.0);
+		if(Beta_after != 0) Mass2_pi_plus = mMomentum[key_B_pi_plus][n_pi_plus]*mMomentum[key_B_pi_plus][n_pi_plus]*(1.0/(Beta_after*Beta_after) - 1.0);
 		mTofCorr->clearContainers();
 	      }
 	      // StV0TofCorrection for pion_minus from Event A
@@ -1983,49 +1991,42 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 		Float_t Time_after = Time_before;
 		Float_t Beta_after = Beta_before;
 		mTofCorr->correctBeta(helixA,Time_after,Beta_after);
-		if(Beta_after != 0) Mass2_pion = mMomentum[key_A_pi_minus][n_pi_minus]*mMomentum[key_A_pi_minus][n_pi_minus]*(1.0/(Beta_after*Beta_after) - 1.0);
+		if(Beta_after != 0) Mass2_pi_minus = mMomentum[key_A_pi_minus][n_pi_minus]*mMomentum[key_A_pi_minus][n_pi_minus]*(1.0/(Beta_after*Beta_after) - 1.0);
 		mTofCorr->clearContainers();
 	      }
 
 	      if(
-		   ((Mass2_proton > Mass2_low_proton && Mass2_proton < Mass2_up_proton) || Mass2_proton < -10.0) // proton mass2 cut
-		&& ((Mass2_pion > Mass2_low_pi_minus && Mass2_pion < Mass2_up_pi_minus) || Mass2_pion < -10.0) // pion_minus mass2 cut
+		   ((Mass2_pi_plus  > Mass2_low_pi_plus  && Mass2_pi_plus  < Mass2_up_pi_plus)  || Mass2_pi_plus  < -10.0) // pion_plus  mass2 cut
+		&& ((Mass2_pi_minus > Mass2_low_pi_minus && Mass2_pi_minus < Mass2_up_pi_minus) || Mass2_pi_minus < -10.0) // pion_minus mass2 cut
 		)
 	      {
-		h_Mass2_K0s->Fill(trackCA.Perp(),InvMassCA);
 		h_Mass2->Fill(trackAB.Perp(),InvMassAB);
 
 		// fill Lambda candidate into mTree_Phi
 		mV0Track = mV0Event->createTrack();
-		mV0Track->setMass2A(mMass2[key_B_pi_plus][n_pi_plus]); // proton
+		mV0Track->setMass2A(mMass2[key_B_pi_plus][n_pi_plus]); // pi_plus
 		mV0Track->setMass2B(mMass2[key_A_pi_minus][n_pi_minus]); // pi_minus
-		mV0Track->setNSigA(mNSigmaProton[key_B_pi_plus][n_pi_plus]); // proton
+		mV0Track->setNSigA(mNSigmaPion[key_B_pi_plus][n_pi_plus]); // pi_plus
 		mV0Track->setNSigB(mNSigmaPion[key_A_pi_minus][n_pi_minus]); // pi_minus
-		mV0Track->setDcaA(mDca[key_B_pi_plus][n_pi_plus]); // proton
+		mV0Track->setDcaA(mDca[key_B_pi_plus][n_pi_plus]); // pi_plus
 		mV0Track->setDcaB(mDca[key_A_pi_minus][n_pi_minus]); // pi_minus
-		mV0Track->setGTrackA(ltrackB); // proton
+		mV0Track->setGTrackA(ltrackB); // pi_plus
 		mV0Track->setGTrackB(ltrackA); // pi_minus
-		mV0Track->setPTrackA(mLPTrack[key_B_pi_plus][n_pi_plus]); // proton
+		mV0Track->setPTrackA(mLPTrack[key_B_pi_plus][n_pi_plus]); // pi_plus
 		mV0Track->setPTrackB(mLPTrack[key_A_pi_minus][n_pi_minus]); // pi_minus
-		mV0Track->setFlagA(Bin_Event_B); // proton
+		mV0Track->setFlagA(Bin_Event_B); // pi_plus
 		mV0Track->setFlagB(Bin_Event_A); // pi_minus
 		mV0Track->setDcaAB(dcaAB);
 		mV0Track->setDecayLength(VerdistX);
 		mV0Track->setDcaV0(VerdistY);
-
-		if(!(InvMassCA > 0.498-3*0.005 && InvMassCA < 0.498+3*0.005))
-		{
-		  h_Mass2_sub->Fill(trackAB.Perp(),InvMassAB);
-		}
 	      }
 	    }
 	  }
 	}
       }
     }
-    mTree_Lambda->Fill();
+    mTree_K0S->Fill();
   }
-  */
 }
 
 //------------------------------------------------------------------------------------------------------------------
