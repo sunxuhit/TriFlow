@@ -5,13 +5,12 @@ date
 
 if [ $# -eq 0 ]
   then
-    Name="_39GeV_antiLambda_SE_"
+    Name="_39GeV_K0S_SE_"
     suffix=".root"
     List="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/List/run_list/39GeV_"
     suffixlist=".list"
 #    for((counter=1;counter<=713;counter=counter+1))
-    for((counter=123;counter<=323;counter=counter+1)) # missing run
-#    for((counter=210;counter<=215;counter=counter+1))
+    for((counter=123;counter<=213;counter=counter+1)) # test mode 
     do
       cp ./run.csh ./run$Name$counter.csh
 
@@ -26,7 +25,8 @@ if [ $# -eq 0 ]
 #      echo -n 4',' >> run$Name$counter.csh  # Proton and Yields mode
 #      echo -n 5',' >> run$Name$counter.csh  # Phi mode
 #      echo -n 6',' >> run$Name$counter.csh  # Lambda mode
-      echo -n 7',' >> run$Name$counter.csh  # anti-Lambda mode
+#      echo -n 7',' >> run$Name$counter.csh  # anti-Lambda mode
+      echo -n 8',' >> run$Name$counter.csh  # K0S mode
 ###############################mode###################################
 
 ###############################energy###################################
