@@ -127,6 +127,9 @@ void StTriFlowV0::InitK0S()
   mTofCorr = new StV0TofCorrection();
   h_Mass2 = new TH2F("h_Mass2","h_Mass2",20,0.2,5.0,200,0.4,0.6);
   h_Mass2_p = new TH2F("h_Mass2_p","h_Mass2_p",200,-5.0,5.0,200,-0.2,1.2);
+  h_Mass2_Lambda = new TH2F("h_Mass2_Lambda","h_Mass2_Lambda",20,0.2,5.0,200,1.06,1.2);
+  h_Mass2_AntiLambda = new TH2F("h_Mass2_AntiLambda","h_Mass2_AntiLambda",20,0.2,5.0,200,1.06,1.2);
+  h_Mass2_sub = new TH2F("h_Mass2_sub","h_Mass2_sub",20,0.2,5.0,200,0.4,0.6);
 
   for(Int_t cent = 0; cent < TriFlow::Bin_Centrality; cent++)
   {
@@ -175,6 +178,9 @@ void StTriFlowV0::WriteK0SMass2()
 {
   h_Mass2->Write();
   h_Mass2_p->Write();
+  h_Mass2_Lambda->Write();
+  h_Mass2_AntiLambda->Write();
+  h_Mass2_sub->Write();
   mTree_K0S->Write("",TObject::kOverwrite);
 }
 //------------------------------------------------------------------------------------------------------------------
@@ -1639,6 +1645,19 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	  TLorentzVector trackAB = ltrackA+ltrackB; // mother particle
 	  Double_t InvMassAB     = trackAB.M(); // invariant mass of mother particle
 
+	  //-----------------------------------------------------------------------------
+	  // get Lambda by misidentification
+	  TLorentzVector  ltrackP, ltrackPbar;
+	  ltrackP.SetXYZM(ltrackA.X(),ltrackA.Y(),ltrackA.Z(),TriFlow::mMassProton); // set Lorentz vector of pi+ to p
+	  ltrackPbar.SetXYZM(ltrackB.X(),ltrackB.Y(),ltrackB.Z(),TriFlow::mMassProton); // set Lorentz vector of pi+ to p
+
+	  // Invariant mass calculations K0s
+	  TLorentzVector trackLambda      = ltrackP+ltrackB; // p + pi-
+	  TLorentzVector trackAntiLambda      = ltrackPbar+ltrackA; // pbar + pi+
+	  Double_t InvMassLambda = trackLambda.M(); // invariant mass of Lambda
+	  Double_t InvMassAntiLambda = trackAntiLambda.M(); // invariant mass of Lambda
+	  //-----------------------------------------------------------------------------
+
 	  if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvK0S_low && InvMassAB < mInvK0S_high)
 	  {
 	    Float_t Mass2_pi_plus  = mMass2[key_pi_plus][n_pi_plus];
@@ -1673,7 +1692,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 
 	    StLorentzVectorD SttrackAB(trackAB.X(),trackAB.Y(),trackAB.Z(),trackAB.E());
 
-	    // StV0TofCorrection for proton
+	    // StV0TofCorrection for pion_plus
 	    if(mTofFlag[key_pi_plus][n_pi_plus] > 0 && mTofTime[key_pi_plus][n_pi_plus] != 0)
 	    {
 	      mTofCorr->setVectors3D(mPrimaryvertex[cent9][Bin_vz][Bin_Psi2][Bin_Event])(vectorAB)(mTofHit[key_pi_plus][n_pi_plus]);
@@ -1706,6 +1725,10 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	      )
 	    {
 	      h_Mass2->Fill(trackAB.Perp(),InvMassAB);
+	      h_Mass2_Lambda->Fill(trackLambda.Perp(),InvMassLambda);
+	      h_Mass2_AntiLambda->Fill(trackAntiLambda.Perp(),InvMassAntiLambda);
+	      if(!(InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3 && InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3))
+		h_Mass2_sub->Fill(trackAB.Perp(),InvMassAB);
 
 	      // fill K0S candidate into mTree_K0S | the InvMass cut already done
 	      mV0Track = mV0Event->createTrack();
@@ -1815,11 +1838,24 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	    MomentumB = mMomentum[key_B_pi_minus][n_pi_minus];
 	    dcaB = mDca[key_B_pi_minus][n_pi_minus];
 
-	    VertexFinder->Find2ndVertex(helixA,helixB,vectorprim,MomentumA,MomentumB,ltrackA,ltrackB,VerdistX,VerdistY,vectorAB,dcaAB,2); // Lambda mode
+	    VertexFinder->Find2ndVertex(helixA,helixB,vectorprim,MomentumA,MomentumB,ltrackA,ltrackB,VerdistX,VerdistY,vectorAB,dcaAB,2); // K0S mode
 
 	    // Invariant mass calculations
 	    TLorentzVector trackAB = ltrackA+ltrackB; // mother particle
 	    Double_t InvMassAB     = trackAB.M(); // invariant mass of mother particle
+
+	    //-----------------------------------------------------------------------------
+	    // get Lambda and antiLambda by misidentification
+	    TLorentzVector  ltrackP, ltrackPbar;
+	    ltrackP.SetXYZM(ltrackA.X(),ltrackA.Y(),ltrackA.Z(),TriFlow::mMassProton); // set Lorentz vector of pi+ to p
+	    ltrackPbar.SetXYZM(ltrackB.X(),ltrackB.Y(),ltrackB.Z(),TriFlow::mMassProton); // set Lorentz vector of pi+ to p
+
+	    // Invariant mass calculations Lambda and antiLambda
+	    TLorentzVector trackLambda      = ltrackP+ltrackB; // p + pi-
+	    TLorentzVector trackAntiLambda      = ltrackPbar+ltrackA; // pbar + pi+
+	    Double_t InvMassLambda = trackLambda.M(); // invariant mass of Lambda
+	    Double_t InvMassAntiLambda = trackAntiLambda.M(); // invariant mass of Lambda
+	    //-----------------------------------------------------------------------------
 
 	    if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvK0S_low && InvMassAB < mInvK0S_high)
 	    {
@@ -1888,6 +1924,10 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 		)
 	      {
 		h_Mass2->Fill(trackAB.Perp(),InvMassAB);
+		h_Mass2_Lambda->Fill(trackLambda.Perp(),InvMassLambda);
+		h_Mass2_AntiLambda->Fill(trackAntiLambda.Perp(),InvMassAntiLambda);
+		if(!(InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3 && InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3))
+		  h_Mass2_sub->Fill(trackAB.Perp(),InvMassAB);
 
 		// fill Lambda candidate into mTree_Lambda
 		mV0Track = mV0Event->createTrack();
@@ -1928,11 +1968,24 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	    MomentumB = mMomentum[key_B_pi_plus][n_pi_plus];
 	    dcaB = mDca[key_B_pi_plus][n_pi_plus];
 
-	    VertexFinder->Find2ndVertex(helixB,helixA,vectorprim,MomentumB,MomentumA,ltrackB,ltrackA,VerdistX,VerdistY,vectorAB,dcaAB,2); // Lambda mode
+	    VertexFinder->Find2ndVertex(helixB,helixA,vectorprim,MomentumB,MomentumA,ltrackB,ltrackA,VerdistX,VerdistY,vectorAB,dcaAB,2); // K0S mode
 
 	    // Invariant mass calculations
 	    TLorentzVector trackAB = ltrackA+ltrackB; // mother particle
 	    Double_t InvMassAB     = trackAB.M(); // invariant mass of mother particle
+
+	    //-----------------------------------------------------------------------------
+	    // get Lambda and antiLambda by misidentification
+	    TLorentzVector  ltrackP, ltrackPbar;
+	    ltrackP.SetXYZM(ltrackB.X(),ltrackB.Y(),ltrackB.Z(),TriFlow::mMassProton); // set Lorentz vector of pi+ to p
+	    ltrackPbar.SetXYZM(ltrackA.X(),ltrackA.Y(),ltrackA.Z(),TriFlow::mMassProton); // set Lorentz vector of pi+ to p
+
+	    // Invariant mass calculations Lambda and antiLambda
+	    TLorentzVector trackLambda      = ltrackP+ltrackA; // p + pi-
+	    TLorentzVector trackAntiLambda      = ltrackPbar+ltrackB; // pbar + pi+
+	    Double_t InvMassLambda = trackLambda.M(); // invariant mass of Lambda
+	    Double_t InvMassAntiLambda = trackAntiLambda.M(); // invariant mass of Lambda
+	    //-----------------------------------------------------------------------------
 
 	    if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvK0S_low && InvMassAB < mInvK0S_high)
 	    {
@@ -2001,6 +2054,10 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 		)
 	      {
 		h_Mass2->Fill(trackAB.Perp(),InvMassAB);
+		h_Mass2_Lambda->Fill(trackLambda.Perp(),InvMassLambda);
+		h_Mass2_AntiLambda->Fill(trackAntiLambda.Perp(),InvMassAntiLambda);
+		if(!(InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3 && InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3))
+		  h_Mass2_sub->Fill(trackAB.Perp(),InvMassAB);
 
 		// fill Lambda candidate into mTree_Phi
 		mV0Track = mV0Event->createTrack();

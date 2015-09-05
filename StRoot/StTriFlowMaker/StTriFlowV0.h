@@ -72,6 +72,8 @@ class StTriFlowV0
     TH2F *h_Mass2_sub;
     TH2F *h_Mass2_K0s;
     TH2F *h_Mass2_p;
+    TH2F *h_Mass2_Lambda;
+    TH2F *h_Mass2_AntiLambda;
     Int_t mEventCounter2[9][10][5]; // 0 = centrality bin, 1 = vertexZ bin, 2 = EP bin
 
     // topology cut for v0
