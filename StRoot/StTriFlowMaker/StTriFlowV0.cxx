@@ -1727,7 +1727,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	      h_Mass2->Fill(trackAB.Perp(),InvMassAB);
 	      h_Mass2_Lambda->Fill(trackLambda.Perp(),InvMassLambda);
 	      h_Mass2_AntiLambda->Fill(trackAntiLambda.Perp(),InvMassAntiLambda);
-	      if(!(InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3 && InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3))
+	      if(!((InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3) || (InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3)))
 		h_Mass2_sub->Fill(trackAB.Perp(),InvMassAB);
 
 	      // fill K0S candidate into mTree_K0S | the InvMass cut already done
@@ -1926,7 +1926,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 		h_Mass2->Fill(trackAB.Perp(),InvMassAB);
 		h_Mass2_Lambda->Fill(trackLambda.Perp(),InvMassLambda);
 		h_Mass2_AntiLambda->Fill(trackAntiLambda.Perp(),InvMassAntiLambda);
-		if(!(InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3 && InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3))
+		if(!((InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3) || (InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3)))
 		  h_Mass2_sub->Fill(trackAB.Perp(),InvMassAB);
 
 		// fill Lambda candidate into mTree_Lambda
@@ -2056,7 +2056,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 		h_Mass2->Fill(trackAB.Perp(),InvMassAB);
 		h_Mass2_Lambda->Fill(trackLambda.Perp(),InvMassLambda);
 		h_Mass2_AntiLambda->Fill(trackAntiLambda.Perp(),InvMassAntiLambda);
-		if(!(InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3 && InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3))
+		if(!((InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3) || (InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3)))
 		  h_Mass2_sub->Fill(trackAB.Perp(),InvMassAB);
 
 		// fill Lambda candidate into mTree_Phi
