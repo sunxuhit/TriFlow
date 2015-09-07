@@ -1649,7 +1649,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	  // get Lambda by misidentification
 	  TLorentzVector  ltrackP, ltrackPbar;
 	  ltrackP.SetXYZM(ltrackA.X(),ltrackA.Y(),ltrackA.Z(),TriFlow::mMassProton); // set Lorentz vector of pi+ to p
-	  ltrackPbar.SetXYZM(ltrackB.X(),ltrackB.Y(),ltrackB.Z(),TriFlow::mMassProton); // set Lorentz vector of pi+ to p
+	  ltrackPbar.SetXYZM(ltrackB.X(),ltrackB.Y(),ltrackB.Z(),TriFlow::mMassProton); // set Lorentz vector of pi- to p
 
 	  // Invariant mass calculations K0s
 	  TLorentzVector trackLambda      = ltrackP+ltrackB; // p + pi-
@@ -1848,7 +1848,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	    // get Lambda and antiLambda by misidentification
 	    TLorentzVector  ltrackP, ltrackPbar;
 	    ltrackP.SetXYZM(ltrackA.X(),ltrackA.Y(),ltrackA.Z(),TriFlow::mMassProton); // set Lorentz vector of pi+ to p
-	    ltrackPbar.SetXYZM(ltrackB.X(),ltrackB.Y(),ltrackB.Z(),TriFlow::mMassProton); // set Lorentz vector of pi+ to p
+	    ltrackPbar.SetXYZM(ltrackB.X(),ltrackB.Y(),ltrackB.Z(),TriFlow::mMassProton); // set Lorentz vector of pi- to p
 
 	    // Invariant mass calculations Lambda and antiLambda
 	    TLorentzVector trackLambda      = ltrackP+ltrackB; // p + pi-
@@ -1978,7 +1978,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	    // get Lambda and antiLambda by misidentification
 	    TLorentzVector  ltrackP, ltrackPbar;
 	    ltrackP.SetXYZM(ltrackB.X(),ltrackB.Y(),ltrackB.Z(),TriFlow::mMassProton); // set Lorentz vector of pi+ to p
-	    ltrackPbar.SetXYZM(ltrackA.X(),ltrackA.Y(),ltrackA.Z(),TriFlow::mMassProton); // set Lorentz vector of pi+ to p
+	    ltrackPbar.SetXYZM(ltrackA.X(),ltrackA.Y(),ltrackA.Z(),TriFlow::mMassProton); // set Lorentz vector of pi- to pbar
 
 	    // Invariant mass calculations Lambda and antiLambda
 	    TLorentzVector trackLambda      = ltrackP+ltrackA; // p + pi-
