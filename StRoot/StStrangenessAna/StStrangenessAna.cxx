@@ -1587,9 +1587,8 @@ void StStrangenessAna::MakeK0S(Int_t X_flag)
 	       fabs(dcaA)    > 0.7
 	    && fabs(dcaB)    > 0.7
 	    && dcaAB         < 1.0
-	    && VerdistX      > 3.0
-	    && VerdistY      < 0.8
-	    && scal_prod     > 0.0
+	    && decaylength   > 3.0
+	    && dcaV0         < 0.8
 	    && ((m2A > Mass2_low_pi_plus && m2A < Mass2_up_pi_plus) || (m2A < -10))
 	    && ((m2B > Mass2_low_pi_minus && m2B < Mass2_up_pi_minus) || (m2B < -10))
 	    )
