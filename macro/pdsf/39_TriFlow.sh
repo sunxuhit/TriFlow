@@ -9,8 +9,8 @@ if [ $# -eq 0 ]
     suffix=".root"
     List="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/List/run_list/39GeV_"
     suffixlist=".list"
-#    for((counter=1;counter<=713;counter=counter+1))
-    for((counter=123;counter<=213;counter=counter+1)) # test
+    for((counter=1;counter<=713;counter=counter+1))
+#    for((counter=123;counter<=213;counter=counter+1)) # test
     do
       cp ./run.csh ./run$Name$counter.csh
 
