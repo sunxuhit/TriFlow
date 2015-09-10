@@ -1,6 +1,6 @@
 #include <TSystem>
 
-void PhiFlow(const Int_t energy = 1, const Int_t X_flag = 0, const Int_t List = 0, const Long64_t start_event = 1000, const Long64_t stop_event = 100024, const Int_t mode = 0)
+void PhiFlow(const Int_t energy = 1, const Int_t X_flag = 0, const Int_t List = 0, const Long64_t start_event = 1000, const Long64_t stop_event = 100024, const Int_t mode = 3)
 {
   // energy: 0 for 200GeV, 1 for 39GeV
   // X_flag: 0 for Same Event, 1 for Mixed Event
