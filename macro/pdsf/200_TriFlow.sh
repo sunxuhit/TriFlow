@@ -5,12 +5,12 @@ date
 
 if [ $# -eq 0 ]
   then
-    Name="_200GeV_Lambda0_SE_"
+    Name="_200GeV_K0S_SE_"
     suffix=".root"
     List="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/run_list/200GeV_"
     suffixlist=".list"
-    for((counter=1;counter<=1030;counter=counter+1))
-#    for((counter=111;counter<=155;counter=counter+1))
+    for((counter=1;counter<=4034;counter=counter+1)) # Lambda and anti-Lambda
+#    for((counter=123;counter<=213;counter=counter+1)) # test
     do
       cp ./run.csh ./run$Name$counter.csh
 
@@ -25,6 +25,8 @@ if [ $# -eq 0 ]
 #      echo -n 4',' >> run$Name$counter.csh  # Proton and Yields mode
 #      echo -n 5',' >> run$Name$counter.csh  # Phi mode
       echo -n 6',' >> run$Name$counter.csh  # Lambda mode
+#      echo -n 7',' >> run$Name$counter.csh  # anti-Lambda mode
+#      echo -n 8',' >> run$Name$counter.csh  # K0S mode
 ###############################mode###################################
 
 ###############################energy###################################
@@ -34,16 +36,16 @@ if [ $# -eq 0 ]
 ###############################energy###################################
 
 ###############################flag_ME###################################
-      echo -n 0')' >> run$Name$counter.csh  # Same Event
+      echo -n 0')' >> run$Name$counter.csh  # Same Event 
 #      echo -n 1')' >> run$Name$counter.csh  # Mixed Event
 ###############################flag_ME###################################
-      echo -n "' > /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/Log/Correction/run" >> run$Name$counter.csh
+      echo -n "' >! /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/Log/Lambda/run" >> run$Name$counter.csh
       echo -n $Name$counter >> run$Name$counter.csh
       echo ".log" >> run$Name$counter.csh
 
-      qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/Log/Correction/job$Name$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/Log/Correction/job$Name$counter.err ./run$Name$counter.csh
+      qsub -hard -l projectio=1,scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/Log/Lambda/job$Name$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/Log/Lambda/job$Name$counter.err ./run$Name$counter.csh
 
-      mv run$Name$counter.csh /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/Script/TriFlow/ 
+      mv run$Name$counter.csh /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/Script/TriFlow/
     done
 
   else
