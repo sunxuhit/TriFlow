@@ -14,8 +14,8 @@ void TriFlow(const Char_t *inputFile="/global/project/projectdirs/starprod/rnc/x
 // energy: 0 for 200 GeV, 1 for 39 GeV, 2 for 27 GeV (on progress)
 // flag_ME: 0 for Same Event, 1 for Mixed Event
 
-//        Int_t nEvents = 10000000;
-	Int_t nEvents = 5000;
+        Int_t nEvents = 10000000;
+//	Int_t nEvents = 5000;
 	
         gROOT->LoadMacro("$STAR/StRoot/StMuDSTMaker/COMMON/macros/loadSharedLibraries.C");
 	loadSharedLibraries();

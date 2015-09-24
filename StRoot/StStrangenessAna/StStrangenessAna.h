@@ -19,7 +19,7 @@ class StV0Track;
 class StStrangenessAna : public TObject
 {
   public:
-    StStrangenessAna(Int_t energy, Int_t X_flag, Int_t List, Long64_t start_event, Long64_t stop_event, Int_t mode); // energy: 0 for 200GeV, 1 for 39GeV | X_flag: 0 for Same Event, 1 for Mixed Event | List: number of list to use | mode: 0 for phi, 1 for Lambda, 2 for anti-Lambda, 3 for K0s
+    StStrangenessAna(Int_t energy, Int_t X_flag, Int_t List, Long64_t start_event, Long64_t stop_event, Int_t mode); // energy: 0 for 200GeV, 1 for 39GeV | X_flag: 0 for Same Event, 1 for Mixed Event | List: number of list to use | mode: 0 for phi, 1 for Lambda, 2 for anti-Lambda, 3 for K0S
     ~StStrangenessAna();
 
     void setInputDir(const TString inputdir);
@@ -39,6 +39,7 @@ class StStrangenessAna : public TObject
     void MakePhiME();
     void MakeLambdaSE();
     void MakeLambdaME();
+    void MakeK0S(Int_t X_flag);
     void Finish();
 
   private:
@@ -60,11 +61,13 @@ class StStrangenessAna : public TObject
     Int_t mEnergy;
     Int_t mX_flag; // 0 for Same Event, 1 for Mixed Event
     Int_t mList;
-    Int_t mMode; // 0 for phi, 1 for Lambda, 2 for anti-Lambda, 3 for K0s
+    Int_t mMode; // 0 for phi, 1 for Lambda, 2 for anti-Lambda, 3 for K0S
     StAlexPhiMesonEvent *mXuPhiMeson_event;
     StAlexPhiMesonTrack *mXuPhiMeson_track;
     StV0Event *mLambda_event;
     StV0Track *mLambda_track;
+    StV0Event *mK0S_event;
+    StV0Track *mK0S_track;
     StStrangenessCorr *mStrangenessCorr;
     StStrangenessCut *mStrangenessCut;
     StStrangenessHistoManger *mStrangenessHistoManger;

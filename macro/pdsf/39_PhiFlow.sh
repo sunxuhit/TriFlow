@@ -6,10 +6,10 @@ date
 if [ $# -eq 0 ]
   then
 #    counter=0
-    Name="_39GeV_Lambda_SE_"
+    Name="_39GeV_K0S_SE_"
     suffix=".root"
-    for((counter=0;counter<=20;counter=counter+1))
-#    for((counter=23;counter<=28;counter=counter+1)) #test
+#    for((counter=0;counter<=35;counter=counter+1))
+    for((counter=20;counter<=28;counter=counter+1)) #test
     do
       cp ./run.csh ./run$Name$counter.csh
 
@@ -32,15 +32,15 @@ if [ $# -eq 0 ]
 ############################start_event#################################
 
 #############################stop_event#################################
-      echo -n 1000000000',' >> run$Name$counter.csh  # stop_event
-#      echo -n 100024',' >> run$Name$counter.csh  # stop_event: test mode
+#      echo -n 1000000000',' >> run$Name$counter.csh  # stop_event
+      echo -n 100024',' >> run$Name$counter.csh  # stop_event: test mode
 #############################stop_event#################################
 
 ##############################Partilce##################################
 #      echo 0')'"'" >> run$Name$counter.csh  # phi meson
 #      echo 1')'"'" >> run$Name$counter.csh  # Lambda
-      echo 2')'"'" >> run$Name$counter.csh  # anti-Lambda
-#      echo 3')'"'" >> run$Name$counter.csh  # K0s
+#      echo 2')'"'" >> run$Name$counter.csh  # anti-Lambda
+      echo 3')'"'" >> run$Name$counter.csh  # K0s
 ##############################Partilce##################################
 
       qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G,projectio=1 -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/Log/Lambda/flow_Lambda/job$Name$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/Log/Lambda/flow_Lambda/job$Name$counter.err ./run$Name$counter.csh

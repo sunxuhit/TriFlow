@@ -184,12 +184,14 @@ void StStrangenessAna::InitSE()
   if(mMode == 0) mXuPhiMeson_event = new StAlexPhiMesonEvent();
   if(mMode == 1) mLambda_event = new StV0Event();
   if(mMode == 2) mLambda_event = new StV0Event();
+  if(mMode == 3) mK0S_event = new StV0Event();
 
   if(mSE_input_flag == 1)
   {
     if(mMode == 0) mInPut_SE->SetBranchAddress( XUV0_EVENT_BRANCH, &mXuPhiMeson_event );
     if(mMode == 1) mInPut_SE->SetBranchAddress( XUV0_EVENT_BRANCH, &mLambda_event);
     if(mMode == 2) mInPut_SE->SetBranchAddress( XUV0_EVENT_BRANCH, &mLambda_event);
+    if(mMode == 3) mInPut_SE->SetBranchAddress( XUV0_EVENT_BRANCH, &mK0S_event);
 
     Int_t num_events_SE = mInPut_SE->GetEntriesFast();
     cout << "Number of events in file(s) = " << num_events_SE << endl;
@@ -255,12 +257,14 @@ void StStrangenessAna::InitME()
   if(mMode == 0) mXuPhiMeson_event = new StAlexPhiMesonEvent();
   if(mMode == 1) mLambda_event = new StV0Event();
   if(mMode == 2) mLambda_event = new StV0Event();
+  if(mMode == 3) mK0S_event = new StV0Event();
 
   if(mME_input_flag == 1)
   {
     if(mMode == 0) mInPut_ME->SetBranchAddress( XUV0_EVENT_BRANCH, &mXuPhiMeson_event );
     if(mMode == 1) mInPut_ME->SetBranchAddress( XUV0_EVENT_BRANCH, &mLambda_event);
     if(mMode == 2) mInPut_ME->SetBranchAddress( XUV0_EVENT_BRANCH, &mLambda_event);
+    if(mMode == 3) mInPut_ME->SetBranchAddress( XUV0_EVENT_BRANCH, &mK0S_event);
 
     Int_t num_events_ME = mInPut_ME->GetEntriesFast();
     cout << "Number of events in file(s) = " << num_events_ME << endl;
@@ -278,6 +282,7 @@ void StStrangenessAna::Make()
     if(mMode == 0) MakePhiSE();
     if(mMode == 1) MakeLambdaSE();
     if(mMode == 2) MakeLambdaSE();
+    if(mMode == 3) MakeK0S(mX_flag);
   }
 
   if(mX_flag == 1)
@@ -285,6 +290,7 @@ void StStrangenessAna::Make()
     if(mMode == 0) MakePhiME();
     if(mMode == 1) MakeLambdaME();
     if(mMode == 2) MakeLambdaME();
+    if(mMode == 3) MakeK0S(mX_flag);
   }
 }
 
@@ -1373,6 +1379,332 @@ void StStrangenessAna::MakeLambdaME()
 	      TLorentzVector lGTrackCB = lGTrackC + lGTrackB; // misidentify K* -> Lambda
 	      Double_t InvMassCB = lGTrackCB.M(); // Inv Mass of K*
 	      if(!(InvMassCB > 0.89594-3*0.0487 && InvMassCB < 0.89594+3*0.0487))
+	      {
+		mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight);
+	      }
+	    }
+	  }
+	}
+      }
+    }
+  }
+
+  cout << "." << flush;
+  cout << " " << stop_event_use-start_event_use << "(" << 100 << "%)";
+  cout << endl;
+}
+
+// K0S loop for Same Event and Mixed Event
+void StStrangenessAna::MakeK0S(Int_t X_flag)
+{
+  Long64_t start_event_use;
+  Long64_t stop_event_use;
+  if(X_flag == 0)
+  {
+    start_event_use = mStartEvent_SE;
+    stop_event_use  = mStopEvent_SE;
+    mInPut_SE->SetBranchAddress( XUV0_EVENT_BRANCH, &mK0S_event);
+    mInPut_SE->GetEntry(0); // For unknown reasons root doesn't like it if someone starts to read a file not from the 0 entry
+  }
+  if(X_flag == 1)
+  {
+    start_event_use = mStartEvent_ME;
+    stop_event_use  = mStopEvent_ME;
+    mInPut_ME->SetBranchAddress( XUV0_EVENT_BRANCH, &mK0S_event);
+    mInPut_ME->GetEntry(0); // For unknown reasons root doesn't like it if someone starts to read a file not from the 0 entry
+  }
+
+  // Initialise Event Head
+  StThreeVectorF PrimaryVertex(0.0,0.0,0.0);
+  Int_t          RunId = 0;
+  Int_t          RefMult = 0;
+  Int_t          Centrality = 0;
+  Int_t          N_prim = 0;
+  Int_t          N_non_prim = 0;
+  Int_t          N_Tof_match = 0;
+  Float_t        ZDCx = 0.0; 
+  Float_t        BBCx = 0.0; 
+  Float_t        VzVpd = 0.0;
+  Int_t          NumTrackUsed = 0;
+  // ---------------------------------------QVector---------------------------------------------
+  TVector2       Q2East[4];
+  TVector2       Q2West[4];
+  TVector2       Q3East[4];
+  TVector2       Q3West[4];
+  // -----------------------------------Number of Tracks----------------------------------------
+  Int_t          NumTrackEast[4];
+  Int_t          NumTrackWest[4];
+  for(Int_t j = 0; j < 4; j++)
+  {
+    Q2East[j].Set(0.0,0.0);
+    Q2West[j].Set(0.0,0.0);
+    Q3East[j].Set(0.0,0.0);
+    Q3West[j].Set(0.0,0.0);
+    NumTrackEast[j] = 0;
+    NumTrackWest[j] = 0;
+  }
+
+  for(Long64_t counter = start_event_use; counter < stop_event_use; counter++)
+  {
+    if (X_flag == 0 && !mInPut_SE->GetEntry( counter )) // take the event -> information is stored in event
+      break;  // end of data chunk
+
+    if (X_flag == 1 && !mInPut_ME->GetEntry( counter )) // take the event -> information is stored in event
+      break;  // end of data chunk
+
+    // get Event Header
+    PrimaryVertex     = mK0S_event->getPrimaryVertex();
+    RunId             = mK0S_event->getRunId();
+    RefMult           = mK0S_event->getRefMult();
+    Centrality        = mK0S_event->getCentrality();
+    N_prim            = mK0S_event->getN_prim();
+    N_non_prim        = mK0S_event->getN_non_prim();
+    N_Tof_match       = mK0S_event->getN_Tof_match();
+    ZDCx              = mK0S_event->getZDCx(); 
+    BBCx              = mK0S_event->getBBCx(); 
+    VzVpd             = mK0S_event->getVzVpd();
+    NumTrackUsed      = mK0S_event->getNumTracks();
+
+    for(Int_t j = 0; j < 4; j++)
+    {
+      Q2East[j]       = mK0S_event->getQ2East(j);
+      Q2West[j]       = mK0S_event->getQ2West(j);
+      Q3East[j]       = mK0S_event->getQ3East(j);
+      Q3West[j]       = mK0S_event->getQ3West(j);
+      NumTrackEast[j] = mK0S_event->getNumTrackEast(j);
+      NumTrackWest[j] = mK0S_event->getNumTrackWest(j);
+    }
+ 
+    // Initialise Track 
+    Float_t m2A = -999.9;
+    Float_t m2B = -999.9;
+    Float_t nsA = -999.9;
+    Float_t nsB = -999.9;
+    Float_t dcaA = -999.9;
+    Float_t dcaB = -999.9;
+    TLorentzVector lGTrackA(0.0,0.0,0.0,0.0);
+    TLorentzVector lGTrackB(0.0,0.0,0.0,0.0);
+    TLorentzVector lPTrackA(0.0,0.0,0.0,0.0);
+    TLorentzVector lPTrackB(0.0,0.0,0.0,0.0);
+    Int_t flagA = -1;
+    Int_t flagB = -1;
+    Float_t dcaAB = -999.9;
+    Float_t decaylength = -999.9; 
+    Float_t dcaV0 = -999.9;
+
+    // vz sign
+    Int_t vz_sign;
+    if(PrimaryVertex.z() > 0.0)
+    {
+      vz_sign = 0;
+    }
+    else
+    {
+      vz_sign = 1;
+    }
+
+    // Centrality
+    mRefMultCorr->init(RunId);
+    if(mEnergy == 0) mRefMultCorr->initEvent(RefMult,PrimaryVertex.z(),ZDCx);
+    if(mEnergy != 0) mRefMultCorr->initEvent(RefMult,PrimaryVertex.z());
+    const Int_t cent9 = Centrality;
+    const Double_t reweight = mRefMultCorr->getWeight();
+
+    // runIndex
+    mRunIdEventsDb = StRunIdEventsDb::Instance(Strangeness::mBeamEnergy[mEnergy],Strangeness::mBeamYear[mEnergy]);
+    const Int_t runIndex = mRunIdEventsDb->getRunIdIndex(RunId); // expensive
+    //cout << runIndex << endl;
+
+    if (counter != 0  &&  counter % 1000 == 0)
+      cout << "." << flush;
+    if (counter != 0  &&  counter % 10000 == 0)
+    {
+      if((stop_event_use-start_event_use) > 0)
+      {
+	Double_t event_percent = 100.0*((Double_t)(counter-start_event_use))/((Double_t)(stop_event_use-start_event_use));
+	cout << " " << counter-start_event_use << " (" << event_percent << "%) " << "\n" << "==> Processing data (strangeness_flow) " << flush;
+      }
+    }
+
+    // get Track Information
+    for(Int_t j = 0; j < Strangeness::mEtaGap_total; j++)
+    {
+      if(mStrangenessCorr->passTrackNumCut(NumTrackEast[j],NumTrackWest[j]))
+      {
+	for(UShort_t nTracks = 0; nTracks < NumTrackUsed; nTracks++) // loop over all tracks of the actual event
+	{
+	  mK0S_track = mK0S_event->getTrack(nTracks);
+	  m2A = mK0S_track->getMass2A();
+	  m2B = mK0S_track->getMass2B();
+	  nsA = mK0S_track->getNSigA();
+	  nsB = mK0S_track->getNSigB();
+	  dcaA = mK0S_track->getDcaA();
+	  dcaB = mK0S_track->getDcaB();
+	  lGTrackA = mK0S_track->getGTrackA();
+	  lGTrackB = mK0S_track->getGTrackB();
+	  lPTrackA = mK0S_track->getPTrackA();
+	  lPTrackB = mK0S_track->getPTrackB();
+	  flagA = mK0S_track->getFlagA();
+	  flagB = mK0S_track->getFlagB();
+	  dcaAB = mK0S_track->getDcaAB();
+	  decaylength = mK0S_track->getDecayLength(); 
+	  dcaV0 = mK0S_track->getDcaV0();
+
+	  Float_t GpA = lGTrackA.P();
+	  Float_t GpB = lGTrackB.P();
+	  TLorentzVector lGTrack = lGTrackA + lGTrackB; // Lorentz vector for mother particle
+	  Float_t pt_lGTrack = lGTrack.Perp();
+
+	  // apply additional PID cut to increase significance
+	  // final mass2 cut
+	  Float_t Mass2_low_pi_plus;
+	  Float_t Mass2_up_pi_plus;
+	  if(GpA < 0.75)
+	  {
+	    Mass2_low_pi_plus = -0.013;
+	    Mass2_up_pi_plus =  0.047;
+	  }
+	  if(GpA >= 0.75)
+	  {
+	    Mass2_low_pi_plus =  0.053 - 0.088*GpB;
+	    Mass2_up_pi_plus = -0.004 + 0.068*GpB;
+	  }
+
+	  Float_t Mass2_low_pi_minus;
+	  Float_t Mass2_up_pi_minus;
+	  if(GpB < 0.75)
+	  {
+	    Mass2_low_pi_minus = -0.013;
+	    Mass2_up_pi_minus  =  0.047;
+	  }
+	  if(GpB >= 0.75)
+	  {
+	    Mass2_low_pi_minus =  0.053 - 0.088*GpB;
+	    Mass2_up_pi_minus  = -0.004 + 0.068*GpB;
+	  }
+
+	  if(
+	       fabs(dcaA)    > 0.7
+	    && fabs(dcaB)    > 0.7
+	    && dcaAB         < 1.0
+	    && decaylength   > 3.0
+	    && dcaV0         < 0.8
+	    && ((m2A > Mass2_low_pi_plus && m2A < Mass2_up_pi_plus) || (m2A < -10))
+	    && ((m2B > Mass2_low_pi_minus && m2B < Mass2_up_pi_minus) || (m2B < -10))
+	    )
+	  {
+	    Float_t phi_lGTrack = lGTrack.Phi();
+	    Float_t InvMass_lGTrack = lGTrack.M();
+
+	    if(mStrangenessCut->passPhiEtaEast(lGTrack)) // neg eta(east)
+	    { // Below is West Only
+	      TVector2 Q2Vector = Q2West[j];
+	      TVector2 Q3Vector = Q3West[j];
+	      // subtract auto-correlation from pos eta(west) event plane
+	      if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaWest(lPTrackA,j)) // trackA
+	      {
+		Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
+
+		TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
+		TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
+		Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
+
+		TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
+		TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
+		Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
+	      }
+	      if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaWest(lPTrackB,j)) // trackB
+	      {
+		Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
+
+		TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
+		TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
+		Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
+
+		TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
+		TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
+		Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
+	      }
+	      Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
+	      Float_t Psi2_west = mStrangenessCorr->calShiftAngle2West_EP(Q2Vector,runIndex,cent9,vz_sign,j);
+	      Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
+	      Float_t Psi3_west = mStrangenessCorr->calShiftAngle3West_EP(Q3Vector,runIndex,cent9,vz_sign,j);
+	      Float_t phi_Psi2 = phi_lGTrack - Psi2_west;
+	      Float_t phi_Psi3 = phi_lGTrack - Psi3_west;
+
+	      mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight);
+
+	      //-----------------------------------------------------------------------------
+	      // get Lambda by misidentification
+	      TLorentzVector  lGTrackP, lGTrackPbar;
+	      lGTrackP.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.93827); // set Lorentz vector of pi+ to p
+	      lGTrackPbar.SetXYZM(lGTrackB.X(),lGTrackB.Y(),lGTrackB.Z(),0.93827); // set Lorentz vector of pi- to pbar
+
+	      // Invariant mass calculations K0s
+	      TLorentzVector trackLambda      = lGTrackP+lGTrackB; // p + pi-
+	      TLorentzVector trackAntiLambda      = lGTrackPbar+lGTrackA; // pbar + pi+
+	      Double_t InvMassLambda = trackLambda.M(); // invariant mass of Lambda
+	      Double_t InvMassAntiLambda = trackAntiLambda.M(); // invariant mass of Lambda
+	      //-----------------------------------------------------------------------------
+
+	      if(!((InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3) || (InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3)))
+	      {
+		mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight);
+	      }
+	    }
+
+	    if(mStrangenessCut->passPhiEtaWest(lGTrack)) // pos eta
+	    { // Below is East Only
+	      TVector2 Q2Vector = Q2East[j];
+	      TVector2 Q3Vector = Q3East[j];
+	      // subtract auto-correlation from neg eta(east) event plane
+	      if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaEast(lPTrackA,j)) // trackA
+	      {
+		Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
+
+		TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
+		TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
+		Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
+
+		TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
+		TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
+		Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
+	      }
+	      if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaEast(lPTrackB,j)) // trackB
+	      {
+		Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
+
+		TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
+		TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
+		Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
+
+		TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
+		TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
+		Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
+	      }
+	      Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
+	      Float_t Psi2_east = mStrangenessCorr->calShiftAngle2East_EP(Q2Vector,runIndex,cent9,vz_sign,j);
+	      Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
+	      Float_t Psi3_east = mStrangenessCorr->calShiftAngle3East_EP(Q3Vector,runIndex,cent9,vz_sign,j);
+	      Float_t phi_Psi2 = phi_lGTrack - Psi2_east;
+	      Float_t phi_Psi3 = phi_lGTrack - Psi3_east;
+
+	      mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight);
+
+	      //-----------------------------------------------------------------------------
+	      // get Lambda by misidentification
+	      TLorentzVector  lGTrackP, lGTrackPbar;
+	      lGTrackP.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.93827); // set Lorentz vector of pi+ to p
+	      lGTrackPbar.SetXYZM(lGTrackB.X(),lGTrackB.Y(),lGTrackB.Z(),0.93827); // set Lorentz vector of pi- to pbar
+
+	      // Invariant mass calculations K0s
+	      TLorentzVector trackLambda      = lGTrackP+lGTrackB; // p + pi-
+	      TLorentzVector trackAntiLambda      = lGTrackPbar+lGTrackA; // pbar + pi+
+	      Double_t InvMassLambda = trackLambda.M(); // invariant mass of Lambda
+	      Double_t InvMassAntiLambda = trackAntiLambda.M(); // invariant mass of Lambda
+	      //-----------------------------------------------------------------------------
+
+	      if(!((InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3) || (InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3)))
 	      {
 		mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight);
 	      }

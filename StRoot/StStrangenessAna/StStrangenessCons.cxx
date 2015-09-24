@@ -4,10 +4,10 @@
 ClassImp(Strangeness)
 
 //-----------------------------------------------------------------
-TString Strangeness::v0_tree[4]  = {"XuPhiMesonEvent","LambdaEvent","antiLambdaEvent","K0sEvent"};
-TString Strangeness::v0_branch[4] = {"phi_flow_branch","Lambda_flow_branch","antiLambda_flow_branch","K0s_flow_branch"};
+TString Strangeness::v0_tree[4]  = {"XuPhiMesonEvent","LambdaEvent","antiLambdaEvent","K0SEvent"};
+TString Strangeness::v0_branch[4] = {"phi_flow_branch","Lambda_flow_branch","antiLambda_flow_branch","K0S_flow_branch"};
 TString Strangeness::Energy[3] = {"200GeV","39GeV","27GeV"};
-TString Strangeness::Partype[4] = {"Phi","Lambda","AntiLambda","K0s"};
+TString Strangeness::Partype[4] = {"Phi","Lambda","AntiLambda","K0S"};
 Int_t   Strangeness::mList_Delta = 20;
 
 //--------------------------------------------------------------------
@@ -67,4 +67,4 @@ Int_t Strangeness::EtaGap_stop  = 4;
 Int_t Strangeness::Phi_Psi_total = 7;
 
 Float_t Strangeness::InvMass_low[4] = {0.98,1.06,1.06,0.4};
-Float_t Strangeness::InvMass_high[4] = {1.05,1.20,1.20,0.4};
+Float_t Strangeness::InvMass_high[4] = {1.05,1.20,1.20,0.6};

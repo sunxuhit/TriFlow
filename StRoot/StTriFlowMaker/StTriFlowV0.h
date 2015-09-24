@@ -29,6 +29,7 @@ class StTriFlowV0
     void InitPhi();
     void InitLambda();
     void InitAntiLambda();
+    void InitK0S();
 
     void doPhi(Int_t,Int_t,Int_t,Int_t);
     void MixEvent_Phi(Int_t,StPicoDst*,Int_t,Float_t,Float_t);
@@ -44,9 +45,15 @@ class StTriFlowV0
     void clear_Lambda(Int_t,Int_t,Int_t);
     void clear_AntiLambda(Int_t,Int_t,Int_t);
 
+    void doK0S(Int_t,Int_t,Int_t,Int_t);
+    void MixEvent_K0S(Int_t,StPicoDst*,Int_t,Float_t,Float_t);
+    void SetTopoCutK0S(Float_t,Float_t,Float_t,Float_t,Float_t,Float_t);
+    void clear_K0S(Int_t,Int_t,Int_t);
+
     void WritePhiMass2();
     void WriteLambdaMass2();
     void WriteAntiLambdaMass2();
+    void WriteK0SMass2();
 
 
     void clearEvent();
@@ -65,10 +72,12 @@ class StTriFlowV0
     TH2F *h_Mass2_sub;
     TH2F *h_Mass2_K0s;
     TH2F *h_Mass2_p;
+    TH2F *h_Mass2_Lambda;
+    TH2F *h_Mass2_AntiLambda;
     Int_t mEventCounter2[9][10][5]; // 0 = centrality bin, 1 = vertexZ bin, 2 = EP bin
 
     // topology cut for v0
-    Float_t mDca_proton, mDca_pion, mDcaAB, mDecayLength, mDcaV0, mDca_pion_Pre, mInvLambda_low, mInvLambda_high;
+    Float_t mDca_proton, mDca_pion, mDcaAB, mDecayLength, mDcaV0, mDca_pion_Pre, mInvLambda_low, mInvLambda_high, mInvK0S_low, mInvK0S_high;
 
     // 0 = centrality bin, 1 = vertexZ bin, 2 = EP bin, 3 = mixed event bin, 4 = charge bin(0 for pos, 1 for neg) || push_back->track
     vectorHelixMap mHelix_Pion;
@@ -93,6 +102,7 @@ class StTriFlowV0
 
     TTree *mTree_Lambda;
     TTree *mTree_AntiLambda;
+    TTree *mTree_K0S;
     StV0Event *mV0Event;
     StV0Track *mV0Track;
 
