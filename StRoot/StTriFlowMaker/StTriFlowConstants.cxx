@@ -96,6 +96,6 @@ TString TriFlow::Energy[3] = {"200GeV","39GeV","27GeV"};
 Int_t TriFlow::Bin_Centrality = 9;
 Int_t TriFlow::Bin_VertexZ = 10;
 Int_t TriFlow::Bin_Phi_Psi = 5;
-Int_t TriFlow::Buffer_depth = 5;
+Int_t TriFlow::Buffer_depth = 3;
 //Int_t TriFlow::Flag_ME = 0; // 0 for same event, 1 for mixed event
 TString TriFlow::MixEvent[2] = {"SE","ME"};
