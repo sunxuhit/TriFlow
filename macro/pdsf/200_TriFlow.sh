@@ -5,12 +5,12 @@ date
 
 if [ $# -eq 0 ]
   then
-    Name="_200GeV_K0S_SE_"
+    Name="_200GeV_Lambda_SE_"
     suffix=".root"
     List="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/run_list/200GeV_"
     suffixlist=".list"
-    for((counter=1;counter<=4034;counter=counter+1)) # Lambda and anti-Lambda
-#    for((counter=123;counter<=213;counter=counter+1)) # test
+#    for((counter=1;counter<=8067;counter=counter+1)) # Lambda, anti-Lambda and K0S
+    for((counter=1;counter<=2067;counter=counter+1)) # substep
     do
       cp ./run.csh ./run$Name$counter.csh
 
