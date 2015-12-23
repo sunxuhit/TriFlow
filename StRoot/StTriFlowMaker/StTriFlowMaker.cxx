@@ -204,7 +204,7 @@ Int_t StTriFlowMaker::Init()
     mFile_K0S = new TFile(mOutPut_K0S.Data(),"RECREATE");
     mFile_K0S->cd();
     mTriFlowV0->InitK0S();
-    mTriFlowV0->SetTopoCutK0S(0.7,1.0,2.0,1.3,0.7,0.6); // dca_proton, dca_pion, dcaAB, decaylength, dcaV0, dca_pion_pre, InvLambda_low = TriFlow::mMassProton+TriFlow::mMassPion, InvLambda_high
+    mTriFlowV0->SetTopoCutK0S(0.7,1.0,2.0,1.3,0.7,0.6); // dca_pion, dcaAB, decaylength, dcaV0, dca_pion_pre, InvK0S_low = TriFlow::mMassPion+TriFlow::mMassPion, InvK0S_high
     mTriFlowCorrection->InitReCenterCorrection(mEnergy);
     mTriFlowCorrection->InitShiftCorrection(mEnergy);
   }

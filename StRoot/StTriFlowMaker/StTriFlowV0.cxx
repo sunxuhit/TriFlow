@@ -704,7 +704,7 @@ void StTriFlowV0::doLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_P
 	  Double_t InvMassCB          = trackCB.M(); // invariant mass of mother particle
 	  //-----------------------------------------------------------------------------
 
-	  if(fabs(dcaA) > mDca_proton && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high)
+	  if(fabs(dcaA) > mDca_proton && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high) // pre topology cuts
 	  {
 	    Float_t Mass2_proton = mMass2[key_proton][n_proton];
 	    Float_t Mass2_pion   = mMass2[key_pi_minus][n_pi_minus];
@@ -891,7 +891,7 @@ void StTriFlowV0::doLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_P
 	    Double_t InvMassCB          = trackCB.M(); // invariant mass of mother particle
 	    //-----------------------------------------------------------------------------
 
-	    if(fabs(dcaA) > mDca_proton && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high)
+	    if(fabs(dcaA) > mDca_proton && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high) // pre topology cuts
 	    {
 	      Float_t Mass2_proton = mMass2[key_A_proton][n_proton];
 	      Float_t Mass2_pion   = mMass2[key_B_pi_minus][n_pi_minus];
@@ -1009,7 +1009,7 @@ void StTriFlowV0::doLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_P
 	    Double_t InvMassCA          = trackCA.M(); // invariant mass of mother particle
 	    //-----------------------------------------------------------------------------
 
-	    if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_proton && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high)
+	    if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_proton && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high) // pre topology cuts
 	    {
 	      Float_t Mass2_proton = mMass2[key_B_proton][n_proton];
 	      Float_t Mass2_pion   = mMass2[key_A_pi_minus][n_pi_minus];
@@ -1179,7 +1179,7 @@ void StTriFlowV0::doAntiLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t B
 	  Double_t InvMassCB          = trackCB.M(); // invariant mass of mother particle
 	  //-----------------------------------------------------------------------------
 
-	  if(fabs(dcaA) > mDca_proton && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high)
+	  if(fabs(dcaA) > mDca_proton && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high) // pre topology cut
 	  {
 	    Float_t Mass2_proton = mMass2[key_antiproton][n_antiproton];
 	    Float_t Mass2_pion   = mMass2[key_pi_plus][n_pi_plus];
@@ -1366,7 +1366,7 @@ void StTriFlowV0::doAntiLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t B
 	    Double_t InvMassCB          = trackCB.M(); // invariant mass of mother particle
 	    //-----------------------------------------------------------------------------
 
-	    if(fabs(dcaA) > mDca_proton && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high)
+	    if(fabs(dcaA) > mDca_proton && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high) // pre topology cuts
 	    {
 	      Float_t Mass2_proton = mMass2[key_A_antiproton][n_antiproton];
 	      Float_t Mass2_pion   = mMass2[key_B_pi_plus][n_pi_plus];
@@ -1484,7 +1484,7 @@ void StTriFlowV0::doAntiLambda(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t B
 	    Double_t InvMassCA          = trackCA.M(); // invariant mass of mother particle
 	    //-----------------------------------------------------------------------------
 
-	    if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_proton && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high)
+	    if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_proton && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvLambda_low && InvMassAB < mInvLambda_high) // pre topology cuts
 	    {
 	      Float_t Mass2_proton = mMass2[key_B_antiproton][n_antiproton];
 	      Float_t Mass2_pion   = mMass2[key_A_pi_plus][n_pi_plus];
@@ -1658,7 +1658,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	  Double_t InvMassAntiLambda = trackAntiLambda.M(); // invariant mass of Lambda
 	  //-----------------------------------------------------------------------------
 
-	  if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvK0S_low && InvMassAB < mInvK0S_high)
+	  if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvK0S_low && InvMassAB < mInvK0S_high) // pre topology cuts
 	  {
 	    Float_t Mass2_pi_plus  = mMass2[key_pi_plus][n_pi_plus];
 	    Float_t Mass2_pi_minus = mMass2[key_pi_minus][n_pi_minus];
@@ -1857,7 +1857,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	    Double_t InvMassAntiLambda = trackAntiLambda.M(); // invariant mass of Lambda
 	    //-----------------------------------------------------------------------------
 
-	    if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvK0S_low && InvMassAB < mInvK0S_high)
+	    if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvK0S_low && InvMassAB < mInvK0S_high) // pre topology cuts
 	    {
 	      Float_t Mass2_pi_plus  = mMass2[key_A_pi_plus][n_pi_plus];
 	      Float_t Mass2_pi_minus = mMass2[key_B_pi_minus][n_pi_minus];
@@ -1987,7 +1987,7 @@ void StTriFlowV0::doK0S(Int_t Flag_ME, Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2
 	    Double_t InvMassAntiLambda = trackAntiLambda.M(); // invariant mass of Lambda
 	    //-----------------------------------------------------------------------------
 
-	    if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvK0S_low && InvMassAB < mInvK0S_high)
+	    if(fabs(dcaA) > mDca_pion && fabs(dcaB) > mDca_pion && fabs(dcaAB) < mDcaAB && VerdistX > mDecayLength && VerdistY < mDcaV0 && InvMassAB > mInvK0S_low && InvMassAB < mInvK0S_high) // pre topology cuts
 	    {
 	      Float_t Mass2_pi_plus  = mMass2[key_B_pi_plus][n_pi_plus];
 	      Float_t Mass2_pi_minus = mMass2[key_A_pi_minus][n_pi_minus];

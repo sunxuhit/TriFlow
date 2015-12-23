@@ -79,6 +79,13 @@ class StStrangenessAna : public TObject
     static char* XUV0_EVENT_TREE;
     static char* XUV0_EVENT_BRANCH;
 
+    static Int_t n_cuts;
+    static Float_t pt_add[20];
+    static Float_t p_add[20];
+    static Float_t nsLow_add[20];
+    static Float_t nsHigh_add[20];
+
+
   ClassDef(StStrangenessAna,1)
 };
 #endif

@@ -63,6 +63,8 @@ class Strangeness
     static Int_t EtaGap_stop;
 
     static Int_t Phi_Psi_total;
+    static Int_t N_cuts;
+
     static Float_t InvMass_low[4];
     static Float_t InvMass_high[4];
 

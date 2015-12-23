@@ -66,5 +66,7 @@ Int_t Strangeness::EtaGap_stop  = 4;
 
 Int_t Strangeness::Phi_Psi_total = 7;
 
+Int_t Strangeness::N_cuts = 20;
+
 Float_t Strangeness::InvMass_low[4] = {0.98,1.06,1.06,0.4};
 Float_t Strangeness::InvMass_high[4] = {1.05,1.20,1.20,0.6};
