@@ -32,8 +32,8 @@ class Strangeness
     //--------------------------------------------------------------------
     // Histogram
     // pt bin
-    static Float_t pt_low_phi[23];
-    static Float_t pt_up_phi[23];
+    static Float_t pt_low_phi[25];
+    static Float_t pt_up_phi[25];
 
     // Centrality bin
     static Int_t   cent_low[4];
