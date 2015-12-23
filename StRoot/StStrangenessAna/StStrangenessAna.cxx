@@ -26,10 +26,10 @@ char* StStrangenessAna::XUV0_EVENT_BRANCH = NULL;
 
 // Systematic Errors estimation
 // phi meson
-Float_t StStrangenessAna::pt_add[Strangeness::N_cuts]        = {0.0,0.3,-0.2,0.2,0.2,0.1,-0.2,0.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.1,0.1,-0.05,0.05};
-Float_t StStrangenessAna::p_add[Strangeness::N_cuts]         = {0.0,0.15,-0.2,0.2,-0.2,0.2,-0.2,0.2,0.0,0.0,0.4,-0.1,0.2,-0.2,0.0,0.0,-0.1,0.1,-0.05,0.05};
-Float_t StStrangenessAna::nsLow_add[Strangeness::N_cuts]     = {0.0,0.15,-0.2,0.2,0.1,-0.1,0.0,0.0,-0.1,-0.2,0.0,0.1,0.0,0.0,-0.4,0.4,0.0,0.0,0.0,0.0};
-Float_t StStrangenessAna::nsHigh_add[Strangeness::N_cuts]    = {0.0,-0.15,-0.2,0.2,0.0,0.0,0.0,0.0,0.1,0.2,0.0,0.1,0.0,0.0,-0.4,0.4,0.0,0.0,0.0,0.0};
+Float_t StStrangenessAna::pt_add[20]        = {0.0,0.3,-0.2,0.2,0.2,0.1,-0.2,0.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.1,0.1,-0.05,0.05};
+Float_t StStrangenessAna::p_add[20]         = {0.0,0.15,-0.2,0.2,-0.2,0.2,-0.2,0.2,0.0,0.0,0.4,-0.1,0.2,-0.2,0.0,0.0,-0.1,0.1,-0.05,0.05};
+Float_t StStrangenessAna::nsLow_add[20]     = {0.0,0.15,-0.2,0.2,0.1,-0.1,0.0,0.0,-0.1,-0.2,0.0,0.1,0.0,0.0,-0.4,0.4,0.0,0.0,0.0,0.0};
+Float_t StStrangenessAna::nsHigh_add[20]    = {0.0,-0.15,-0.2,0.2,0.0,0.0,0.0,0.0,0.1,0.2,0.0,0.1,0.0,0.0,-0.4,0.4,0.0,0.0,0.0,0.0};
 
 Int_t n_cuts = 14; // temporary for Lambda, anti-Lambda and K0S => Code developing
 //----------------------------------------------------
@@ -445,12 +445,12 @@ void StStrangenessAna::MakePhiSE()
 	  {
 	    // apply additional PID cut to increase significance
 	    if(
-		((fabs(pA) <= 0.65+p_add[icut] && m2A < -10) || (m2A > 0 && ((fabs(pA) < 1.5 && m2A > 0.16 && m2A < 0.36) || (fabs(pA) >= 1.5 && m2A > 0.125 && m2A < 0.36)) )) &&
-		((fabs(pB) <= 0.65+p_add[icut] && m2B < -10) || (m2B > 0 && ((fabs(pB) < 1.5 && m2B > 0.16 && m2B < 0.36) || (fabs(pB) >= 1.5 && m2B > 0.125 && m2B < 0.36)) )) &&
-		((pt_lTrack+pt_add[icut]) < 0.8 || ((pt_lTrack+pt_add[icut]) >= 0.8 && ( (m2A > 0.16 && m2A < 0.36) || (m2B > 0.16 && m2B < 0.36)))) &&
+		((fabs(pA) <= 0.65+p_add[i_cut] && m2A < -10) || (m2A > 0 && ((fabs(pA) < 1.5 && m2A > 0.16 && m2A < 0.36) || (fabs(pA) >= 1.5 && m2A > 0.125 && m2A < 0.36)) )) &&
+		((fabs(pB) <= 0.65+p_add[i_cut] && m2B < -10) || (m2B > 0 && ((fabs(pB) < 1.5 && m2B > 0.16 && m2B < 0.36) || (fabs(pB) >= 1.5 && m2B > 0.125 && m2B < 0.36)) )) &&
+		((pt_lTrack+pt_add[i_cut]) < 0.8 || ((pt_lTrack+pt_add[i_cut]) >= 0.8 && ( (m2A > 0.16 && m2A < 0.36) || (m2B > 0.16 && m2B < 0.36)))) &&
 		(
-		 ((m2A < -10 && nsA < 2.5+nsHigh_add[icut] && nsA > -(1.5+nsLow_add[icut])) || (m2A > 0.16 && m2A < 0.36)) &&
-		 ((m2B < -10 && nsB < 2.5+nsHigh_add[icut] && nsB > -(1.5+nsLow_add[icut])) || (m2B > 0.16 && m2B < 0.36))
+		 ((m2A < -10 && nsA < 2.5+nsHigh_add[i_cut] && nsA > -(1.5+nsLow_add[i_cut])) || (m2A > 0.16 && m2A < 0.36)) &&
+		 ((m2B < -10 && nsB < 2.5+nsHigh_add[i_cut] && nsB > -(1.5+nsLow_add[i_cut])) || (m2B > 0.16 && m2B < 0.36))
 		)
 	      )
 	    {
@@ -686,12 +686,12 @@ void StStrangenessAna::MakePhiME()
 	  {
 	    // apply additional PID cut to increase significance
 	    if(
-		((fabs(pA) <= 0.65+p_add[icut] && m2A < -10) || (m2A > 0 && ((fabs(pA) < 1.5 && m2A > 0.16 && m2A < 0.36) || (fabs(pA) >= 1.5 && m2A > 0.125 && m2A < 0.36)) )) &&
-		((fabs(pB) <= 0.65+p_add[icut] && m2B < -10) || (m2B > 0 && ((fabs(pB) < 1.5 && m2B > 0.16 && m2B < 0.36) || (fabs(pB) >= 1.5 && m2B > 0.125 && m2B < 0.36)) )) &&
-		((pt_lTrack+pt_add[icut]) < 0.8 || ((pt_lTrack+pt_add[icut]) >= 0.8 && ( (m2A > 0.16 && m2A < 0.36) || (m2B > 0.16 && m2B < 0.36)))) &&
+		((fabs(pA) <= 0.65+p_add[i_cut] && m2A < -10) || (m2A > 0 && ((fabs(pA) < 1.5 && m2A > 0.16 && m2A < 0.36) || (fabs(pA) >= 1.5 && m2A > 0.125 && m2A < 0.36)) )) &&
+		((fabs(pB) <= 0.65+p_add[i_cut] && m2B < -10) || (m2B > 0 && ((fabs(pB) < 1.5 && m2B > 0.16 && m2B < 0.36) || (fabs(pB) >= 1.5 && m2B > 0.125 && m2B < 0.36)) )) &&
+		((pt_lTrack+pt_add[i_cut]) < 0.8 || ((pt_lTrack+pt_add[i_cut]) >= 0.8 && ( (m2A > 0.16 && m2A < 0.36) || (m2B > 0.16 && m2B < 0.36)))) &&
 		(
-		 ((m2A < -10 && nsA < 2.5+nsHigh_add[icut] && nsA > -(1.5+nsLow_add[icut])) || (m2A > 0.16 && m2A < 0.36)) &&
-		 ((m2B < -10 && nsB < 2.5+nsHigh_add[icut] && nsB > -(1.5+nsLow_add[icut])) || (m2B > 0.16 && m2B < 0.36))
+		 ((m2A < -10 && nsA < 2.5+nsHigh_add[i_cut] && nsA > -(1.5+nsLow_add[i_cut])) || (m2A > 0.16 && m2A < 0.36)) &&
+		 ((m2B < -10 && nsB < 2.5+nsHigh_add[i_cut] && nsB > -(1.5+nsLow_add[i_cut])) || (m2B > 0.16 && m2B < 0.36))
 		)
 	      )
 	    {
