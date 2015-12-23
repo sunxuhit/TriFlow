@@ -23,19 +23,21 @@ class StStrangenessHistoManger
     // 2 = eta_gap
     // 3 = phi - Psi
     // 4 = SysErrors
-    TH1F *h_mMass2_EP[23][4][4][7][20];
-    TH1F *h_mMass3_EP[23][4][4][7][20];
+    TH1F *h_mMass2_EP[25][4][4][7][20];
+    TH1F *h_mMass3_EP[25][4][4][7][20];
     // subtract contaminations
-    TH1F *h_mMass2_EP_sub[23][4][4][7][20];
-    TH1F *h_mMass3_EP_sub[23][4][4][7][20];
+    TH1F *h_mMass2_EP_sub[25][4][4][7][20];
+    TH1F *h_mMass3_EP_sub[25][4][4][7][20];
 
     // raw pt spectra
     // 0 = pt bin
-    // 1 = centrality: 0 = 0-80%(0-70%), 1 = 0-10%, 2 = 10-40%, 3 = 40-80%(40-70%)
-    // 2 = eta_gap
-    TH1F *h_mMass_Spec[23][4][4][20];
+    // 1 = pt bin finer
+    // 2 = centrality: 0 = 0-80%(0-70%), 1 = 0-10%, 2 = 10-40%, 3 = 40-80%(40-70%)
+    // 3 = eta_gap
+    // 4 = SysErrors
+    TH1F *h_mMass_Spec[25][2][4][4][20];
     // subtract contaminations
-    TH1F *h_mMass_Spec_sub[23][4][4][20];
+    TH1F *h_mMass_Spec_sub[25][2][4][4][20];
 
     // event plane resolution correction
     // 0 = centrality

@@ -19,7 +19,7 @@ StStrangenessHistoManger::~StStrangenessHistoManger()
 void StStrangenessHistoManger::Init(Int_t X_flag, Int_t mode) // 0 for Same Event, 1 for Mixed Event
 {
   // flow analysis
-  for(Int_t i = 0; i < Strangeness::pt_total_phi; i++) // pt bin | TODO: increase pt_bin to 8 GeV/c
+  for(Int_t i = 0; i < Strangeness::pt_total_phi; i++) // pt bin 
   {
     for(Int_t j = Strangeness::Centrality_start; j < Strangeness::Centrality_stop; j++) // centrality bin
     {
@@ -27,7 +27,7 @@ void StStrangenessHistoManger::Init(Int_t X_flag, Int_t mode) // 0 for Same Even
       {
 	for(Int_t m = 0; m < Strangeness::Phi_Psi_total; m++) // phi-psi bin
 	{
-	  for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++)
+	  for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++) // SysErrors
 	  {
 	    TString Mode[2] = {"SE","ME"};
 	    TString HistName;
@@ -58,18 +58,22 @@ void StStrangenessHistoManger::Init(Int_t X_flag, Int_t mode) // 0 for Same Even
     {
       for(Int_t l = Strangeness::EtaGap_start; l < Strangeness::EtaGap_stop; l++) // eta gap bin
       {
-	for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++)
+	for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++) // SysErrors
 	{
-	  TString Mode[2] = {"SE","ME"};
-	  TString HistName; 
-	  HistName = Form("Spec_pt_%d_Centrality_%d_EtaGap_%d_%s_%s_SysErrors_%d",i,j,l,Strangeness::Partype[mode].Data(),Mode[X_flag].Data(),i_cut);
-	  h_mMass_Spec[i][j][l][i_cut] = new TH1F(HistName.Data(),HistName.Data(),200,Strangeness::InvMass_low[mode],Strangeness::InvMass_high[mode]);
-	  h_mMass_Spec[i][j][l][i_cut]->Sumw2();
+	  for(Int_t i_pT = 0; i_pT < 2; i_pT++)
+	  {
+	    TString Mode[2] = {"SE","ME"};
+	    TString pT[2] = {"low","high"};
+	    TString HistName; 
+	    HistName = Form("Spec_pt_%d_%s_Centrality_%d_EtaGap_%d_%s_%s_SysErrors_%d",i,pT[i_pT].Data(),j,l,Strangeness::Partype[mode].Data(),Mode[X_flag].Data(),i_cut);
+	    h_mMass_Spec[i][i_pT][j][l][i_cut] = new TH1F(HistName.Data(),HistName.Data(),200,Strangeness::InvMass_low[mode],Strangeness::InvMass_high[mode]);
+	    h_mMass_Spec[i][i_pT][j][l][i_cut]->Sumw2();
 
-	  // subtract K0s
-	  HistName = Form("Spec_pt_%d_Centrality_%d_EtaGap_%d_%s_%s_SysErrors_%d_sub",i,j,l,Strangeness::Partype[mode].Data(),Mode[X_flag].Data(),i_cut);
-	  h_mMass_Spec_sub[i][j][l][i_cut] = new TH1F(HistName.Data(),HistName.Data(),200,Strangeness::InvMass_low[mode],Strangeness::InvMass_high[mode]);
-	  h_mMass_Spec_sub[i][j][l][i_cut]->Sumw2();
+	    // subtract K0s
+	    HistName = Form("Spec_pt_%d_%s_Centrality_%d_EtaGap_%d_%s_%s_SysErrors_%d_sub",i,pT[i_pT].Data(),j,l,Strangeness::Partype[mode].Data(),Mode[X_flag].Data(),i_cut);
+	    h_mMass_Spec_sub[i][i_pT][j][l][i_cut] = new TH1F(HistName.Data(),HistName.Data(),200,Strangeness::InvMass_low[mode],Strangeness::InvMass_high[mode]);
+	    h_mMass_Spec_sub[i][i_pT][j][l][i_cut]->Sumw2();
+	  }
 	}
       }
     }
@@ -103,7 +107,7 @@ void StStrangenessHistoManger::Fill(Float_t pt, Int_t Cent9, Int_t eta_gap, Floa
   {
     for(Int_t i = 0; i < Strangeness::pt_total_phi; i++) // pt_bin
     {
-      if(pt > Strangeness::pt_low_phi[i] && pt < Strangeness::pt_up_phi[i])
+      if(pt >= Strangeness::pt_low_phi[i] && pt < Strangeness::pt_up_phi[i])
       {
 	for(Int_t j = Strangeness::Centrality_start; j < Strangeness::Centrality_stop; j++) // centrality bin
 	{
@@ -133,7 +137,7 @@ void StStrangenessHistoManger::Fill(Float_t pt, Int_t Cent9, Int_t eta_gap, Floa
   {
     for(Int_t i = 0; i < Strangeness::pt_total_phi; i++) // pt_bin
     {
-      if(pt > Strangeness::pt_low_phi[i] && pt < Strangeness::pt_up_phi[i])
+      if(pt >= Strangeness::pt_low_phi[i] && pt < Strangeness::pt_up_phi[i])
       {
 	for(Int_t j = Strangeness::Centrality_start; j < Strangeness::Centrality_stop; j++) // centrality bin
 	{
@@ -151,7 +155,14 @@ void StStrangenessHistoManger::Fill(Float_t pt, Int_t Cent9, Int_t eta_gap, Floa
 		    // flow
 		    h_mMass3_EP[i][j][eta_gap][m][i_cut]->Fill(InvMass,(reweight/Res3));
 		    // raw pt spectra
-		    h_mMass_Spec[i][j][eta_gap][i_cut]->Fill(InvMass,reweight);
+		    if(pt < 0.5*(Strangeness::pt_low_phi[i]+Strangeness::pt_up_phi[i])) 
+		    {
+		      h_mMass_Spec[i][0][j][eta_gap][i_cut]->Fill(InvMass,reweight);
+		    }
+		    else
+		    {
+		      h_mMass_Spec[i][1][j][eta_gap][i_cut]->Fill(InvMass,reweight);
+		    }
 		  }
 		}
 	      }
@@ -169,7 +180,7 @@ void StStrangenessHistoManger::Fill_sub(Float_t pt, Int_t Cent9, Int_t eta_gap, 
   {
     for(Int_t i = 0; i < Strangeness::pt_total_phi; i++) // pt_bin
     {
-      if(pt > Strangeness::pt_low_phi[i] && pt < Strangeness::pt_up_phi[i])
+      if(pt >= Strangeness::pt_low_phi[i] && pt < Strangeness::pt_up_phi[i])
       {
 	for(Int_t j = Strangeness::Centrality_start; j < Strangeness::Centrality_stop; j++) // centrality bin
 	{
@@ -199,7 +210,7 @@ void StStrangenessHistoManger::Fill_sub(Float_t pt, Int_t Cent9, Int_t eta_gap, 
   {
     for(Int_t i = 0; i < Strangeness::pt_total_phi; i++) // pt_bin
     {
-      if(pt > Strangeness::pt_low_phi[i] && pt < Strangeness::pt_up_phi[i])
+      if(pt >= Strangeness::pt_low_phi[i] && pt < Strangeness::pt_up_phi[i])
       {
 	for(Int_t j = Strangeness::Centrality_start; j < Strangeness::Centrality_stop; j++) // centrality bin
 	{
@@ -217,7 +228,14 @@ void StStrangenessHistoManger::Fill_sub(Float_t pt, Int_t Cent9, Int_t eta_gap, 
 		    // flow
 		    h_mMass3_EP_sub[i][j][eta_gap][m][i_cut]->Fill(InvMass,(reweight/Res3));
 		    // raw pt spectra
-		    h_mMass_Spec_sub[i][j][eta_gap][i_cut]->Fill(InvMass,reweight);
+		    if(pt < 0.5*(Strangeness::pt_low_phi[i]+Strangeness::pt_up_phi[i])) 
+		    {
+		      h_mMass_Spec_sub[i][0][j][eta_gap][i_cut]->Fill(InvMass,reweight);
+		    }
+		    else
+		    {
+		      h_mMass_Spec_sub[i][1][j][eta_gap][i_cut]->Fill(InvMass,reweight);
+		    }
 		  }
 		}
 	      }
@@ -275,8 +293,11 @@ void StStrangenessHistoManger::Write()
       {
 	for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++) // SysErrors
 	{
-	  h_mMass_Spec[i][j][l][i_cut]->Write();
-	  h_mMass_Spec_sub[i][j][l][i_cut]->Write();
+	  for(Int_t i_pT = 0; i_pT < 2; i_pT++)
+	  {
+	    h_mMass_Spec[i][i_pT][j][l][i_cut]->Write();
+	    h_mMass_Spec_sub[i][i_pT][j][l][i_cut]->Write();
+	  }
 	}
       }
     }
