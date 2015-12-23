@@ -58,16 +58,19 @@ void StStrangenessHistoManger::Init(Int_t X_flag, Int_t mode) // 0 for Same Even
     {
       for(Int_t l = Strangeness::EtaGap_start; l < Strangeness::EtaGap_stop; l++) // eta gap bin
       {
-	TString Mode[2] = {"SE","ME"};
-	TString HistName; 
-	HistName = Form("Spec_pt_%d_Centrality_%d_EtaGap_%d_%s_%s",i,j,l,Strangeness::Partype[mode].Data(),Mode[X_flag].Data());
-	h_mMass_Spec[i][j][l] = new TH1F(HistName.Data(),HistName.Data(),200,Strangeness::InvMass_low[mode],Strangeness::InvMass_high[mode]);
-	h_mMass_Spec[i][j][l]->Sumw2();
+	for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++)
+	{
+	  TString Mode[2] = {"SE","ME"};
+	  TString HistName; 
+	  HistName = Form("Spec_pt_%d_Centrality_%d_EtaGap_%d_%s_%s_SysErrors_%d",i,j,l,Strangeness::Partype[mode].Data(),Mode[X_flag].Data(),i_cut);
+	  h_mMass_Spec[i][j][l][i_cut] = new TH1F(HistName.Data(),HistName.Data(),200,Strangeness::InvMass_low[mode],Strangeness::InvMass_high[mode]);
+	  h_mMass_Spec[i][j][l][i_cut]->Sumw2();
 
-	// subtract K0s
-	HistName = Form("Spec_pt_%d_Centrality_%d_EtaGap_%d_%s_%s_sub",i,j,l,Strangeness::Partype[mode].Data(),Mode[X_flag].Data());
-	h_mMass_Spec_sub[i][j][l] = new TH1F(HistName.Data(),HistName.Data(),200,Strangeness::InvMass_low[mode],Strangeness::InvMass_high[mode]);
-	h_mMass_Spec_sub[i][j][l]->Sumw2();
+	  // subtract K0s
+	  HistName = Form("Spec_pt_%d_Centrality_%d_EtaGap_%d_%s_%s_SysErrors_%d_sub",i,j,l,Strangeness::Partype[mode].Data(),Mode[X_flag].Data(),i_cut);
+	  h_mMass_Spec_sub[i][j][l][i_cut] = new TH1F(HistName.Data(),HistName.Data(),200,Strangeness::InvMass_low[mode],Strangeness::InvMass_high[mode]);
+	  h_mMass_Spec_sub[i][j][l][i_cut]->Sumw2();
+	}
       }
     }
   }
@@ -77,16 +80,19 @@ void StStrangenessHistoManger::Init(Int_t X_flag, Int_t mode) // 0 for Same Even
   {
     for(Int_t l = Strangeness::EtaGap_start; l < Strangeness::EtaGap_stop; l++) // eta gap bin
     {
-      TString Mode[2] = {"SE","ME"};
-      TString HistName;
-      HistName = Form("Yields_Centrality_%d_EtaGap_%d_%s_%s",j,l,Strangeness::Partype[mode].Data(),Mode[X_flag].Data());
-      h_mMass_Yields[j][l] = new TH1F(HistName.Data(),HistName.Data(),200,Strangeness::InvMass_low[mode],Strangeness::InvMass_high[mode]);
-      h_mMass_Yields[j][l]->Sumw2();
+      for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++)
+      {
+	TString Mode[2] = {"SE","ME"};
+	TString HistName;
+	HistName = Form("Yields_Centrality_%d_EtaGap_%d_%s_%s_SysErrors_%d",j,l,Strangeness::Partype[mode].Data(),Mode[X_flag].Data(),i_cut);
+	h_mMass_Yields[j][l][i_cut] = new TH1F(HistName.Data(),HistName.Data(),200,Strangeness::InvMass_low[mode],Strangeness::InvMass_high[mode]);
+	h_mMass_Yields[j][l][i_cut]->Sumw2();
 
-      // subtract K0s
-      HistName = Form("Yields_Centrality_%d_EtaGap_%d_%s_%s_sub",j,l,Strangeness::Partype[mode].Data(),Mode[X_flag].Data());
-      h_mMass_Yields_sub[j][l] = new TH1F(HistName.Data(),HistName.Data(),200,Strangeness::InvMass_low[mode],Strangeness::InvMass_high[mode]);
-      h_mMass_Yields_sub[j][l]->Sumw2();
+	// subtract K0s
+	HistName = Form("Yields_Centrality_%d_EtaGap_%d_%s_%s_SysErrors_%d_sub",j,l,Strangeness::Partype[mode].Data(),Mode[X_flag].Data(),i_cut);
+	h_mMass_Yields_sub[j][l][i_cut] = new TH1F(HistName.Data(),HistName.Data(),200,Strangeness::InvMass_low[mode],Strangeness::InvMass_high[mode]);
+	h_mMass_Yields_sub[j][l][i_cut]->Sumw2();
+      }
     }
   }
 }
