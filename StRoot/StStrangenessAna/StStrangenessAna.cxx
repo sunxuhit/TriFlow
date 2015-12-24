@@ -441,7 +441,8 @@ void StStrangenessAna::MakePhiSE()
 	  TLorentzVector lTrack = lTrackA + lTrackB;
 	  Float_t pt_lTrack = lTrack.Perp();
 
-	  for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++)
+//	  for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++)
+	  for(Int_t i_cut = 0; i_cut < 1; i_cut++)
 	  {
 	    // apply additional PID cut to increase significance
 	    if(
