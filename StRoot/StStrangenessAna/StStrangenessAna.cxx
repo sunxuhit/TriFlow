@@ -642,7 +642,8 @@ void StStrangenessAna::MakePhiME()
     mRefMultCorr->init(RunId);
     if(mEnergy == 0) mRefMultCorr->initEvent(RefMult,PrimaryVertex.z(),ZDCx);
     if(mEnergy != 0) mRefMultCorr->initEvent(RefMult,PrimaryVertex.z());
-    const Int_t cent9 = Centrality;
+//    const Int_t cent9 = Centrality;
+    const Int_t cent9 = mRefMultCorr->getCentralityBin9();
     const Double_t reweight = mRefMultCorr->getWeight();
 
     // runIndex
