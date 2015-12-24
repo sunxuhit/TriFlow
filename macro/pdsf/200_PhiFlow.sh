@@ -6,10 +6,10 @@ date
 if [ $# -eq 0 ]
   then
 #    counter=0
-    Name="_200GeV_Lambda_SE_"
+    Name="_200GeV_Phi_SE_"
     suffix=".root"
 #    for((counter=0;counter<=52;counter=counter+1))
-    for((counter=20;counter<=28;counter=counter+1)) #test
+    for((counter=10;counter<=28;counter=counter+1)) #test
     do
       cp ./run.csh ./run$Name$counter.csh
 
@@ -37,8 +37,8 @@ if [ $# -eq 0 ]
 #############################stop_event#################################
 
 ##############################Partilce##################################
-#      echo 0')'"'" >> run$Name$counter.csh  # phi meson
-      echo 1')'"'" >> run$Name$counter.csh  # Lambda
+      echo 0')'"'" >> run$Name$counter.csh  # phi meson
+#      echo 1')'"'" >> run$Name$counter.csh  # Lambda
 #      echo 2')'"'" >> run$Name$counter.csh  # anti-Lambda
 #      echo 3')'"'" >> run$Name$counter.csh  # K0s
 ##############################Partilce##################################
