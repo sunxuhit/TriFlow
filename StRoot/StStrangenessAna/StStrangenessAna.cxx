@@ -31,7 +31,7 @@ Float_t StStrangenessAna::p_add[20]         = {0.0,0.15,-0.2,0.2,-0.2,0.2,-0.2,0
 Float_t StStrangenessAna::nsLow_add[20]     = {0.0,0.15,-0.2,0.2,0.1,-0.1,0.0,0.0,-0.1,-0.2,0.0,0.1,0.0,0.0,-0.4,0.4,0.0,0.0,0.0,0.0};
 Float_t StStrangenessAna::nsHigh_add[20]    = {0.0,-0.15,-0.2,0.2,0.0,0.0,0.0,0.0,0.1,0.2,0.0,0.1,0.0,0.0,-0.4,0.4,0.0,0.0,0.0,0.0};
 
-Int_t n_cuts = 14; // temporary for Lambda, anti-Lambda and K0S => Code developing
+Int_t StStrangenessAna::n_cuts = 14; // temporary for Lambda, anti-Lambda and K0S => Code developing
 //----------------------------------------------------
 StStrangenessAna::StStrangenessAna(Int_t energy, Int_t X_flag, Int_t List, Long64_t start_event, Long64_t stop_event, Int_t mode)
 {
