@@ -154,6 +154,7 @@ void StStrangenessHistoManger::Fill(Float_t pt, Int_t Cent9, Int_t eta_gap, Floa
 		  {
 		    // flow
 		    h_mMass3_EP[i][j][eta_gap][m][i_cut]->Fill(InvMass,(reweight/Res3));
+		    cout << "i_cut = " << i_cut << ", pT = " << pt << ", InvMass_lTrack = " << InvMass << endl;
 		    // raw pt spectra
 		    if(pt < 0.5*(Strangeness::pt_low_phi[i]+Strangeness::pt_up_phi[i])) 
 		    {

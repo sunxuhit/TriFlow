@@ -533,7 +533,7 @@ void StStrangenessAna::MakePhiSE()
 		Float_t phi_Psi3 = phi_lTrack - Psi3_east;
 
 		mStrangenessHistoManger->Fill(pt_lTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lTrack,reweight,i_cut);
-		cout << "i_cut = " << i_cut << "pT = " << pt_lTrack << ", InvMass_lTrack = " << InvMass_lTrack << endl;
+//		cout << "i_cut = " << i_cut << "pT = " << pt_lTrack << ", InvMass_lTrack = " << InvMass_lTrack << endl;
 	      }
 	    }
 	  }
