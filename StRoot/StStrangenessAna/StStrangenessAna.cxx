@@ -441,8 +441,7 @@ void StStrangenessAna::MakePhiSE()
 	  TLorentzVector lTrack = lTrackA + lTrackB;
 	  Float_t pt_lTrack = lTrack.Perp();
 
-//	  for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++)
-	  for(Int_t i_cut = 0; i_cut < 1; i_cut++)
+	  for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++)
 	  {
 	    // apply additional PID cut to increase significance
 	    if(
@@ -490,6 +489,7 @@ void StStrangenessAna::MakePhiSE()
 		Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
 		Float_t Psi2_west = mStrangenessCorr->calShiftAngle2West_EP(Q2Vector,runIndex,cent9,vz_sign,j);
 		Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
+		cout << "cent9 = " << cent9 << ", Res2 = " << Res2 << ", Res3 = " << Res3 << endl;
 		Float_t Psi3_west = mStrangenessCorr->calShiftAngle3West_EP(Q3Vector,runIndex,cent9,vz_sign,j);
 		Float_t phi_Psi2 = phi_lTrack - Psi2_west;
 		Float_t phi_Psi3 = phi_lTrack - Psi3_west;
