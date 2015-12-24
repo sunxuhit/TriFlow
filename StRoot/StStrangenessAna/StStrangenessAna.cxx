@@ -645,6 +645,7 @@ void StStrangenessAna::MakePhiME()
 //    const Int_t cent9 = Centrality;
     const Int_t cent9 = mRefMultCorr->getCentralityBin9();
     const Double_t reweight = mRefMultCorr->getWeight();
+    cout << "RefMult = " << RefMult << ", cent9 = " << cent9 << endl;
 
     // runIndex
     mRunIdEventsDb = StRunIdEventsDb::Instance(Strangeness::mBeamEnergy[mEnergy],Strangeness::mBeamYear[mEnergy]);
