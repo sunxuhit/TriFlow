@@ -103,7 +103,7 @@ void StStrangenessHistoManger::Init(Int_t X_flag, Int_t mode) // 0 for Same Even
 //-------------------------------------------------------------
 void StStrangenessHistoManger::Fill(Float_t pt, Int_t Cent9, Int_t eta_gap, Float_t phi_psi2, Float_t Res2, Float_t phi_psi3, Float_t Res3, Float_t InvMass, Double_t reweight, Int_t i_cut)
 {
-  cout << "Top i_cut = " << i_cut << ", pT = " << pt << ", InvMass_lTrack = " << InvMass << endl;
+  cout << "Top: i_cut = " << i_cut << ", pT = " << pt << ", InvMass_lTrack = " << InvMass << ", Res3 = " << Res3 << endl;
   if(Res2 > 0.0)
   {
     for(Int_t i = 0; i < Strangeness::pt_total_phi; i++) // pt_bin
@@ -125,6 +125,7 @@ void StStrangenessHistoManger::Fill(Float_t pt, Int_t Cent9, Int_t eta_gap, Floa
 		  {
 		    // flow
 		    h_mMass2_EP[i][j][eta_gap][m][i_cut]->Fill(InvMass,(reweight/Res2));
+		    cout << "v2 i_cut = " << i_cut << ", pT = " << pt << ", InvMass_lTrack = " << InvMass << ", Res2 = " << Res2 << endl;
 		  }
 		}
 	      }
@@ -155,7 +156,6 @@ void StStrangenessHistoManger::Fill(Float_t pt, Int_t Cent9, Int_t eta_gap, Floa
 		  {
 		    // flow
 		    h_mMass3_EP[i][j][eta_gap][m][i_cut]->Fill(InvMass,(reweight/Res3));
-		    cout << "v3 i_cut = " << i_cut << ", pT = " << pt << ", InvMass_lTrack = " << InvMass << endl;
 		    // raw pt spectra
 		    if(pt < 0.5*(Strangeness::pt_low_phi[i]+Strangeness::pt_up_phi[i])) 
 		    {
@@ -175,7 +175,6 @@ void StStrangenessHistoManger::Fill(Float_t pt, Int_t Cent9, Int_t eta_gap, Floa
     }
   }
   h_mMass_Yields[Cent9][eta_gap][i_cut]->Fill(InvMass,reweight);
-  cout << "Bottom i_cut = " << i_cut << ", pT = " << pt << ", InvMass_lTrack = " << InvMass << endl;
 }
 void StStrangenessHistoManger::Fill_sub(Float_t pt, Int_t Cent9, Int_t eta_gap, Float_t phi_psi2, Float_t Res2, Float_t phi_psi3, Float_t Res3, Float_t InvMass, Double_t reweight, Int_t i_cut)
 {
