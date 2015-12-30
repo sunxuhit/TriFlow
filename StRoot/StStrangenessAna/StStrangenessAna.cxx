@@ -26,12 +26,16 @@ char* StStrangenessAna::XUV0_EVENT_BRANCH = NULL;
 
 // Systematic Errors estimation
 // phi meson
-Float_t StStrangenessAna::pt_add[20]        = {0.0,0.3,-0.2,0.2,0.2,0.1,-0.2,0.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.1,0.1,-0.05,0.05};
-Float_t StStrangenessAna::p_add[20]         = {0.0,0.15,-0.2,0.2,-0.2,0.2,-0.2,0.2,0.0,0.0,0.4,-0.1,0.2,-0.2,0.0,0.0,-0.1,0.1,-0.05,0.05};
-Float_t StStrangenessAna::nsLow_add[20]     = {0.0,0.15,-0.2,0.2,0.1,-0.1,0.0,0.0,-0.1,-0.2,0.0,0.1,0.0,0.0,-0.4,0.4,0.0,0.0,0.0,0.0};
-Float_t StStrangenessAna::nsHigh_add[20]    = {0.0,-0.15,-0.2,0.2,0.0,0.0,0.0,0.0,0.1,0.2,0.0,0.1,0.0,0.0,-0.4,0.4,0.0,0.0,0.0,0.0};
+Float_t StStrangenessAna::pt_add[20]           = {0.0,0.3,-0.2,0.2,0.2,0.1,-0.2,0.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.1,0.1,-0.05,0.05};
+Float_t StStrangenessAna::p_add[20]            = {0.0,0.15,-0.2,0.2,-0.2,0.2,-0.2,0.2,0.0,0.0,0.4,-0.1,0.2,-0.2,0.0,0.0,-0.1,0.1,-0.05,0.05};
+Float_t StStrangenessAna::nsLow_add[20]        = {0.0,0.15,-0.2,0.2,0.1,-0.1,0.0,0.0,-0.1,-0.2,0.0,0.1,0.0,0.0,-0.4,0.4,0.0,0.0,0.0,0.0};
+Float_t StStrangenessAna::nsHigh_add[20]       = {0.0,-0.15,-0.2,0.2,0.0,0.0,0.0,0.0,0.1,0.2,0.0,0.1,0.0,0.0,-0.4,0.4,0.0,0.0,0.0,0.0};
 
-Int_t StStrangenessAna::n_cuts = 14; // temporary for Lambda, anti-Lambda and K0S => Code developing
+Float_t StStrangenessAna::dcaA_add[20]         = {0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.05,-0.1,0.0,0.0,0.0,0.1,0.0,0.0,0.0,-0.05,0.05,-0.05,0.05};
+Float_t StStrangenessAna::dcaB_add[20]         = {0.0,-0.1,0.0,0.0,0.0,0.0,0.0,0.1,0.0,0.1,-0.1,0.0,0.0,-0.1,0.0,0.0,0.0,0.0,-0.1,0.1};
+Float_t StStrangenessAna::dcaV0_add[20]        = {0.0,0.05,0.0,0.0,0.15,0.1,0.05,-0.1,0.0,-0.5,0.5,0.05,0.0,0.0,-0.1,0.0,0.0,0.0,-0.05,0.05};
+Float_t StStrangenessAna::decaylength_add[20]  = {0.0,-0.5,0.0,0.0,0.0,0.0,0.0,-0.5,0.0,-0.5,0.5,0.0,-0.5,0.0,1.5,1.0,0.0,0.0,-0.5,0.5};
+
 //----------------------------------------------------
 StStrangenessAna::StStrangenessAna(Int_t energy, Int_t X_flag, Int_t List, Long64_t start_event, Long64_t stop_event, Int_t mode)
 {
@@ -951,140 +955,143 @@ void StStrangenessAna::MakeLambdaSE()
 	    Mass2_up_pi_minus  = -0.004 + 0.068*GpB;
 	  }
 
-	  if(
-	      ( // no particle has a mass
-		(m2A < -10.0) && (m2B < -10.0)
-		&& fabs(dcaA)    > 0.6
-		&& fabs(dcaB)    > 1.7
-		&& dcaAB         < 1.0
-		&& decaylength   > 4.0
-		&& dcaV0         < 0.75
-	      )
-	      ||
-	      ( // only pion has a mass
-		(m2A < -10.0) && (m2B > Mass2_low_pi_minus && m2B < Mass2_up_pi_minus)
-		&& fabs(dcaA)    > 0.5
-		&& fabs(dcaB)    > 1.5
-		&& dcaAB         < 1.0
-		&& decaylength   > 3.5
-		&& dcaV0         < 0.75
-	      )
-	      ||
-	      ( // only proton has a mass
-		(m2A > Mass2_low_proton && m2A < Mass2_up_proton) && (m2B < -10.0)
-		&& fabs(dcaA)    > 0.15
-		&& fabs(dcaB)    > 0.8
-		&& dcaAB         < 1.0
-		&& decaylength   > 2.5
-		&& dcaV0         < 1.2
-	      )
-	      ||
-	      ( // both particles have a mass
-		(m2A > Mass2_low_proton && m2A < Mass2_up_proton) && (m2B > Mass2_low_pi_minus && m2B < Mass2_up_pi_minus)
-		&& fabs(dcaA)    > 0.1
-		&& fabs(dcaB)    > 0.7
-		&& dcaAB         < 1.0
-		&& decaylength   > 2.0
-		&& dcaV0         < 1.3
-	      )
-	    )
+	  for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++)
 	  {
-	    Float_t phi_lGTrack = lGTrack.Phi();
-	    Float_t InvMass_lGTrack = lGTrack.M();
-
-	    if(mStrangenessCut->passPhiEtaEast(lGTrack)) // neg eta(east)
-	    { // Below is West Only
-	      TVector2 Q2Vector = Q2West[j];
-	      TVector2 Q3Vector = Q3West[j];
-	      // subtract auto-correlation from pos eta(west) event plane
-	      if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaWest(lPTrackA,j)) // trackA
-	      {
-		Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
-
-		TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
-		TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
-		Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
-
-		TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
-		TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
-		Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
+	    if(
+		( // no particle has a mass
+		  (m2A < -10.0) && (m2B < -10.0)
+		  && fabs(dcaA)    > 0.6+dcaA_add[i_cut]
+		  && fabs(dcaB)    > 1.7+dcaB_add[i_cut]
+		  && dcaAB         < 1.0
+		  && decaylength   > 4.0+decaylength_add[i_cut]
+		  && dcaV0         < 0.75+dcaV0_add[i_cut]
+		)
+		||
+		( // only pion has a mass
+		  (m2A < -10.0) && (m2B > Mass2_low_pi_minus && m2B < Mass2_up_pi_minus)
+		  && fabs(dcaA)    > 0.5+dcaA_add[i_cut]
+		  && fabs(dcaB)    > 1.5+dcaB_add[i_cut]
+		  && dcaAB         < 1.0
+		  && decaylength   > 3.5+decaylength_add[i_cut]
+		  && dcaV0         < 0.75+dcaV0_add[i_cut]
+		)
+		||
+		( // only proton has a mass
+		  (m2A > Mass2_low_proton && m2A < Mass2_up_proton) && (m2B < -10.0)
+		  && fabs(dcaA)    > 0.15+dcaA_add[i_cut]
+		  && fabs(dcaB)    > 0.8+dcaB_add[i_cut]
+		  && dcaAB         < 1.0
+		  && decaylength   > 2.5+decaylength_add[i_cut]
+		  && dcaV0         < 1.2+dcaV0_add[i_cut]
+		)
+		||
+		( // both particles have a mass
+		  (m2A > Mass2_low_proton && m2A < Mass2_up_proton) && (m2B > Mass2_low_pi_minus && m2B < Mass2_up_pi_minus)
+		  && fabs(dcaA)    > 0.1+dcaA_add[i_cut]
+		  && fabs(dcaB)    > 0.7+dcaB_add[i_cut]
+		  && dcaAB         < 1.0
+		  && decaylength   > 2.0+decaylength_add[i_cut]
+		  && dcaV0         < 1.3+dcaV0_add[i_cut]
+		)
+	      )
+	    {
+	      Float_t phi_lGTrack = lGTrack.Phi();
+	      Float_t InvMass_lGTrack = lGTrack.M();
+	      
+	      if(mStrangenessCut->passPhiEtaEast(lGTrack)) // neg eta(east)
+	      { // Below is West Only
+	        TVector2 Q2Vector = Q2West[j];
+	        TVector2 Q3Vector = Q3West[j];
+	        // subtract auto-correlation from pos eta(west) event plane
+	        if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaWest(lPTrackA,j)) // trackA
+	        {
+	          Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
+	      
+	          TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
+	          TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
+	          Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
+	      
+	          TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
+	          TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
+	          Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
+	        }
+	        if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaWest(lPTrackB,j)) // trackB
+	        {
+	          Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
+	      
+	          TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
+	          TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
+	          Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
+	      
+	          TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
+	          TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
+	          Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
+	        }
+	        Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
+	        Float_t Psi2_west = mStrangenessCorr->calShiftAngle2West_EP(Q2Vector,runIndex,cent9,vz_sign,j);
+	        Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
+	        Float_t Psi3_west = mStrangenessCorr->calShiftAngle3West_EP(Q3Vector,runIndex,cent9,vz_sign,j);
+	        Float_t phi_Psi2 = phi_lGTrack - Psi2_west;
+	        Float_t phi_Psi3 = phi_lGTrack - Psi3_west;
+	      
+	        mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,i_cut);
+	      
+	        TLorentzVector lGTrackC;
+	        lGTrackC.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.49368);
+	        TLorentzVector lGTrackCB = lGTrackC + lGTrackB; // misidentify K* -> Lambda
+	        Double_t InvMassCB = lGTrackCB.M(); // Inv Mass of K*
+	        if(!(InvMassCB > 0.89594-3*0.0487 && InvMassCB < 0.89594+3*0.0487))
+	        {
+	          mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,i_cut);
+	        }
 	      }
-	      if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaWest(lPTrackB,j)) // trackB
-	      {
-		Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
-
-		TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
-		TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
-		Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
-
-		TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
-		TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
-		Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
-	      }
-	      Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
-	      Float_t Psi2_west = mStrangenessCorr->calShiftAngle2West_EP(Q2Vector,runIndex,cent9,vz_sign,j);
-	      Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
-	      Float_t Psi3_west = mStrangenessCorr->calShiftAngle3West_EP(Q3Vector,runIndex,cent9,vz_sign,j);
-	      Float_t phi_Psi2 = phi_lGTrack - Psi2_west;
-	      Float_t phi_Psi3 = phi_lGTrack - Psi3_west;
-
-	      mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,n_cuts);
-
-	      TLorentzVector lGTrackC;
-	      lGTrackC.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.49368);
-	      TLorentzVector lGTrackCB = lGTrackC + lGTrackB; // misidentify K* -> Lambda
-	      Double_t InvMassCB = lGTrackCB.M(); // Inv Mass of K*
-	      if(!(InvMassCB > 0.89594-3*0.0487 && InvMassCB < 0.89594+3*0.0487))
-	      {
-		mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,n_cuts);
-	      }
-	    }
-
-	    if(mStrangenessCut->passPhiEtaWest(lGTrack)) // pos eta
-	    { // Below is East Only
-	      TVector2 Q2Vector = Q2East[j];
-	      TVector2 Q3Vector = Q3East[j];
-	      // subtract auto-correlation from neg eta(east) event plane
-	      if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaEast(lPTrackA,j)) // trackA
-	      {
-		Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
-
-		TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
-		TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
-		Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
-
-		TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
-		TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
-		Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
-	      }
-	      if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaEast(lPTrackB,j)) // trackB
-	      {
-		Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
-
-		TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
-		TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
-		Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
-
-		TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
-		TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
-		Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
-	      }
-	      Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
-	      Float_t Psi2_east = mStrangenessCorr->calShiftAngle2East_EP(Q2Vector,runIndex,cent9,vz_sign,j);
-	      Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
-	      Float_t Psi3_east = mStrangenessCorr->calShiftAngle3East_EP(Q3Vector,runIndex,cent9,vz_sign,j);
-	      Float_t phi_Psi2 = phi_lGTrack - Psi2_east;
-	      Float_t phi_Psi3 = phi_lGTrack - Psi3_east;
-
-	      mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,n_cuts);
-
-	      TLorentzVector lGTrackC;
-	      lGTrackC.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.49368);
-	      TLorentzVector lGTrackCB = lGTrackC + lGTrackB; // misidentify K* -> Lambda
-	      Double_t InvMassCB = lGTrackCB.M(); // Inv Mass of K*
-	      if(!(InvMassCB > 0.89594-3*0.0487 && InvMassCB < 0.89594+3*0.0487))
-	      {
-		mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,n_cuts);
+	      
+	      if(mStrangenessCut->passPhiEtaWest(lGTrack)) // pos eta
+	      { // Below is East Only
+	        TVector2 Q2Vector = Q2East[j];
+	        TVector2 Q3Vector = Q3East[j];
+	        // subtract auto-correlation from neg eta(east) event plane
+	        if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaEast(lPTrackA,j)) // trackA
+	        {
+	          Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
+	      
+	          TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
+	          TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
+	          Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
+	      
+	          TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
+	          TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
+	          Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
+	        }
+	        if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaEast(lPTrackB,j)) // trackB
+	        {
+	          Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
+	      
+	          TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
+	          TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
+	          Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
+	      
+	          TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
+	          TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
+	          Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
+	        }
+	        Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
+	        Float_t Psi2_east = mStrangenessCorr->calShiftAngle2East_EP(Q2Vector,runIndex,cent9,vz_sign,j);
+	        Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
+	        Float_t Psi3_east = mStrangenessCorr->calShiftAngle3East_EP(Q3Vector,runIndex,cent9,vz_sign,j);
+	        Float_t phi_Psi2 = phi_lGTrack - Psi2_east;
+	        Float_t phi_Psi3 = phi_lGTrack - Psi3_east;
+	      
+	        mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,i_cut);
+	      
+	        TLorentzVector lGTrackC;
+	        lGTrackC.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.49368);
+	        TLorentzVector lGTrackCB = lGTrackC + lGTrackB; // misidentify K* -> Lambda
+	        Double_t InvMassCB = lGTrackCB.M(); // Inv Mass of K*
+	        if(!(InvMassCB > 0.89594-3*0.0487 && InvMassCB < 0.89594+3*0.0487))
+	        {
+	          mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,i_cut);
+	        }
 	      }
 	    }
 	  }
@@ -1262,140 +1269,143 @@ void StStrangenessAna::MakeLambdaME()
 	    Mass2_up_pi_minus  = -0.004 + 0.068*GpB;
 	  }
 
-	  if(
-	      ( // no particle has a mass
-		(m2A < -10.0) && (m2B < -10.0)
-		&& fabs(dcaA)    > 0.6
-		&& fabs(dcaB)    > 1.7
-		&& dcaAB         < 1.0
-		&& decaylength   > 4.0
-		&& dcaV0         < 0.75
-	      )
-	      ||
-	      ( // only pion has a mass
-		(m2A < -10) && (m2B > Mass2_low_pi_minus && m2B < Mass2_up_pi_minus)
-		&& fabs(dcaA)    > 0.5
-		&& fabs(dcaB)    > 1.5
-		&& dcaAB         < 1.0
-		&& decaylength   > 3.5
-		&& dcaV0         < 0.75
-	      )
-	      ||
-	      ( // only proton has a mass
-		(m2B < -10) && (m2A > Mass2_low_proton && m2A < Mass2_up_proton)
-		&& fabs(dcaA)    > 0.15
-		&& fabs(dcaB)    > 0.8
-		&& dcaAB         < 1.0
-		&& decaylength   > 2.5
-		&& dcaV0         < 1.2
-	      )
-	      ||
-	      ( // both particles have a mass
-		(m2A > Mass2_low_proton && m2A < Mass2_up_proton) && (m2B > Mass2_low_pi_minus && m2B < Mass2_up_pi_minus)
-		&& fabs(dcaA)    > 0.1
-		&& fabs(dcaB)    > 0.7
-		&& dcaAB         < 1.0
-		&& decaylength   > 2.0
-		&& dcaV0         < 1.3
-	      )
-	    )
+	  for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++)
 	  {
-	    Float_t phi_lGTrack = lGTrack.Phi();
-	    Float_t InvMass_lGTrack = lGTrack.M();
+	    if(
+		( // no particle has a mass
+		  (m2A < -10.0) && (m2B < -10.0)
+		  && fabs(dcaA)    > 0.6+dcaA_add[i_cut]
+		  && fabs(dcaB)    > 1.7+dcaB_add[i_cut]
+		  && dcaAB         < 1.0
+		  && decaylength   > 4.0+decaylength_add[i_cut]
+		  && dcaV0         < 0.75+dcaV0_add[i_cut]
+		)
+		||
+		( // only pion has a mass
+		  (m2A < -10.0) && (m2B > Mass2_low_pi_minus && m2B < Mass2_up_pi_minus)
+		  && fabs(dcaA)    > 0.5+dcaA_add[i_cut]
+		  && fabs(dcaB)    > 1.5+dcaB_add[i_cut]
+		  && dcaAB         < 1.0
+		  && decaylength   > 3.5+decaylength_add[i_cut]
+		  && dcaV0         < 0.75+dcaV0_add[i_cut]
+		)
+		||
+		( // only proton has a mass
+		  (m2A > Mass2_low_proton && m2A < Mass2_up_proton) && (m2B < -10.0)
+		  && fabs(dcaA)    > 0.15+dcaA_add[i_cut]
+		  && fabs(dcaB)    > 0.8+dcaB_add[i_cut]
+		  && dcaAB         < 1.0
+		  && decaylength   > 2.5+decaylength_add[i_cut]
+		  && dcaV0         < 1.2+dcaV0_add[i_cut]
+		)
+		||
+		( // both particles have a mass
+		  (m2A > Mass2_low_proton && m2A < Mass2_up_proton) && (m2B > Mass2_low_pi_minus && m2B < Mass2_up_pi_minus)
+		  && fabs(dcaA)    > 0.1+dcaA_add[i_cut]
+		  && fabs(dcaB)    > 0.7+dcaB_add[i_cut]
+		  && dcaAB         < 1.0
+		  && decaylength   > 2.0+decaylength_add[i_cut]
+		  && dcaV0         < 1.3+dcaV0_add[i_cut]
+		)
+	      )
+	    {
+	      Float_t phi_lGTrack = lGTrack.Phi();
+	      Float_t InvMass_lGTrack = lGTrack.M();
 
-	    if(mStrangenessCut->passPhiEtaEast(lGTrack)) // neg eta(east)
-	    { // Below is West Only
-	      TVector2 Q2Vector = Q2West[j];
-	      TVector2 Q3Vector = Q3West[j];
-	      // subtract auto-correlation from pos eta(west) event plane
-	      if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaWest(lPTrackA,j)) // trackA
-	      {
-		Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
+	      if(mStrangenessCut->passPhiEtaEast(lGTrack)) // neg eta(east)
+	      { // Below is West Only
+	        TVector2 Q2Vector = Q2West[j];
+	        TVector2 Q3Vector = Q3West[j];
+	        // subtract auto-correlation from pos eta(west) event plane
+	        if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaWest(lPTrackA,j)) // trackA
+	        {
+	          Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
 
-		TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
-		TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
-		Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
+	          TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
+	          TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
+	          Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
 
-		TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
-		TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
-		Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
+	          TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
+	          TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
+	          Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
+	        }
+	        if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaWest(lPTrackB,j)) // trackB
+	        {
+	          Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
+
+	          TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
+	          TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
+	          Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
+
+	          TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
+	          TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
+	          Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
+	        }
+	        Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
+	        Float_t Psi2_west = mStrangenessCorr->calShiftAngle2West_EP(Q2Vector,runIndex,cent9,vz_sign,j);
+	        Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
+	        Float_t Psi3_west = mStrangenessCorr->calShiftAngle3West_EP(Q3Vector,runIndex,cent9,vz_sign,j);
+	        Float_t phi_Psi2 = phi_lGTrack - Psi2_west;
+	        Float_t phi_Psi3 = phi_lGTrack - Psi3_west;
+
+	        mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,i_cut);
+
+	        TLorentzVector lGTrackC;
+	        lGTrackC.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.49368);
+	        TLorentzVector lGTrackCB = lGTrackC + lGTrackB; // misidentify K* -> Lambda
+	        Double_t InvMassCB = lGTrackCB.M(); // Inv Mass of K*
+	        if(!(InvMassCB > 0.89594-3*0.0487 && InvMassCB < 0.89594+3*0.0487))
+	        {
+	          mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,i_cut);
+	        }
 	      }
-	      if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaWest(lPTrackB,j)) // trackB
-	      {
-		Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
 
-		TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
-		TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
-		Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
+	      if(mStrangenessCut->passPhiEtaWest(lGTrack)) // pos eta
+	      { // Below is East Only
+	        TVector2 Q2Vector = Q2East[j];
+	        TVector2 Q3Vector = Q3East[j];
+	        // subtract auto-correlation from neg eta(east) event plane
+	        if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaEast(lPTrackA,j)) // trackA
+	        {
+	          Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
 
-		TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
-		TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
-		Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
-	      }
-	      Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
-	      Float_t Psi2_west = mStrangenessCorr->calShiftAngle2West_EP(Q2Vector,runIndex,cent9,vz_sign,j);
-	      Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
-	      Float_t Psi3_west = mStrangenessCorr->calShiftAngle3West_EP(Q3Vector,runIndex,cent9,vz_sign,j);
-	      Float_t phi_Psi2 = phi_lGTrack - Psi2_west;
-	      Float_t phi_Psi3 = phi_lGTrack - Psi3_west;
+	          TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
+	          TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
+	          Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
 
-	      mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,n_cuts);
+	          TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
+	          TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
+	          Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
+	        }
+	        if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaEast(lPTrackB,j)) // trackB
+	        {
+	          Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
 
-	      TLorentzVector lGTrackC;
-	      lGTrackC.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.49368);
-	      TLorentzVector lGTrackCB = lGTrackC + lGTrackB; // misidentify K* -> Lambda
-	      Double_t InvMassCB = lGTrackCB.M(); // Inv Mass of K*
-	      if(!(InvMassCB > 0.89594-3*0.0487 && InvMassCB < 0.89594+3*0.0487))
-	      {
-		mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,n_cuts);
-	      }
-	    }
+	          TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
+	          TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
+	          Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
 
-	    if(mStrangenessCut->passPhiEtaWest(lGTrack)) // pos eta
-	    { // Below is East Only
-	      TVector2 Q2Vector = Q2East[j];
-	      TVector2 Q3Vector = Q3East[j];
-	      // subtract auto-correlation from neg eta(east) event plane
-	      if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaEast(lPTrackA,j)) // trackA
-	      {
-		Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
+	          TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
+	          TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
+	          Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
+	        }
+	        Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
+	        Float_t Psi2_east = mStrangenessCorr->calShiftAngle2East_EP(Q2Vector,runIndex,cent9,vz_sign,j);
+	        Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
+	        Float_t Psi3_east = mStrangenessCorr->calShiftAngle3East_EP(Q3Vector,runIndex,cent9,vz_sign,j);
+	        Float_t phi_Psi2 = phi_lGTrack - Psi2_east;
+	        Float_t phi_Psi3 = phi_lGTrack - Psi3_east;
 
-		TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
-		TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
-		Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
+	        mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,i_cut);
 
-		TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
-		TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
-		Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
-	      }
-	      if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaEast(lPTrackB,j)) // trackB
-	      {
-		Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
-
-		TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
-		TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
-		Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
-
-		TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
-		TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
-		Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
-	      }
-	      Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
-	      Float_t Psi2_east = mStrangenessCorr->calShiftAngle2East_EP(Q2Vector,runIndex,cent9,vz_sign,j);
-	      Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
-	      Float_t Psi3_east = mStrangenessCorr->calShiftAngle3East_EP(Q3Vector,runIndex,cent9,vz_sign,j);
-	      Float_t phi_Psi2 = phi_lGTrack - Psi2_east;
-	      Float_t phi_Psi3 = phi_lGTrack - Psi3_east;
-
-	      mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,n_cuts);
-
-	      TLorentzVector lGTrackC;
-	      lGTrackC.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.49368);
-	      TLorentzVector lGTrackCB = lGTrackC + lGTrackB; // misidentify K* -> Lambda
-	      Double_t InvMassCB = lGTrackCB.M(); // Inv Mass of K*
-	      if(!(InvMassCB > 0.89594-3*0.0487 && InvMassCB < 0.89594+3*0.0487))
-	      {
-		mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,n_cuts);
+	        TLorentzVector lGTrackC;
+	        lGTrackC.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.49368);
+	        TLorentzVector lGTrackCB = lGTrackC + lGTrackB; // misidentify K* -> Lambda
+	        Double_t InvMassCB = lGTrackCB.M(); // Inv Mass of K*
+	        if(!(InvMassCB > 0.89594-3*0.0487 && InvMassCB < 0.89594+3*0.0487))
+	        {
+	          mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,i_cut);
+	        }
 	      }
 	    }
 	  }
@@ -1598,131 +1608,134 @@ void StStrangenessAna::MakeK0S(Int_t X_flag)
 	    Mass2_up_pi_minus  = -0.004 + 0.068*GpB;
 	  }
 
-	  if(
-	       fabs(dcaA)    > 0.7
-	    && fabs(dcaB)    > 0.7
-	    && dcaAB         < 1.0
-	    && decaylength   > 3.0
-	    && dcaV0         < 0.8
-	    && ((m2A > Mass2_low_pi_plus && m2A < Mass2_up_pi_plus) || (m2A < -10))
-	    && ((m2B > Mass2_low_pi_minus && m2B < Mass2_up_pi_minus) || (m2B < -10))
-	    )
+	  for(Int_t i_cut = 0; i_cut < Strangeness::N_cuts; i_cut++)
 	  {
-	    Float_t phi_lGTrack = lGTrack.Phi();
-	    Float_t InvMass_lGTrack = lGTrack.M();
+	    if(
+	         fabs(dcaA)    > 0.7+dcaA_add[i_cut]
+	      && fabs(dcaB)    > 0.7+dcaB_add[i_cut]
+	      && dcaAB         < 1.0
+	      && decaylength   > 3.0+decaylength_add[i_cut]
+	      && dcaV0         < 0.8+dcaV0_add[i_cut]
+	      && ((m2A > Mass2_low_pi_plus && m2A < Mass2_up_pi_plus) || (m2A < -10))
+	      && ((m2B > Mass2_low_pi_minus && m2B < Mass2_up_pi_minus) || (m2B < -10))
+	      )
+	    {
+	      Float_t phi_lGTrack = lGTrack.Phi();
+	      Float_t InvMass_lGTrack = lGTrack.M();
 
-	    if(mStrangenessCut->passPhiEtaEast(lGTrack)) // neg eta(east)
-	    { // Below is West Only
-	      TVector2 Q2Vector = Q2West[j];
-	      TVector2 Q3Vector = Q3West[j];
-	      // subtract auto-correlation from pos eta(west) event plane
-	      if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaWest(lPTrackA,j)) // trackA
-	      {
-		Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
+	      if(mStrangenessCut->passPhiEtaEast(lGTrack)) // neg eta(east)
+	      { // Below is West Only
+	        TVector2 Q2Vector = Q2West[j];
+	        TVector2 Q3Vector = Q3West[j];
+	        // subtract auto-correlation from pos eta(west) event plane
+	        if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaWest(lPTrackA,j)) // trackA
+	        {
+	          Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
 
-		TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
-		TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
-		Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
+	          TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
+	          TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
+	          Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
 
-		TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
-		TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
-		Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
+	          TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
+	          TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
+	          Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
+	        }
+	        if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaWest(lPTrackB,j)) // trackB
+	        {
+	          Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
+
+	          TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
+	          TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
+	          Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
+
+	          TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
+	          TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
+	          Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
+	        }
+	        Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
+	        Float_t Psi2_west = mStrangenessCorr->calShiftAngle2West_EP(Q2Vector,runIndex,cent9,vz_sign,j);
+	        Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
+	        Float_t Psi3_west = mStrangenessCorr->calShiftAngle3West_EP(Q3Vector,runIndex,cent9,vz_sign,j);
+	        Float_t phi_Psi2 = phi_lGTrack - Psi2_west;
+	        Float_t phi_Psi3 = phi_lGTrack - Psi3_west;
+
+	        mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,i_cut);
+
+	        //-----------------------------------------------------------------------------
+	        // get Lambda by misidentification
+	        TLorentzVector  lGTrackP, lGTrackPbar;
+	        lGTrackP.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.93827); // set Lorentz vector of pi+ to p
+	        lGTrackPbar.SetXYZM(lGTrackB.X(),lGTrackB.Y(),lGTrackB.Z(),0.93827); // set Lorentz vector of pi- to pbar
+
+	        // Invariant mass calculations K0s
+	        TLorentzVector trackLambda      = lGTrackP+lGTrackB; // p + pi-
+	        TLorentzVector trackAntiLambda      = lGTrackPbar+lGTrackA; // pbar + pi+
+	        Double_t InvMassLambda = trackLambda.M(); // invariant mass of Lambda
+	        Double_t InvMassAntiLambda = trackAntiLambda.M(); // invariant mass of Lambda
+	        //-----------------------------------------------------------------------------
+
+	        if(!((InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3) || (InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3)))
+	        {
+	          mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,i_cut);
+	        }
 	      }
-	      if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaWest(lPTrackB,j)) // trackB
-	      {
-		Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
 
-		TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
-		TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_West(0,cent9,runIndex,vz_sign,j,0); // 2nd
-		Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
+	      if(mStrangenessCut->passPhiEtaWest(lGTrack)) // pos eta
+	      { // Below is East Only
+	        TVector2 Q2Vector = Q2East[j];
+	        TVector2 Q3Vector = Q3East[j];
+	        // subtract auto-correlation from neg eta(east) event plane
+	        if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaEast(lPTrackA,j)) // trackA
+	        {
+	          Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
 
-		TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
-		TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_West(1,cent9,runIndex,vz_sign,j,0); // 3rd
-		Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
-	      }
-	      Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
-	      Float_t Psi2_west = mStrangenessCorr->calShiftAngle2West_EP(Q2Vector,runIndex,cent9,vz_sign,j);
-	      Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
-	      Float_t Psi3_west = mStrangenessCorr->calShiftAngle3West_EP(Q3Vector,runIndex,cent9,vz_sign,j);
-	      Float_t phi_Psi2 = phi_lGTrack - Psi2_west;
-	      Float_t phi_Psi3 = phi_lGTrack - Psi3_west;
+	          TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
+	          TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
+	          Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
 
-	      mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,n_cuts);
+	          TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
+	          TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
+	          Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
+	        }
+	        if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaEast(lPTrackB,j)) // trackB
+	        {
+	          Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
 
-	      //-----------------------------------------------------------------------------
-	      // get Lambda by misidentification
-	      TLorentzVector  lGTrackP, lGTrackPbar;
-	      lGTrackP.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.93827); // set Lorentz vector of pi+ to p
-	      lGTrackPbar.SetXYZM(lGTrackB.X(),lGTrackB.Y(),lGTrackB.Z(),0.93827); // set Lorentz vector of pi- to pbar
+	          TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
+	          TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
+	          Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
 
-	      // Invariant mass calculations K0s
-	      TLorentzVector trackLambda      = lGTrackP+lGTrackB; // p + pi-
-	      TLorentzVector trackAntiLambda      = lGTrackPbar+lGTrackA; // pbar + pi+
-	      Double_t InvMassLambda = trackLambda.M(); // invariant mass of Lambda
-	      Double_t InvMassAntiLambda = trackAntiLambda.M(); // invariant mass of Lambda
-	      //-----------------------------------------------------------------------------
+	          TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
+	          TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
+	          Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
+	        }
+	        Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
+	        Float_t Psi2_east = mStrangenessCorr->calShiftAngle2East_EP(Q2Vector,runIndex,cent9,vz_sign,j);
+	        Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
+	        Float_t Psi3_east = mStrangenessCorr->calShiftAngle3East_EP(Q3Vector,runIndex,cent9,vz_sign,j);
+	        Float_t phi_Psi2 = phi_lGTrack - Psi2_east;
+	        Float_t phi_Psi3 = phi_lGTrack - Psi3_east;
 
-	      if(!((InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3) || (InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3)))
-	      {
-		mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,n_cuts);
-	      }
-	    }
+	        mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,i_cut);
 
-	    if(mStrangenessCut->passPhiEtaWest(lGTrack)) // pos eta
-	    { // Below is East Only
-	      TVector2 Q2Vector = Q2East[j];
-	      TVector2 Q3Vector = Q3East[j];
-	      // subtract auto-correlation from neg eta(east) event plane
-	      if(flagA == 0 && mStrangenessCut->passTrackEP(lPTrackA,dcaA) && mStrangenessCut->passTrackEtaEast(lPTrackA,j)) // trackA
-	      {
-		Float_t  w = mStrangenessCorr->getWeight(lPTrackA);
+	        //-----------------------------------------------------------------------------
+	        // get Lambda by misidentification
+	        TLorentzVector  lGTrackP, lGTrackPbar;
+	        lGTrackP.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.93827); // set Lorentz vector of pi+ to p
+	        lGTrackPbar.SetXYZM(lGTrackB.X(),lGTrackB.Y(),lGTrackB.Z(),0.93827); // set Lorentz vector of pi- to pbar
 
-		TVector2 q2VectorA = mStrangenessCorr->calq2Vector(lPTrackA);
-		TVector2 q2CorrA   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
-		Q2Vector = Q2Vector - w*(q2VectorA-q2CorrA);
+	        // Invariant mass calculations K0s
+	        TLorentzVector trackLambda      = lGTrackP+lGTrackB; // p + pi-
+	        TLorentzVector trackAntiLambda      = lGTrackPbar+lGTrackA; // pbar + pi+
+	        Double_t InvMassLambda = trackLambda.M(); // invariant mass of Lambda
+	        Double_t InvMassAntiLambda = trackAntiLambda.M(); // invariant mass of Lambda
+	        //-----------------------------------------------------------------------------
 
-		TVector2 q3VectorA = mStrangenessCorr->calq3Vector(lPTrackA);
-		TVector2 q3CorrA   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
-		Q3Vector = Q3Vector - w*(q3VectorA-q3CorrA);
-	      }
-	      if(flagB == 0 && mStrangenessCut->passTrackEP(lPTrackB,dcaB) && mStrangenessCut->passTrackEtaEast(lPTrackB,j)) // trackB
-	      {
-		Float_t  w = mStrangenessCorr->getWeight(lPTrackB);
-
-		TVector2 q2VectorB = mStrangenessCorr->calq2Vector(lPTrackB);
-		TVector2 q2CorrB   = mStrangenessCorr->getReCenterPar_East(0,cent9,runIndex,vz_sign,j,0); // 2nd
-		Q2Vector = Q2Vector - w*(q2VectorB-q2CorrB);
-
-		TVector2 q3VectorB = mStrangenessCorr->calq3Vector(lPTrackB);
-		TVector2 q3CorrB   = mStrangenessCorr->getReCenterPar_East(1,cent9,runIndex,vz_sign,j,0); // 3rd
-		Q3Vector = Q3Vector - w*(q3VectorB-q3CorrB);
-	      }
-	      Float_t Res2 = mStrangenessCorr->getResolution2_EP(cent9,j);
-	      Float_t Psi2_east = mStrangenessCorr->calShiftAngle2East_EP(Q2Vector,runIndex,cent9,vz_sign,j);
-	      Float_t Res3 = mStrangenessCorr->getResolution3_EP(cent9,j);
-	      Float_t Psi3_east = mStrangenessCorr->calShiftAngle3East_EP(Q3Vector,runIndex,cent9,vz_sign,j);
-	      Float_t phi_Psi2 = phi_lGTrack - Psi2_east;
-	      Float_t phi_Psi3 = phi_lGTrack - Psi3_east;
-
-	      mStrangenessHistoManger->Fill(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,n_cuts);
-
-	      //-----------------------------------------------------------------------------
-	      // get Lambda by misidentification
-	      TLorentzVector  lGTrackP, lGTrackPbar;
-	      lGTrackP.SetXYZM(lGTrackA.X(),lGTrackA.Y(),lGTrackA.Z(),0.93827); // set Lorentz vector of pi+ to p
-	      lGTrackPbar.SetXYZM(lGTrackB.X(),lGTrackB.Y(),lGTrackB.Z(),0.93827); // set Lorentz vector of pi- to pbar
-
-	      // Invariant mass calculations K0s
-	      TLorentzVector trackLambda      = lGTrackP+lGTrackB; // p + pi-
-	      TLorentzVector trackAntiLambda      = lGTrackPbar+lGTrackA; // pbar + pi+
-	      Double_t InvMassLambda = trackLambda.M(); // invariant mass of Lambda
-	      Double_t InvMassAntiLambda = trackAntiLambda.M(); // invariant mass of Lambda
-	      //-----------------------------------------------------------------------------
-
-	      // subtract Lambda and anti-Lambda contaminations
-	      if(!((InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3) || (InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3)))
-	      {
-		mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,n_cuts);
+	        // subtract Lambda and anti-Lambda contaminations
+	        if(!((InvMassLambda > 1.1157-0.006*3 && InvMassLambda < 1.1157+0.006*3) || (InvMassAntiLambda > 1.1157-0.006*3 && InvMassAntiLambda < 1.1157+0.006*3)))
+	        {
+	          mStrangenessHistoManger->Fill_sub(pt_lGTrack,cent9,j,phi_Psi2,Res2,phi_Psi3,Res3,InvMass_lGTrack,reweight,i_cut);
+	        }
 	      }
 	    }
 	  }
