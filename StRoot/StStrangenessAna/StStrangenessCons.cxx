@@ -8,7 +8,7 @@ TString Strangeness::v0_tree[4]  = {"XuPhiMesonEvent","LambdaEvent","antiLambdaE
 TString Strangeness::v0_branch[4] = {"phi_flow_branch","Lambda_flow_branch","antiLambda_flow_branch","K0S_flow_branch"};
 TString Strangeness::Energy[3] = {"200GeV","39GeV","27GeV"};
 TString Strangeness::Partype[4] = {"Phi","Lambda","AntiLambda","K0S"};
-Int_t   Strangeness::mList_Delta = 10;
+Int_t   Strangeness::mList_Delta = 5;
 
 //--------------------------------------------------------------------
 // Cuts 
