@@ -119,7 +119,7 @@ void StStrangenessAna::Init()
     setSEList(SEList);
     cout << SEList << endl;
 
-    TString outputfile = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/%s/flow_%s/Yields_SE_%s_%d_%d.root",Strangeness::Energy[mEnergy].Data(),Strangeness::Partype[mMode].Data(),Strangeness::Partype[mMode].Data(),Strangeness::Energy[mEnergy].Data(),list_start,list_stop);
+    TString outputfile = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/%s/flow_%s/Yields_SE_%s_%d.root",Strangeness::Energy[mEnergy].Data(),Strangeness::Partype[mMode].Data(),Strangeness::Partype[mMode].Data(),Strangeness::Energy[mEnergy].Data(),mList);
     setOutputfile(outputfile);
 
     setStartEvent_SE(Long64_t(mStart_Event));
@@ -133,7 +133,7 @@ void StStrangenessAna::Init()
     TString MEList = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/List/%s_list/Split_ME_%s_%d_%d.list",Strangeness::Energy[mEnergy].Data(),Strangeness::Partype[mMode].Data(),Strangeness::Energy[mEnergy].Data(),list_start,list_stop);
     setMEList(MEList);
 
-    TString outputfile = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/%s/flow_%s/Yields_ME_%s_%d_%d.root",Strangeness::Energy[mEnergy].Data(),Strangeness::Partype[mMode].Data(),Strangeness::Partype[mMode].Data(),Strangeness::Energy[mEnergy].Data(),list_start,list_stop);
+    TString outputfile = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/%s/flow_%s/Yields_ME_%s_%d.root",Strangeness::Energy[mEnergy].Data(),Strangeness::Partype[mMode].Data(),Strangeness::Partype[mMode].Data(),Strangeness::Energy[mEnergy].Data(),mList);
     setOutputfile(outputfile);
 
     setStartEvent_ME(Long64_t(mStart_Event));
