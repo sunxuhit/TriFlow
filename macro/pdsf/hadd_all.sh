@@ -10,7 +10,7 @@ if [ $# -eq 0 ]
     SM=_ME_
     Energy=200GeV
     n_stpes=9
-    OutDir="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/$PID/flow_$PID/merged_file/merged_Yileds$SM${Energy}_"
+    OutDir="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/$PID/flow_$PID/merged_file/merged_Yields$SM${Energy}_"
     suffix=".root"
 #    for((counter=0;counter<=52;counter=counter+1))
     for((counter=0;counter<=1;counter=counter+1)) #test
@@ -24,7 +24,7 @@ if [ $# -eq 0 ]
       echo -n "hadd $OutName " >> run_hadd_$PID$SM$counter.csh
 
       Order=0
-      for((i_loop=0;i_loop<=$n_stpes;i_loop=i_loop+1)) # loop for Yileds files
+      for((i_loop=0;i_loop<=$n_stpes;i_loop=i_loop+1)) # loop for Yields files
       do
 	let "Order=$counter*10+$i_loop"
 	echo -n " Yields${SM}${Energy}_$Order$suffix" >> run_hadd_$PID$SM$counter.csh
