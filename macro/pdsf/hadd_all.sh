@@ -4,16 +4,15 @@ date
 #. ./hadd_all.sh
 
 
-if [ $# -eq 0 ]
+if [ $# -eq 1 ]
   then
     PID=Phi
     SM=_SE_
     Energy=200GeV
-    n_stpes=9
     OutDir="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/$PID/flow_$PID/merged_file/merged_Yields$SM${Energy}_"
     suffix=".root"
-#    for((counter=0;counter<=52;counter=counter+1))
-    for((counter=0;counter<=20;counter=counter+1)) #test
+    counter=0
+    for item in `cat $1`
     do
       cp ./run_hadd.csh ./run_hadd_$PID$SM$counter.csh
       echo "cd ./AuAu$Energy/$PID/flow_$PID" >> run_hadd_$PID$SM$counter.csh
@@ -23,19 +22,18 @@ if [ $# -eq 0 ]
 
       echo -n "hadd $OutName " >> run_hadd_$PID$SM$counter.csh
 
-      Order=0
-      for((i_loop=0;i_loop<=$n_stpes;i_loop=i_loop+1)) # loop for Yields files
+      for yields in `cat $item`
       do
-	let "Order=$counter*10+$i_loop"
-	echo -n " Yields${SM}${Energy}_$Order$suffix" >> run_hadd_$PID$SM$counter.csh
+	echo -n "$yields " >> run_hadd_$PID$SM$counter.csh
       done
-      echo " " >> run_hadd_$PID$SM$counter.csh
 
+      echo " " >> run_hadd_$PID$SM$counter.csh
       echo "echo 'This is the end of hadd\!\!\!'" >> run_hadd_$PID$SM$counter.csh
 
       qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G,projectio=1 -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM$counter.err ./run_hadd_$PID$SM$counter.csh
 
       mv run_hadd_$PID$SM$counter.csh /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Script/hadd/
+      let "counter=counter+1"
     done
 
   else
