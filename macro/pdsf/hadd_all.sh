@@ -20,6 +20,8 @@ if [ $# -eq 1 ]
 
       OutName=$OutDir$counter$suffix
 
+      echo "rm $OutName " >> run_hadd_$PID$SM$counter.csh
+      echo " " >> run_hadd_$PID$SM$counter.csh
       echo -n "hadd $OutName " >> run_hadd_$PID$SM$counter.csh
 
       for yields in `cat $item`
@@ -27,6 +29,7 @@ if [ $# -eq 1 ]
 	echo -n "$yields " >> run_hadd_$PID$SM$counter.csh
       done
 
+      echo " " >> run_hadd_$PID$SM$counter.csh
       echo " " >> run_hadd_$PID$SM$counter.csh
       echo "echo 'This is the end of hadd\!\!\!'" >> run_hadd_$PID$SM$counter.csh
 
