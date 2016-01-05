@@ -31,6 +31,8 @@ if [ $# -eq 0 ]
       done
       echo " " >> run_hadd_$PID$SM$counter.csh
 
+      echo "echo 'This is the end of hadd!!!'"
+
       qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G,projectio=1 -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM$counter.err ./run_hadd_$PID$SM$counter.csh
 
       mv run_hadd_$PID$SM$counter.csh /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Script/hadd/
