@@ -7,13 +7,13 @@ date
 if [ $# -eq 0 ]
   then
     PID=Phi
-    SM=_ME_
+    SM=_SE_
     Energy=200GeV
     n_stpes=9
     OutDir="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/$PID/flow_$PID/merged_file/merged_Yields$SM${Energy}_"
     suffix=".root"
 #    for((counter=0;counter<=52;counter=counter+1))
-    for((counter=0;counter<=1;counter=counter+1)) #test
+    for((counter=0;counter<=20;counter=counter+1)) #test
     do
       cp ./run_hadd.csh ./run_hadd_$PID$SM$counter.csh
       echo "cd ./AuAu$Energy/$PID/flow_$PID" >> run_hadd_$PID$SM$counter.csh
