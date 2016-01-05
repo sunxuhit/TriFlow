@@ -1,7 +1,7 @@
 #!/bin/bash
 date
 
-#. ./hadd_all.sh
+#. ./hadd_all.sh /project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/Phi_list/flow_List/flow_SE.list
 
 
 if [ $# -eq 1 ]
