@@ -1,7 +1,7 @@
 #!/bin/bash
 date
 
-#. ./hadd_all.sh /project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/Phi_list/flow_List/flow_SE_2nd.list
+#. ./hadd_all_2nd.sh /project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/Phi_list/flow_List/flow_SE_2nd.list
 
 
 if [ $# -eq 1 ]
@@ -14,28 +14,28 @@ if [ $# -eq 1 ]
     counter=0
     for item in `cat $1`
     do
-      cp ./run_hadd.csh ./run_hadd_$PID$SM$counter.csh
-      echo "cd ./AuAu$Energy/$PID/flow_$PID/merged_file/" >> run_hadd_$PID$SM$counter.csh
-      echo " " >> run_hadd_$PID$SM$counter.csh
+      cp ./run_hadd.csh ./run_hadd_2nd_$PID$SM$counter.csh
+      echo "cd ./AuAu$Energy/$PID/flow_$PID/merged_file/" >> run_hadd_2nd_$PID$SM$counter.csh
+      echo " " >> run_hadd_2nd_$PID$SM$counter.csh
 
       OutName=$OutDir$counter$suffix
 
-      echo "rm $OutName " >> run_hadd_$PID$SM$counter.csh
-      echo " " >> run_hadd_$PID$SM$counter.csh
-      echo -n "hadd $OutName " >> run_hadd_$PID$SM$counter.csh
+      echo "rm $OutName " >> run_hadd_2nd_$PID$SM$counter.csh
+      echo " " >> run_hadd_2nd_$PID$SM$counter.csh
+      echo -n "hadd $OutName " >> run_hadd_2nd_$PID$SM$counter.csh
 
       for yields in `cat $item`
       do
-	echo -n "$yields " >> run_hadd_$PID$SM$counter.csh
+	echo -n "$yields " >> run_hadd_2nd_$PID$SM$counter.csh
       done
 
-      echo " " >> run_hadd_$PID$SM$counter.csh
-      echo " " >> run_hadd_$PID$SM$counter.csh
-      echo "echo 'This is the end of hadd\!\!\!'" >> run_hadd_$PID$SM$counter.csh
+      echo " " >> run_hadd_2nd_$PID$SM$counter.csh
+      echo " " >> run_hadd_2nd_$PID$SM$counter.csh
+      echo "echo 'This is the end of hadd\!\!\!'" >> run_hadd_2nd_$PID$SM$counter.csh
 
-      qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G,projectio=1 -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM$counter.err ./run_hadd_$PID$SM$counter.csh
+      qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G,projectio=1 -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM$counter.err ./run_hadd_2nd_$PID$SM$counter.csh
 
-      mv run_hadd_$PID$SM$counter.csh /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Script/hadd/
+      mv run_hadd_2nd_$PID$SM$counter.csh /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Script/hadd/
       let "counter=counter+1"
     done
 
