@@ -1,18 +1,19 @@
 #!/bin/bash
 date
 
-#. ./hadd_all.sh /project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/Phi_list/flow_List/flow_SE.list
+#. ./hadd_all.sh 
 
 
-if [ $# -eq 1 ]
+if [ $# -eq 0 ]
   then
     PID=Phi
     SM=_SE_
     Energy=200GeV
     OutDir="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/$PID/flow_$PID/merged_file/merged_Yields$SM${Energy}_"
     suffix=".root"
+    InPutList="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/List/${PID}_list/flow_List/flow_${SM}.list"
     counter=0
-    for item in `cat $1`
+    for item in `cat $InPutList`
     do
       cp ./run_hadd.csh ./run_hadd_$PID$SM$counter.csh
       echo "cd ./AuAu$Energy/$PID/flow_$PID" >> run_hadd_$PID$SM$counter.csh
