@@ -7,8 +7,8 @@ date
 if [ $# -eq 0 ]
   then
     PID=Phi
-    SM=_SE_
     List_SM=SE
+    SM=_${List_SM}_
     Energy=200GeV
     OutDir="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/$PID/flow_$PID/merged_file/MERGED_Yields$SM${Energy}_"
     suffix=".root"
