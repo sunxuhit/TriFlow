@@ -14,7 +14,7 @@ if [ $# -eq 0 ]
     suffix=".root"
     InPutList="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/List/${PID}_list/flow_List/flow_${List_SM}_2nd.list"
     counter=0
-    for item in `cat $1`
+    for item in `cat $InPutList`
     do
       cp ./run_hadd.csh ./run_hadd_2nd_$PID$SM$counter.csh
       echo "cd ./AuAu$Energy/$PID/flow_$PID/merged_file/" >> run_hadd_2nd_$PID$SM$counter.csh
