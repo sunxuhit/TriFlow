@@ -24,14 +24,14 @@ if [ $# -eq 0 ]
       echo " " >> run_hadd_final_$PID$SM$counter.csh
       echo -n "hadd $OutName " >> run_hadd_final_$PID$SM$counter.csh
 
-    for item in `cat $InPutList`
-    do
-      echo -n "$item" >> run_hadd_final_$PID$SM$counter.csh
+      for item in `cat $InPutList`
+      do
+	echo -n "$item" >> run_hadd_final_$PID$SM$counter.csh
 
-      echo " " >> run_hadd_final_$PID$SM$counter.csh
-      echo " " >> run_hadd_final_$PID$SM$counter.csh
-      echo "echo 'This is the end of hadd\!\!\!'" >> run_hadd_final_$PID$SM$counter.csh
-    done
+	echo " " >> run_hadd_final_$PID$SM$counter.csh
+	echo " " >> run_hadd_final_$PID$SM$counter.csh
+	echo "echo 'This is the end of hadd\!\!\!'" >> run_hadd_final_$PID$SM$counter.csh
+      done
 
       qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G,projectio=1 -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM$counter.err ./run_hadd_final_$PID$SM$counter.csh
 
