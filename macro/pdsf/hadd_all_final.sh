@@ -10,7 +10,7 @@ if [ $# -eq 0 ]
     List_SM=SE
     SM=_${List_SM}
     Energy=200GeV
-    OutDir="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/$PID/flow_$PID/merged_file/Yields$SM${Energy}"
+    OutDir="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/$PID/flow_$PID/merged_file/Yields${SM}_${Energy}"
     suffix=".root"
     InPutList="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/List/${PID}_list/flow_List/flow_${List_SM}_final.list"
       cp ./run_hadd.csh ./run_hadd_final_$PID$SM.csh
@@ -25,9 +25,9 @@ if [ $# -eq 0 ]
 
       for item in `cat $InPutList`
       do
-	echo -n "$item" >> run_hadd_final_$PID$SM.csh
-	echo -n " " >> run_hadd_final_$PID$SM.csh
+	echo -n "$item " >> run_hadd_final_$PID$SM.csh
       done
+      echo " " >> run_hadd_final_$PID$SM.csh
       echo " " >> run_hadd_final_$PID$SM.csh
       echo "echo 'This is the end of hadd\!\!\!'" >> run_hadd_final_$PID$SM.csh
 
