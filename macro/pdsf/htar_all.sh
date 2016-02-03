@@ -10,7 +10,7 @@ if [ $# -eq 0 ]
     List_SM=SE
     SM=_${List_SM}_
     Energy=200GeV
-    OutDir="/home/x/xusun/AuAu$Energy/$PID/file_${Energy}_${PID}_${SM}_"
+    OutDir="/home/x/xusun/AuAu$Energy/$PID/file_${Energy}_${PID}${SM}"
     suffix=".tar"
     InPutList="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/List/${PID}_list/backup_List/backup_${List_SM}.list"
     counter=0
