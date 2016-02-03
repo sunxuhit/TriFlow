@@ -22,9 +22,9 @@ if [ $# -eq 0 ]
 
       OutName=$OutDir$counter$suffix
 
-      echo "rm $OutName " >> run_htar_$PID$SM$counter.csh
-      echo " " >> run_htar_$PID$SM$counter.csh
-      echo -n "htar $OutName " >> run_htar_$PID$SM$counter.csh
+#      echo "rm $OutName " >> run_htar_$PID$SM$counter.csh
+#      echo " " >> run_htar_$PID$SM$counter.csh
+      echo "htar $OutName " >> run_htar_$PID$SM$counter.csh
 
       for yields in `cat $item`
       do
