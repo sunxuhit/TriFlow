@@ -18,7 +18,7 @@ if [ $# -eq 0 ]
       echo "cd ./AuAu$Energy/$PID" >> run_htarX_$PID$SM$counter.csh
       echo " " >> run_htarX_$PID$SM$counter.csh
 
-      InPutName=$InPutName$counter$suffix
+      InPutName=$InPutDir$counter$suffix
 
       echo -n "htar -xf $InPutName " >> run_htarX_$PID$SM$counter.csh
 
