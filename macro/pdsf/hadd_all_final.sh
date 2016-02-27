@@ -31,7 +31,7 @@ if [ $# -eq 0 ]
       echo " " >> run_hadd_final_$PID$SM.csh
       echo "echo 'This is the end of hadd\!\!\!'" >> run_hadd_final_$PID$SM.csh
 
-      qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G,projectio=1 -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM.err ./run_hadd_final_$PID$SM.csh
+      qsub -hard -l scratchfree=500,h_cpu=2:00:00,h_vmem=1.8G,projectio=1 -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_$PID$SM.err ./run_hadd_final_$PID$SM.csh
 
       mv run_hadd_final_$PID$SM.csh /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Script/hadd/
   else

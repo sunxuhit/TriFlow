@@ -35,7 +35,7 @@ if [ $# -eq 0 ]
       echo " " >> run_htar_$PID$SM$counter.csh
       echo "echo 'This is the end of htar\!\!\!'" >> run_htar_$PID$SM$counter.csh
 
-      qsub -hard -l scratchfree=500,h_cpu=24:00:00,h_vmem=1.8G,projectio=1 -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/htar/job_$PID$SM$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/htar/job_$PID$SM$counter.err ./run_htar_$PID$SM$counter.csh
+      qsub -hard -l scratchfree=500,h_cpu=10:00:00,h_vmem=1.8G,projectio=1 -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/htar/job_$PID$SM$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/htar/job_$PID$SM$counter.err ./run_htar_$PID$SM$counter.csh
 
       mv run_htar_$PID$SM$counter.csh /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Script/htar/
       let "counter=counter+1"
