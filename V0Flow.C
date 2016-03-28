@@ -61,6 +61,8 @@ static const Int_t pt_rebin_last  = 8;
 static const Int_t Cent_total = 4; // Centrality loop
 static const Int_t Cent_start = 0;
 static const Int_t Cent_stop  = 1;
+static const Int_t cent_low[4] = {0,7,4,0}; // 0 = 0-80%, 1 = 0-10%, 2 = 10-40%, 3 = 40-80%
+static const Int_t cent_up[4]  = {8,8,6,3}; // 0 = 0-80%, 1 = 0-10%, 2 = 10-40%, 3 = 40-80%
 
 static const Int_t Eta_total = 4; // Eta loop
 static const Int_t Eta_start = 0;
@@ -477,7 +479,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   */
 
   // calculate counts and errors for phi bin with gaussian fits and breit wigner fits
-  TH1FMap h_mCounts, h_mRawV3;
+  TH1FMap h_mCounts, h_mRawFlow;
   vecFMap ParFlow_Gaus, ParFlow_BW;
   for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++) // Centrality loop
   {
@@ -485,10 +487,10 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     {
       for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic loop
       {
-	TString KEY_RawV3_Gaus = Form("RawV3_Gaus_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // gaussian fits
-	h_mRawV3[KEY_RawV3_Gaus] = new TH1F(KEY_RawV3_Gaus.Data(),KEY_RawV3_Gaus.Data(),100,0.0,10.0);
-	TString KEY_RawV3_BW = Form("RawV3_BW_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // breit wigner fits
-	h_mRawV3[KEY_RawV3_BW] = new TH1F(KEY_RawV3_BW.Data(),KEY_RawV3_BW.Data(),100,0.0,10.0);
+	TString KEY_RawFlow_Gaus = Form("RawFlow_Gaus_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // gaussian fits
+	h_mRawFlow[KEY_RawFlow_Gaus] = new TH1F(KEY_RawFlow_Gaus.Data(),KEY_RawFlow_Gaus.Data(),100,0.0,10.0);
+	TString KEY_RawFlow_BW = Form("RawFlow_BW_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // breit wigner fits
+	h_mRawFlow[KEY_RawFlow_BW] = new TH1F(KEY_RawFlow_BW.Data(),KEY_RawFlow_BW.Data(),100,0.0,10.0);
 	for(Int_t i_pt = pt_rebin_first; i_pt < pt_rebin_last; i_pt++) // pt loop
 	{
 	  TString KEY_Gaus = Form("Gaus_pt_%d_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_pt,i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // gaussian fits
@@ -539,8 +541,8 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	  ParFlow_Gaus[KEY_Gaus].push_back(static_cast<Float_t>(f_phi_gaus->GetParameter(0)));
 	  ParFlow_Gaus[KEY_Gaus].push_back(static_cast<Float_t>(f_phi_gaus->GetParameter(1)));
 	  ParFlow_Gaus[KEY_Gaus].push_back(static_cast<Float_t>(f_phi_gaus->GetParameter(2)));
-	  h_mRawV3[KEY_RawV3_Gaus]->SetBinContent(h_mRawV3[KEY_RawV3_Gaus]->FindBin(pt_mean),f_phi_gaus->GetParameter(1));
-	  h_mRawV3[KEY_RawV3_Gaus]->SetBinError(h_mRawV3[KEY_RawV3_Gaus]->FindBin(pt_mean),f_phi_gaus->GetParError(1));
+	  h_mRawFlow[KEY_RawFlow_Gaus]->SetBinContent(h_mRawFlow[KEY_RawFlow_Gaus]->FindBin(pt_mean),f_phi_gaus->GetParameter(1));
+	  h_mRawFlow[KEY_RawFlow_Gaus]->SetBinError(h_mRawFlow[KEY_RawFlow_Gaus]->FindBin(pt_mean),f_phi_gaus->GetParError(1));
 
 	  TF1 *f_phi_bw = new TF1("f_phi_bw",flow,0.0,PI_max[mOrder],3);
 	  f_phi_bw->SetParameter(0,2.0);
@@ -551,8 +553,8 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	  ParFlow_BW[KEY_BW].push_back(static_cast<Float_t>(f_phi_bw->GetParameter(0)));
 	  ParFlow_BW[KEY_BW].push_back(static_cast<Float_t>(f_phi_bw->GetParameter(1)));
 	  ParFlow_BW[KEY_BW].push_back(static_cast<Float_t>(f_phi_bw->GetParameter(2)));
-	  h_mRawV3[KEY_RawV3_BW]->SetBinContent(h_mRawV3[KEY_RawV3_BW]->FindBin(pt_mean),f_phi_bw->GetParameter(1));
-	  h_mRawV3[KEY_RawV3_BW]->SetBinError(h_mRawV3[KEY_RawV3_BW]->FindBin(pt_mean),f_phi_bw->GetParError(1));
+	  h_mRawFlow[KEY_RawFlow_BW]->SetBinContent(h_mRawFlow[KEY_RawFlow_BW]->FindBin(pt_mean),f_phi_bw->GetParameter(1));
+	  h_mRawFlow[KEY_RawFlow_BW]->SetBinError(h_mRawFlow[KEY_RawFlow_BW]->FindBin(pt_mean),f_phi_bw->GetParError(1));
 	}
       }
     }
@@ -653,12 +655,12 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   */
 
   /*
-  // QA raw v3 vs. pt for gaussian fits and breit wigner fits
-  TCanvas *c_raw_v3 = new TCanvas("c_raw_v3","c_raw_v3",10,10,800,800);
-  c_raw_v3->SetLeftMargin(0.15);
-  c_raw_v3->SetBottomMargin(0.15);
-  c_raw_v3->SetTicks(1,1);
-  c_raw_v3->SetGrid(0,0);
+  // QA raw flow vs. pt for gaussian fits and breit wigner fits
+  TCanvas *c_raw_flow = new TCanvas("c_raw_flow","c_raw_flow",10,10,800,800);
+  c_raw_flow->SetLeftMargin(0.15);
+  c_raw_flow->SetBottomMargin(0.15);
+  c_raw_flow->SetTicks(1,1);
+  c_raw_flow->SetGrid(0,0);
   TH1F *h_play = new TH1F("h_play","h_play",100,0.0,10.0);
   for(Int_t i_bin = 0; i_bin < 100; i_bin++)
   {
@@ -689,26 +691,26 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     {
       for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic loop
       {
-	TString KEY_RawV3_Gaus = Form("RawV3_Gaus_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // gaussian fits
-	h_mRawV3[KEY_RawV3_Gaus]->SetMarkerStyle(24);
-	h_mRawV3[KEY_RawV3_Gaus]->SetMarkerColor(2);
-	h_mRawV3[KEY_RawV3_Gaus]->Draw("PE same");
-	TString KEY_RawV3_BW = Form("RawV3_BW_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // breit wigner fits
-	h_mRawV3[KEY_RawV3_BW]->SetMarkerStyle(24);
-	h_mRawV3[KEY_RawV3_BW]->SetMarkerColor(4);
-	h_mRawV3[KEY_RawV3_BW]->Draw("PE same");
+	TString KEY_RawFlow_Gaus = Form("RawFlow_Gaus_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // gaussian fits
+	h_mRawFlow[KEY_RawFlow_Gaus]->SetMarkerStyle(24);
+	h_mRawFlow[KEY_RawFlow_Gaus]->SetMarkerColor(2);
+	h_mRawFlow[KEY_RawFlow_Gaus]->DrawCopy("PE same");
+	TString KEY_RawFlow_BW = Form("RawFlow_BW_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // breit wigner fits
+	h_mRawFlow[KEY_RawFlow_BW]->SetMarkerStyle(24);
+	h_mRawFlow[KEY_RawFlow_BW]->SetMarkerColor(4);
+	h_mRawFlow[KEY_RawFlow_BW]->DrawCopy("PE same");
       }
     }
   }
-  TString KEY_RawV3_Gaus = Form("RawV3_Gaus_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_0",Order[mOrder].Data(),PID[mPID].Data()); // gaussian fits
-  TString KEY_RawV3_BW = Form("RawV3_BW_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_0",Order[mOrder].Data(),PID[mPID].Data()); // gaussian fits
-  TLegend *leg_raw_v3 = new TLegend(0.5,0.6,0.8,0.8);
-  leg_raw_v3->SetFillColor(10);
-  leg_raw_v3->SetBorderSize(0.0);
-  leg_raw_v3->AddEntry(h_mRawV3[KEY_RawV3_Gaus],"bin counting","p");
-  leg_raw_v3->AddEntry(h_mRawV3[KEY_RawV3_BW],"breit wigner","p");
-  leg_raw_v3->Draw("same");
-//  c_raw_v3->SaveAs("./raw_v3.eps");
+  TString KEY_RawFlow_Gaus = Form("RawFlow_Gaus_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_0",Order[mOrder].Data(),PID[mPID].Data()); // gaussian fits
+  TString KEY_RawFlow_BW = Form("RawFlow_BW_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_0",Order[mOrder].Data(),PID[mPID].Data()); // gaussian fits
+  TLegend *leg_raw_flow = new TLegend(0.5,0.6,0.8,0.8);
+  leg_raw_flow->SetFillColor(10);
+  leg_raw_flow->SetBorderSize(0.0);
+  leg_raw_flow->AddEntry(h_mRawFlow[KEY_RawFlow_Gaus],"bin counting","p");
+  leg_raw_flow->AddEntry(h_mRawFlow[KEY_RawFlow_BW],"breit wigner","p");
+  leg_raw_flow->Draw("same");
+//  c_raw_flow->SaveAs("./raw_flow.eps");
   */
 
   // resolution correction
@@ -989,26 +991,50 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   }
   */
 
-  /*
-  // read in resolution
-  /Users/xusun/STAR/V0Flow/Data/AuAu200GeV/.root
+  // calculate final resolution correction factors and correct flow
   TString InPutFile_Res = Form("./Data/AuAu%s/file_%s_Resolution.root",Energy[mEnergy].Data(),Energy[mEnergy].Data());
   TFile *File_Res = TFile::Open(InPutFile_Res.Data());
   TString Res_Order[2] = {"Res2","Res3"};
   TProMap p_mRes;
-  vecFMap ResCorr;
-  for(Int_t i_eta = Eta_start; i_eta < Eta_stop; i_eta++)
+  vecFMap ResValue;
+  for(Int_t i_eta = Eta_start; i_eta < Eta_stop; i_eta++) // eta_gap loop
   {
     TString KEY_eta = Form("%s_EtaGap_%d_EP",Res_Order[mOrder].Data(),i_eta);
-    p_mRes[KEY_eta] = (TProfile*)File_Res->Get(KEY_eta.Data());
-    for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++)
+    p_mRes[KEY_eta] = (TProfile*)File_Res->Get(KEY_eta.Data()); // read in resolution file
+    for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic errors loop
     {
-      for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++)
+      for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++) // centrality bin loop
       {
-	TString KEY_ResCorr = Form("Res_%s_Centrality_%d_EtaGap_%d_SysErrors_%d",Order[mOrder].Data(),i_cent,i_eta,i_sys);
-	cout << KEY_ResCorr.Data() << endl;
+	Float_t yields_total_gaus = 0.0;
+	Float_t yields_total_bw   = 0.0;
+	for(Int_t cent = cent_low[i_cent]; cent <= cent_up[i_cent]; cent++) // calculate resolution and total yields in selected centrality bin
+	{
+	  if(p_mRes[KEY_eta]->GetBinContent(cent+1) > 0) 
+	  {
+	    TString KEY_Yield = Form("Yields_Centrality_%d_EtaGap_%d_%s_SysErrors_%d",cent,i_eta,PID[mPID].Data(),i_sys);
+	    ResValue[KEY_Yield].push_back(static_cast<Float_t>(TMath::Sqrt(p_mRes[KEY_eta]->GetBinContent(cent+1))));
+	    yields_total_gaus += yields_Gaus[KEY_Yield][0];
+	    yields_total_bw += yields_BW[KEY_Yield][0];
+	  }
+	}
+
+	TString KEY_ResCorr = Form("Res_%s_Centrality_%d_EtaGap_%d_SysErrors_%d",Order[mOrder].Data(),i_cent,i_eta,i_sys); // KEY for final resolution correction factor
+	Float_t mean_res_gaus = 0.0;
+	Float_t mean_res_bw = 0.0;
+	for(Int_t cent = cent_low[i_cent]; cent <= cent_up[i_cent]; cent++) // calculate final resolution correction factor <1/R(centrality)>
+	{
+	  TString KEY_Yield = Form("Yields_Centrality_%d_EtaGap_%d_%s_SysErrors_%d",cent,i_eta,PID[mPID].Data(),i_sys);
+	  mean_res_gaus += yields_Gaus[KEY_Yield][0]/(ResValue[KEY_Yield][0]*yields_total_gaus);
+	  mean_res_bw += yields_BW[KEY_Yield][0]/(ResValue[KEY_Yield][0]*yields_total_bw);
+	}
+	cout << "i_eta = " << i_eta << ", i_sys = " << i_sys << ", centrality_bin = " << i_cent << ", mean_res_gaus = " << mean_res_gaus << endl;
+	cout << "i_eta = " << i_eta << ", i_sys = " << i_sys << ", centrality_bin = " << i_cent << ", mean_res_bw = " << mean_res_bw << endl;
+
+	TString KEY_RawFlow_Gaus = Form("RawFlow_Gaus_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // gaussian fits
+	h_mRawFlow[KEY_RawFlow_Gaus]->Scale(mean_res_gaus);
+	TString KEY_RawFlow_BW = Form("RawFlow_BW_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // breit wigner fits
+	h_mRawFlow[KEY_RawFlow_BW]->Scale(mean_res_bw);
       }
     }
   }
-  */
 }
