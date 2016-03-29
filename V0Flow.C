@@ -12,6 +12,7 @@
 #include "TLegend.h"
 #include "TGaxis.h"
 #include "TProfile.h"
+#include "TGraphAsymmErrors.h"
 
 // mEnergy: 0, 200 GeV | 1, 39 GeV
 // mPID: 0, phi | 1, Lambda | 2, anti-Lambda | 3, K0S
@@ -32,6 +33,7 @@ static const Float_t Flow_Order[2] = {2.0,3.0};
 static const Int_t pt_total = 25; // pT loop
 static const Int_t pt_start = 0;
 static const Int_t pt_stop  = 25;
+static const Int_t pt_QA    = 4;
 
 // pt bin
 //                                       0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 ,10 ,11 ,12 ,13 ,14 ,15 ,16 ,17 ,18 ,19 ,20 ,21 ,22, 23, 24
@@ -73,8 +75,8 @@ static const Int_t phi_start = 0;
 static const Int_t phi_stop  = 7;
 
 static const Int_t Sys_total = 20; // Systematic loop
-static const Int_t Sys_start = 10;
-static const Int_t Sys_stop  = 15;
+static const Int_t Sys_start = 0;
+static const Int_t Sys_stop  = 20;
 
 typedef std::map<TString,TH1F*> TH1FMap;
 typedef std::map<TString,TProfile*> TProMap;
@@ -124,20 +126,20 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 
   /*
   // QA Plots for SE vs. ME
-  TString KEY = "pt_4_Centrality_0_EtaGap_0_phi_Psi_3_3rd_Phi_SE_SysErrors_10";
-  h_mMass_SE[KEY]->Draw("PE");
+  TString KEY = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_3_3rd_Phi_SE_SysErrors_%d",pt_QA,Sys_start);
+  h_mMass_SE[KEY]->DrawCopy("PE");
 
-  KEY = "pt_4_Centrality_0_EtaGap_0_phi_Psi_3_3rd_Phi_ME_SysErrors_10";
+  KEY = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_3_3rd_Phi_ME_SysErrors_%d",pt_QA,Sys_start);
   h_mMass_ME[KEY]->SetLineColor(2);
   h_mMass_ME[KEY]->SetFillColor(2);
   h_mMass_ME[KEY]->SetFillStyle(3002);
-  h_mMass_ME[KEY]->Draw("h same");
+  h_mMass_ME[KEY]->DrawCopy("h same");
 
-  KEY = "pt_4_Centrality_0_EtaGap_0_phi_Psi_3_3rd_Phi_SM_SysErrors_10";
+  KEY = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_3_3rd_Phi_SM_SysErrors_%d",pt_QA,Sys_start);
   h_mMass_SM[KEY]->SetLineColor(4);
   h_mMass_SM[KEY]->SetFillColor(4);
   h_mMass_SM[KEY]->SetFillStyle(3004);
-  h_mMass_SM[KEY]->Draw("h same");
+  h_mMass_SM[KEY]->DrawCopy("h same");
   */
 
 
@@ -152,20 +154,20 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     c_pT->cd(i_pt+1)->SetBottomMargin(0.15);
     c_pT->cd(i_pt+1)->SetTicks(1,1);
     c_pT->cd(i_pt+1)->SetGrid(0,0);
-    TString KEY_SE = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_2_%s_%s_SE_SysErrors_14",i_pt,Order[mOrder].Data(),PID[mPID].Data());
-    h_mMass_SE[KEY_SE]->Draw();
+    TString KEY_SE = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_2_%s_%s_SE_SysErrors_%d",i_pt,Order[mOrder].Data(),PID[mPID].Data(),Sys_start);
+    h_mMass_SE[KEY_SE]->DrawCopy();
 
-    TString KEY_ME = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_2_%s_%s_ME_SysErrors_14",i_pt,Order[mOrder].Data(),PID[mPID].Data());
+    TString KEY_ME = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_2_%s_%s_ME_SysErrors_%d",i_pt,Order[mOrder].Data(),PID[mPID].Data(),Sys_start);
     h_mMass_ME[KEY_ME]->SetLineColor(2);
     h_mMass_ME[KEY_ME]->SetFillColor(2);
     h_mMass_ME[KEY_ME]->SetFillStyle(3002);
-    h_mMass_ME[KEY_ME]->Draw("h same");
+    h_mMass_ME[KEY_ME]->DrawCopy("h same");
 
-    TString KEY_SM = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_2_%s_%s_SM_SysErrors_14",i_pt,Order[mOrder].Data(),PID[mPID].Data());
+    TString KEY_SM = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_2_%s_%s_SM_SysErrors_%d",i_pt,Order[mOrder].Data(),PID[mPID].Data(),Sys_start);
     h_mMass_SM[KEY_SM]->SetLineColor(4);
     h_mMass_SM[KEY_SM]->SetFillColor(4);
     h_mMass_SM[KEY_SM]->SetFillStyle(3004);
-    h_mMass_SM[KEY_SM]->Draw("h same");
+    h_mMass_SM[KEY_SM]->DrawCopy("h same");
 
     TString pT_range = Form("[%.2f,%.2f]",pt_low_raw[i_pt],pt_up_raw[i_pt]);
     plotTopLegend((char*)pT_range.Data(),0.2,0.7,0.08,1,0.0,42,1);
@@ -286,11 +288,11 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
       c_mMass_phi->cd(pt_rebin_start[i_pt]+1)->SetBottomMargin(0.15);
       c_mMass_phi->cd(pt_rebin_start[i_pt]+1)->SetTicks(1,1);
       c_mMass_phi->cd(pt_rebin_start[i_pt]+1)->SetGrid(0,0);
-      TString KEY_phi = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_%d_%s_%s_SM_SysErrors_14",i_pt,phi_start,Order[mOrder].Data(),PID[mPID].Data());
+      TString KEY_phi = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_%d_%s_%s_SM_SysErrors_%d",i_pt,phi_start,Order[mOrder].Data(),PID[mPID].Data(),Sys_start);
       h_mMass_phi[KEY_phi]->SetMarkerColor(1);
       h_mMass_phi[KEY_phi]->SetMarkerStyle(24);
       h_mMass_phi[KEY_phi]->SetMarkerSize(0.8);
-      h_mMass_phi[KEY_phi]->Draw("PE");
+      h_mMass_phi[KEY_phi]->DrawCopy("PE");
 
       TF1 *f_bw = new TF1("f_bw",PolyBreitWigner,BW_Start[mPID],BW_Stop[mPID],5);
       for(Int_t i_par = 0; i_par < 5; i_par++)
@@ -364,11 +366,11 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
       c_mMass_phi_diff->cd(pt_rebin_start[i_pt]+1)->SetBottomMargin(0.15);
       c_mMass_phi_diff->cd(pt_rebin_start[i_pt]+1)->SetTicks(1,1);
       c_mMass_phi_diff->cd(pt_rebin_start[i_pt]+1)->SetGrid(0,0);
-      TString KEY_phi = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_3_%s_%s_SM_SysErrors_14",i_pt,Order[mOrder].Data(),PID[mPID].Data());
+      TString KEY_phi = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_3_%s_%s_SM_SysErrors_%d",i_pt,Order[mOrder].Data(),PID[mPID].Data(),Sys_start);
       h_mMass[KEY_phi]->SetMarkerColor(1);
       h_mMass[KEY_phi]->SetMarkerStyle(24);
       h_mMass[KEY_phi]->SetMarkerSize(0.8);
-      h_mMass[KEY_phi]->Draw("PE");
+      h_mMass[KEY_phi]->DrawCopy("PE");
 
       TString pT_range = Form("[%.2f,%.2f]",pt_low[i_pt],pt_up[i_pt]);
       plotTopLegend((char*)pT_range.Data(),0.2,0.7,0.08,1,0.0,42,1);
@@ -432,18 +434,18 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     c_mMass_guass->cd(pt_rebin_start[i_pt]+1)->SetBottomMargin(0.15);
     c_mMass_guass->cd(pt_rebin_start[i_pt]+1)->SetTicks(1,1);
     c_mMass_guass->cd(pt_rebin_start[i_pt]+1)->SetGrid(0,0);
-    TString KEY_phi = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_%d_%s_%s_SM_SysErrors_14",i_pt,phi_start,Order[mOrder].Data(),PID[mPID].Data());
+    TString KEY_phi = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_%d_%s_%s_SM_SysErrors_%d",i_pt,phi_start,Order[mOrder].Data(),PID[mPID].Data(),Sys_start);
     h_mMass_gauss[KEY_phi]->SetMarkerColor(1);
     h_mMass_gauss[KEY_phi]->SetMarkerStyle(24);
     h_mMass_gauss[KEY_phi]->SetMarkerSize(0.8);
-    h_mMass_gauss[KEY_phi]->Draw("PE");
+    h_mMass_gauss[KEY_phi]->DrawCopy("PE");
     TF1 *f_gauss = new TF1("f_gauss",Gaussion,BW_Start[mPID],BW_Stop[mPID],3);
     f_gauss->FixParameter(0,ParGaus[KEY_phi][0]);
     f_gauss->FixParameter(1,ParGaus[KEY_phi][1]);
     f_gauss->FixParameter(2,ParGaus[KEY_phi][2]);
     f_gauss->SetRange(InvMass[mPID]-nSigGaus*Width[mPID],InvMass[mPID]+nSigGaus*Width[mPID]);
     f_gauss->SetLineColor(2);
-    f_gauss->Draw("l same");
+    f_gauss->DrawCopy("l same");
 
     TString pT_range = Form("[%.2f,%.2f]",pt_low[i_pt],pt_up[i_pt]);
     plotTopLegend((char*)pT_range.Data(),0.2,0.7,0.08,1,0.0,42,1);
@@ -459,18 +461,18 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     c_mMass_bw->cd(pt_rebin_start[i_pt]+1)->SetBottomMargin(0.15);
     c_mMass_bw->cd(pt_rebin_start[i_pt]+1)->SetTicks(1,1);
     c_mMass_bw->cd(pt_rebin_start[i_pt]+1)->SetGrid(0,0);
-    TString KEY_phi = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_%d_%s_%s_SM_SysErrors_14",i_pt,phi_start,Order[mOrder].Data(),PID[mPID].Data());
+    TString KEY_phi = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_%d_%s_%s_SM_SysErrors_%d",i_pt,phi_start,Order[mOrder].Data(),PID[mPID].Data(),Sys_start);
     h_mMass_gauss[KEY_phi]->SetMarkerColor(1);
     h_mMass_gauss[KEY_phi]->SetMarkerStyle(24);
     h_mMass_gauss[KEY_phi]->SetMarkerSize(0.8);
-    h_mMass_gauss[KEY_phi]->Draw("PE");
+    h_mMass_gauss[KEY_phi]->DrawCopy("PE");
     TF1 *f_bw = new TF1("f_bw",BreitWigner,BW_Start[mPID],BW_Stop[mPID],3);
     f_bw->SetParameter(0,ParBW[KEY_phi][0]);
     f_bw->SetParameter(1,ParBW[KEY_phi][1]);
     f_bw->SetParameter(2,ParBW[KEY_phi][2]);
     f_bw->SetRange(BW_Start[mPID],BW_Stop[mPID]);
     f_bw->SetLineColor(2);
-    f_bw->Draw("l same");
+    f_bw->DrawCopy("l same");
 
     TString pT_range = Form("[%.2f,%.2f]",pt_low[i_pt],pt_up[i_pt]);
     plotTopLegend((char*)pT_range.Data(),0.2,0.7,0.08,1,0.0,42,1);
@@ -534,7 +536,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 
 	  TF1 *f_phi_gaus = new TF1("f_phi_gaus",flow,0.0,PI_max[mOrder],3);
 	  f_phi_gaus->SetParameter(0,0.2);
-	  f_phi_gaus->SetParameter(1,0.1);
+	  f_phi_gaus->SetParameter(1,0.2);
 	  f_phi_gaus->FixParameter(2,Flow_Order[mOrder]);
 	  h_mCounts[KEY_Gaus]->Fit(f_phi_gaus,"NQM");
 	  ParFlow_Gaus[KEY_Gaus].clear();
@@ -562,7 +564,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 
   /*
   // QA InvMass vs. phi for gaussian and breit wigner fits
-  TString KEY_phi = Form("pt_7_Centrality_0_EtaGap_0_phi_Psi_%d_%s_%s_SM_SysErrors_14",phi_start,Order[mOrder].Data(),PID[mPID].Data());
+  TString KEY_phi = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_%d_%s_%s_SM_SysErrors_%d",pt_QA,phi_start,Order[mOrder].Data(),PID[mPID].Data(),Sys_start);
   TCanvas *c_mMass_psi = new TCanvas("c_mMass_psi","c_mMass_psi",10,10,900,900);
   c_mMass_psi->Divide(3,3);
   for(Int_t i_phi = phi_start; i_phi < phi_stop; i_phi++)
@@ -575,11 +577,11 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   for(Int_t i_phi = phi_start; i_phi < phi_stop; i_phi++)
   {
     c_mMass_psi->cd(i_phi+1);
-    TString KEY = Form("pt_7_Centrality_0_EtaGap_0_phi_Psi_%d_%s_%s_SM_SysErrors_14",i_phi,Order[mOrder].Data(),PID[mPID].Data());
+    TString KEY = Form("pt_%d_Centrality_0_EtaGap_0_phi_Psi_%d_%s_%s_SM_SysErrors_%d",pt_QA,i_phi,Order[mOrder].Data(),PID[mPID].Data(),Sys_start);
     h_mMass[KEY]->SetMarkerColor(1);
     h_mMass[KEY]->SetMarkerStyle(24);
     h_mMass[KEY]->SetMarkerSize(0.8);
-    h_mMass[KEY]->Draw("hE");
+    h_mMass[KEY]->DrawCopy("hE");
 
     TF1 *f_bw = new TF1("f_bw",BreitWigner,BW_Start[mPID],BW_Stop[mPID],3);;
     f_bw->FixParameter(0,ParBW[KEY_phi][0]);
@@ -588,7 +590,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     f_bw->SetRange(BW_Start[mPID],BW_Stop[mPID]);
     h_mMass[KEY]->Fit(f_bw,"NMQR");
     f_bw->SetLineColor(2);
-    f_bw->Draw("l same");
+    f_bw->DrawCopy("l same");
 
     Float_t x1 = ParGaus[KEY_phi][0] - nSigV0*ParGaus[KEY_phi][1];
     Float_t x2 = ParGaus[KEY_phi][0] + nSigV0*ParGaus[KEY_phi][1];
@@ -602,7 +604,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   h_mMass_gauss[KEY_phi]->SetMarkerColor(1);
   h_mMass_gauss[KEY_phi]->SetMarkerStyle(24);
   h_mMass_gauss[KEY_phi]->SetMarkerSize(0.8);
-  h_mMass_gauss[KEY_phi]->Draw("pE");
+  h_mMass_gauss[KEY_phi]->DrawCopy("pE");
   TF1 *f_gauss_temp = new TF1("f_gauss_temp",Gaussion,BW_Start[mPID],BW_Stop[mPID],3);
   f_gauss_temp->FixParameter(0,ParGaus[KEY_phi][0]);
   f_gauss_temp->FixParameter(1,ParGaus[KEY_phi][1]);
@@ -610,41 +612,41 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   f_gauss_temp->SetRange(InvMass[mPID]-nSigGaus*Width[mPID],InvMass[mPID]+nSigGaus*Width[mPID]);
   f_gauss_temp->SetLineColor(4);
   f_gauss_temp->SetLineWidth(2);
-  f_gauss_temp->Draw("l same");
+  f_gauss_temp->DrawCopy("l same");
   PlotLine(0.98,1.05,0.0,0.0,1,2,2);
 
   c_mMass_psi->cd(9);
-  TString KEY_Gaus = Form("Gaus_pt_7_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_14",Order[mOrder].Data(),PID[mPID].Data());
+  TString KEY_Gaus = Form("Gaus_pt_%d_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_%d",pt_QA,Order[mOrder].Data(),PID[mPID].Data(),Sys_start);
   h_mCounts[KEY_Gaus]->SetLineColor(4);
   h_mCounts[KEY_Gaus]->SetMarkerColor(4);
   h_mCounts[KEY_Gaus]->SetMarkerStyle(24);
   h_mCounts[KEY_Gaus]->SetMarkerSize(0.8);
   Float_t Inte_gaus = h_mCounts[KEY_Gaus]->Integral();
   h_mCounts[KEY_Gaus]->Scale(1.0/Inte_gaus);
-  h_mCounts[KEY_Gaus]->Draw("pE");
+  h_mCounts[KEY_Gaus]->DrawCopy("pE");
   TF1 *f_phi_gaus = new TF1("f_phi_gaus",flow,0.0,PI_max[mOrder],3);
   f_phi_gaus->FixParameter(0,ParFlow_Gaus[KEY_Gaus][0]/Inte_gaus);
 //  f_phi_gaus->FixParameter(0,ParFlow_Gaus[KEY_Gaus][0]);
   f_phi_gaus->FixParameter(1,ParFlow_Gaus[KEY_Gaus][1]);
   f_phi_gaus->FixParameter(2,ParFlow_Gaus[KEY_Gaus][2]);
   f_phi_gaus->SetLineColor(4);
-  f_phi_gaus->Draw("l same");
+  f_phi_gaus->DrawCopy("l same");
 
-  TString KEY_BW = Form("BW_pt_7_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_14",Order[mOrder].Data(),PID[mPID].Data());
+  TString KEY_BW = Form("BW_pt_%d_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_%d",pt_QA,Order[mOrder].Data(),PID[mPID].Data(),Sys_start);
   h_mCounts[KEY_BW]->SetLineColor(2);
   h_mCounts[KEY_BW]->SetMarkerColor(2);
   h_mCounts[KEY_BW]->SetMarkerStyle(24);
   h_mCounts[KEY_BW]->SetMarkerSize(0.8);
   Float_t Inte_bw = h_mCounts[KEY_BW]->Integral();
   h_mCounts[KEY_BW]->Scale(1.0/Inte_bw);
-  h_mCounts[KEY_BW]->Draw("pE same");
+  h_mCounts[KEY_BW]->DrawCopy("pE same");
   TF1 *f_phi_bw = new TF1("f_phi_bw",flow,0.0,PI_max[mOrder],3);
   f_phi_bw->FixParameter(0,ParFlow_BW[KEY_BW][0]/Inte_bw);
 //  f_phi_bw->FixParameter(0,ParFlow_BW[KEY_BW][0]);
   f_phi_bw->FixParameter(1,ParFlow_BW[KEY_BW][1]);
   f_phi_bw->FixParameter(2,ParFlow_BW[KEY_BW][2]);
   f_phi_bw->SetLineColor(2);
-  f_phi_bw->Draw("l same");
+  f_phi_bw->DrawCopy("l same");
 
   TLegend *leg_temp = new TLegend(0.5,0.6,0.8,0.8);
   leg_temp->SetFillColor(10);
@@ -661,29 +663,29 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   c_raw_flow->SetBottomMargin(0.15);
   c_raw_flow->SetTicks(1,1);
   c_raw_flow->SetGrid(0,0);
-  TH1F *h_play = new TH1F("h_play","h_play",100,0.0,10.0);
+  TH1F *h_play_raw = new TH1F("h_play_raw","h_play_raw",100,0.0,10.0);
   for(Int_t i_bin = 0; i_bin < 100; i_bin++)
   {
-    h_play->SetBinContent(i_bin+1,-10.0);
-    h_play->SetBinError(i_bin+1,1.0);
+    h_play_raw->SetBinContent(i_bin+1,-10.0);
+    h_play_raw->SetBinError(i_bin+1,1.0);
   }
-  h_play->SetTitle("");
-  h_play->SetStats(0);
-  h_play->GetXaxis()->SetRangeUser(0.0,8.0);
-  h_play->GetXaxis()->SetNdivisions(505,'N');
-  h_play->GetXaxis()->SetLabelSize(0.03);
-  h_play->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-  h_play->GetXaxis()->SetTitleSize(0.05);
-  h_play->GetXaxis()->SetTitleOffset(1.2);
-  h_play->GetXaxis()->CenterTitle();
+  h_play_raw->SetTitle("");
+  h_play_raw->SetStats(0);
+  h_play_raw->GetXaxis()->SetRangeUser(0.0,8.0);
+  h_play_raw->GetXaxis()->SetNdivisions(505,'N');
+  h_play_raw->GetXaxis()->SetLabelSize(0.03);
+  h_play_raw->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+  h_play_raw->GetXaxis()->SetTitleSize(0.05);
+  h_play_raw->GetXaxis()->SetTitleOffset(1.2);
+  h_play_raw->GetXaxis()->CenterTitle();
 
-  h_play->GetYaxis()->SetRangeUser(-0.01,0.04);
-  h_play->GetYaxis()->SetNdivisions(505,'N');
-  h_play->GetYaxis()->SetTitle("v_{3}^{raw}");
-  h_play->GetYaxis()->SetTitleSize(0.05);
-  h_play->GetYaxis()->SetLabelSize(0.03);
-  h_play->GetYaxis()->CenterTitle();
-  h_play->Draw("pE");
+  h_play_raw->GetYaxis()->SetRangeUser(-0.01,0.04);
+  h_play_raw->GetYaxis()->SetNdivisions(505,'N');
+  h_play_raw->GetYaxis()->SetTitle("v_{3}^{raw}");
+  h_play_raw->GetYaxis()->SetTitleSize(0.05);
+  h_play_raw->GetYaxis()->SetLabelSize(0.03);
+  h_play_raw->GetYaxis()->CenterTitle();
+  h_play_raw->DrawCopy("pE");
   PlotLine(0.0,8.0,0.0,0.0,1,2,2);
   for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++) // Centrality loop
   {
@@ -693,22 +695,22 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
       {
 	TString KEY_RawFlow_Gaus = Form("RawFlow_Gaus_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // gaussian fits
 	h_mRawFlow[KEY_RawFlow_Gaus]->SetMarkerStyle(24);
-	h_mRawFlow[KEY_RawFlow_Gaus]->SetMarkerColor(2);
+	h_mRawFlow[KEY_RawFlow_Gaus]->SetMarkerColor(4);
 	h_mRawFlow[KEY_RawFlow_Gaus]->DrawCopy("PE same");
 	TString KEY_RawFlow_BW = Form("RawFlow_BW_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // breit wigner fits
 	h_mRawFlow[KEY_RawFlow_BW]->SetMarkerStyle(24);
-	h_mRawFlow[KEY_RawFlow_BW]->SetMarkerColor(4);
+	h_mRawFlow[KEY_RawFlow_BW]->SetMarkerColor(2);
 	h_mRawFlow[KEY_RawFlow_BW]->DrawCopy("PE same");
       }
     }
   }
-  TString KEY_RawFlow_Gaus = Form("RawFlow_Gaus_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_0",Order[mOrder].Data(),PID[mPID].Data()); // gaussian fits
-  TString KEY_RawFlow_BW = Form("RawFlow_BW_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_0",Order[mOrder].Data(),PID[mPID].Data()); // gaussian fits
+  TString KEY_RawFlow_Gaus_QA = Form("RawFlow_Gaus_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_%d",Order[mOrder].Data(),PID[mPID].Data(),Sys_start); // gaussian fits
+  TString KEY_RawFlow_BW_QA = Form("RawFlow_BW_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_%d",Order[mOrder].Data(),PID[mPID].Data(),Sys_start); // gaussian fits
   TLegend *leg_raw_flow = new TLegend(0.5,0.6,0.8,0.8);
   leg_raw_flow->SetFillColor(10);
   leg_raw_flow->SetBorderSize(0.0);
-  leg_raw_flow->AddEntry(h_mRawFlow[KEY_RawFlow_Gaus],"bin counting","p");
-  leg_raw_flow->AddEntry(h_mRawFlow[KEY_RawFlow_BW],"breit wigner","p");
+  leg_raw_flow->AddEntry(h_mRawFlow[KEY_RawFlow_Gaus_QA],"bin counting","p");
+  leg_raw_flow->AddEntry(h_mRawFlow[KEY_RawFlow_BW_QA],"breit wigner","p");
   leg_raw_flow->Draw("same");
 //  c_raw_flow->SaveAs("./raw_flow.eps");
   */
@@ -751,7 +753,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     c_Yields->cd(i_cent+1)->SetBottomMargin(0.20);
     c_Yields->cd(i_cent+1)->SetTicks(1,1);
     c_Yields->cd(i_cent+1)->SetGrid(0,0);
-    TString KEY_Yield_SE = Form("Yields_Centrality_%d_EtaGap_0_%s_SE_SysErrors_14",i_cent,PID[mPID].Data());
+    TString KEY_Yield_SE = Form("Yields_Centrality_%d_EtaGap_0_%s_SE_SysErrors_%d",i_cent,PID[mPID].Data(),Sys_start);
     h_mYield_SE[KEY_Yield_SE]->SetTitle("");
     h_mYield_SE[KEY_Yield_SE]->SetStats(0);
     h_mYield_SE[KEY_Yield_SE]->SetMarkerStyle(24);
@@ -762,17 +764,17 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     h_mYield_SE[KEY_Yield_SE]->GetYaxis()->SetTitle("Counts");
     h_mYield_SE[KEY_Yield_SE]->GetYaxis()->CenterTitle();
     h_mYield_SE[KEY_Yield_SE]->GetYaxis()->SetTitleOffset(1.2);
-    h_mYield_SE[KEY_Yield_SE]->Draw("pE");
+    h_mYield_SE[KEY_Yield_SE]->DrawCopy("pE");
 
-    TString KEY_Yield_ME = Form("Yields_Centrality_%d_EtaGap_0_%s_ME_SysErrors_14",i_cent,PID[mPID].Data());
+    TString KEY_Yield_ME = Form("Yields_Centrality_%d_EtaGap_0_%s_ME_SysErrors_%d",i_cent,PID[mPID].Data(),Sys_start);
     h_mYield_ME[KEY_Yield_ME]->SetFillColor(2);
     h_mYield_ME[KEY_Yield_ME]->SetFillStyle(3002);
-    h_mYield_ME[KEY_Yield_ME]->Draw("h Same");
+    h_mYield_ME[KEY_Yield_ME]->DrawCopy("h Same");
 
-    TString KEY_Yield = Form("Yields_Centrality_%d_EtaGap_0_%s_SysErrors_14",i_cent,PID[mPID].Data());
+    TString KEY_Yield = Form("Yields_Centrality_%d_EtaGap_0_%s_SysErrors_%d",i_cent,PID[mPID].Data(),Sys_start);
     h_mYield[KEY_Yield]->SetFillColor(4);
     h_mYield[KEY_Yield]->SetFillStyle(3001);
-    h_mYield[KEY_Yield]->Draw("h Same");
+    h_mYield[KEY_Yield]->DrawCopy("h Same");
   }
   */
 
@@ -829,7 +831,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
       c_Yields->cd(i_cent+1)->SetTicks(1,1);
       c_Yields->cd(i_cent+1)->SetGrid(0,0);
 
-      TString KEY_Yield = Form("Yields_Centrality_%d_EtaGap_0_%s_SysErrors_14",i_cent,PID[mPID].Data());
+      TString KEY_Yield = Form("Yields_Centrality_%d_EtaGap_0_%s_SysErrors_%d",i_cent,PID[mPID].Data(),Sys_start);
       h_mYield[KEY_Yield]->SetTitle("");
       h_mYield[KEY_Yield]->SetStats(0);
       h_mYield[KEY_Yield]->SetMarkerStyle(24);
@@ -841,13 +843,13 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
       h_mYield[KEY_Yield]->GetYaxis()->SetTitle("Counts");
       h_mYield[KEY_Yield]->GetYaxis()->CenterTitle();
       h_mYield[KEY_Yield]->GetYaxis()->SetTitleOffset(1.2);
-      h_mYield[KEY_Yield]->Draw("pE");
+      h_mYield[KEY_Yield]->DrawCopy("pE");
       PlotLine(0.98,1.05,0.0,0.0,1,2,2);
 
       h_mYield_SM[KEY_Yield]->SetMarkerStyle(24);
       h_mYield_SM[KEY_Yield]->SetMarkerColor(2);
       h_mYield_SM[KEY_Yield]->SetMarkerSize(0.8);
-      h_mYield_SM[KEY_Yield]->Draw("pE Same");
+      h_mYield_SM[KEY_Yield]->DrawCopy("pE Same");
 
       TF1 *f_bw = new TF1("f_bw",PolyBreitWigner,BW_Start[mPID],BW_Stop[mPID],5);
       for(Int_t i_par = 0; i_par < 5; i_par++)
@@ -863,7 +865,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
       f_bw->SetLineColor(4);
       f_bw->SetLineWidth(2);
       f_bw->SetLineStyle(1);
-      f_bw->Draw("l same");
+      f_bw->DrawCopy("l same");
 
       TF1 *f_poly = new TF1("f_poly",Poly,BW_Start[mPID],BW_Stop[mPID],2);
       f_poly->FixParameter(0,ParYield_SM[KEY_Yield][3]);
@@ -871,7 +873,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
       f_poly->SetLineColor(4);
       f_poly->SetLineWidth(2);
       f_poly->SetLineStyle(2);
-      f_poly->Draw("l same");
+      f_poly->DrawCopy("l same");
     }
     */
   }
@@ -948,7 +950,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     c_Yields_counts->cd(i_cent+1)->SetTicks(1,1);
     c_Yields_counts->cd(i_cent+1)->SetGrid(0,0);
 
-    TString KEY_Yield = Form("Yields_Centrality_%d_EtaGap_0_%s_SysErrors_14",i_cent,PID[mPID].Data());
+    TString KEY_Yield = Form("Yields_Centrality_%d_EtaGap_0_%s_SysErrors_%d",i_cent,PID[mPID].Data(),Sys_start);
     h_mYield[KEY_Yield]->SetTitle("");
     h_mYield[KEY_Yield]->SetStats(0);
     h_mYield[KEY_Yield]->SetMarkerStyle(24);
@@ -960,7 +962,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     h_mYield[KEY_Yield]->GetYaxis()->SetTitle("Counts");
     h_mYield[KEY_Yield]->GetYaxis()->CenterTitle();
     h_mYield[KEY_Yield]->GetYaxis()->SetTitleOffset(1.2);
-    h_mYield[KEY_Yield]->Draw("pE");
+    h_mYield[KEY_Yield]->DrawCopy("pE");
     PlotLine(0.98,1.05,0.0,0.0,1,2,2);
 
     TF1 *f_yields_bw = new TF1("f_yields_bw",BreitWigner,BW_Start[mPID],BW_Stop[mPID],3);
@@ -971,7 +973,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     f_yields_bw->SetLineColor(2);
     f_yields_bw->SetLineStyle(1);
     f_yields_bw->SetLineWidth(2);
-    f_yields_bw->Draw("l same");
+    f_yields_bw->DrawCopy("l same");
 
     TF1 *f_yields_gauss = new TF1("f_yields_gauss",Gaussion,BW_Start[mPID],BW_Stop[mPID],3);
     f_yields_gauss->SetParameter(0,ParYield_Gaus[KEY_Yield][0]);
@@ -981,7 +983,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     f_yields_gauss->SetLineColor(4);
     f_yields_gauss->SetLineStyle(2);
     f_yields_gauss->SetLineWidth(4);
-    f_yields_gauss->Draw("l same");
+    f_yields_gauss->DrawCopy("l same");
 
     Float_t x1 = ParYield_Gaus[KEY_Yield][0] - nSigV0*ParYield_Gaus[KEY_Yield][1];
     Float_t x2 = ParYield_Gaus[KEY_Yield][0] + nSigV0*ParYield_Gaus[KEY_Yield][1];
@@ -1037,4 +1039,81 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
       }
     }
   }
+
+  /*
+  // QA flow vs. pt for gaussian fits and breit wigner fits
+  TCanvas *c_flow = new TCanvas("c_flow","c_flow",10,10,800,800);
+  c_flow->SetLeftMargin(0.15);
+  c_flow->SetBottomMargin(0.15);
+  c_flow->SetTicks(1,1);
+  c_flow->SetGrid(0,0);
+  TH1F *h_play = new TH1F("h_play","h_play",100,0.0,10.0);
+  for(Int_t i_bin = 0; i_bin < 100; i_bin++)
+  {
+    h_play->SetBinContent(i_bin+1,-10.0);
+    h_play->SetBinError(i_bin+1,1.0);
+  }
+  h_play->SetTitle("");
+  h_play->SetStats(0);
+  h_play->GetXaxis()->SetRangeUser(0.0,8.0);
+  h_play->GetXaxis()->SetNdivisions(505,'N');
+  h_play->GetXaxis()->SetLabelSize(0.03);
+  h_play->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+  h_play->GetXaxis()->SetTitleSize(0.05);
+  h_play->GetXaxis()->SetTitleOffset(1.2);
+  h_play->GetXaxis()->CenterTitle();
+
+  h_play->GetYaxis()->SetRangeUser(-0.01,0.20);
+  h_play->GetYaxis()->SetNdivisions(505,'N');
+  h_play->GetYaxis()->SetTitle("v_{3}");
+  h_play->GetYaxis()->SetTitleSize(0.05);
+  h_play->GetYaxis()->SetLabelSize(0.03);
+  h_play->GetYaxis()->CenterTitle();
+  h_play->DrawCopy("pE");
+  PlotLine(0.0,8.0,0.0,0.0,1,2,2);
+  for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++) // Centrality loop
+  {
+    for(Int_t i_eta = Eta_start; i_eta < Eta_stop; i_eta++) // EtaGap loop
+    {
+      for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic loop
+      {
+	TString KEY_RawFlow_Gaus = Form("RawFlow_Gaus_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // gaussian fits
+	h_mRawFlow[KEY_RawFlow_Gaus]->SetMarkerStyle(24);
+	h_mRawFlow[KEY_RawFlow_Gaus]->SetMarkerColor(4);
+	h_mRawFlow[KEY_RawFlow_Gaus]->DrawCopy("PE same");
+	TString KEY_RawFlow_BW = Form("RawFlow_BW_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // breit wigner fits
+	h_mRawFlow[KEY_RawFlow_BW]->SetMarkerStyle(24);
+	h_mRawFlow[KEY_RawFlow_BW]->SetMarkerColor(2);
+	h_mRawFlow[KEY_RawFlow_BW]->DrawCopy("PE same");
+      }
+    }
+  }
+  TString KEY_RawFlow_Gaus = Form("RawFlow_Gaus_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_%d",Order[mOrder].Data(),PID[mPID].Data(),Sys_start); // gaussian fits
+  TString KEY_RawFlow_BW = Form("RawFlow_BW_Centrality_0_EtaGap_0_%s_%s_SM_SysErrors_%d",Order[mOrder].Data(),PID[mPID].Data(),Sys_start); // breit wigner fits
+  TLegend *leg_flow = new TLegend(0.5,0.6,0.8,0.8);
+  leg_flow->SetFillColor(10);
+  leg_flow->SetBorderSize(0.0);
+  leg_flow->AddEntry(h_mRawFlow[KEY_RawFlow_Gaus],"bin counting","p");
+  leg_flow->AddEntry(h_mRawFlow[KEY_RawFlow_BW],"breit wigner","p");
+  leg_flow->Draw("same");
+//  c_flow->SaveAs("./flow.eps");
+  */
+
+  TString OutPutFile = Form("./OutPut/AuAu%s/%s/h_flow_%s.root",Energy[mEnergy].Data(),PID[mPID].Data(),Order[mOrder].Data());
+  TFile *File_OutPut = new TFile(OutPutFile.Data(),"RECREATE");
+  File_OutPut->cd();
+  for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++) // Centrality loop
+  {
+    for(Int_t i_eta = Eta_start; i_eta < Eta_stop; i_eta++) // EtaGap loop
+    {
+      for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic loop
+      {
+	TString KEY_RawFlow_Gaus_Save = Form("RawFlow_Gaus_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // gaussian fits
+	h_mRawFlow[KEY_RawFlow_Gaus_Save]->Write();
+	TString KEY_RawFlow_BW_Save = Form("RawFlow_BW_Centrality_%d_EtaGap_%d_%s_%s_SM_SysErrors_%d",i_cent,i_eta,Order[mOrder].Data(),PID[mPID].Data(),i_sys); // breit wigner fits
+	h_mRawFlow[KEY_RawFlow_BW_Save]->Write();
+      }
+    }
+  }
+  File_OutPut->Close();
 }
