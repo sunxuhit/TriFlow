@@ -505,6 +505,7 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
     }
   }
 
+
   /*
   // QA: pt spectra
   TCanvas *c_Pt = new TCanvas("c_Pt","c_Pt",10,10,800,800);
@@ -515,18 +516,26 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
   c_Pt->cd()->SetGrid(0,0);
   c_Pt->cd()->SetLogy();
   TString KEY_pT_counts_QA = Form("Count_Spec_Centrality_%d_EtaGap_%d_%s_SysErrors_%d",Cent_start,Eta_start,PID[mPID].Data(),Sys_start);
-  h_mPt[KEY_pT_counts_QA]->SetTitle("");
-  h_mPt[KEY_pT_counts_QA]->SetStats(0);
+  TH1F *h_play = new TH1F("h_play","h_play",110,-1.0,10.0);
+  for(Int_t i_bin = 0; i_bin < 110; i_bin++)
+  {
+    h_play->SetBinContent(i_bin+1,-1000.0);
+    h_play->SetBinError(i_bin+1,1.0);
+  }
+  h_play->SetTitle("");
+  h_play->SetStats(0);
+  h_play->GetXaxis()->SetNdivisions(505,'N');
+  h_play->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+  h_play->GetXaxis()->CenterTitle();
+  h_play->GetYaxis()->SetTitle("dN/dp_{T}");
+  h_play->GetYaxis()->CenterTitle();
+  h_play->GetYaxis()->SetTitleOffset(1.2);
+  h_play->GetYaxis()->SetRangeUser(0.1,2.0*h_mPt[KEY_pT_counts_QA]->GetMaximum());
+  h_play->DrawCopy("pE");
   h_mPt[KEY_pT_counts_QA]->SetMarkerStyle(24);
   h_mPt[KEY_pT_counts_QA]->SetMarkerColor(4);
   h_mPt[KEY_pT_counts_QA]->SetMarkerSize(1.0);
-  h_mPt[KEY_pT_counts_QA]->GetXaxis()->SetNdivisions(505,'N');
-  h_mPt[KEY_pT_counts_QA]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-  h_mPt[KEY_pT_counts_QA]->GetXaxis()->CenterTitle();
-  h_mPt[KEY_pT_counts_QA]->GetYaxis()->SetTitle("dN/dp_{T}");
-  h_mPt[KEY_pT_counts_QA]->GetYaxis()->CenterTitle();
-  h_mPt[KEY_pT_counts_QA]->GetYaxis()->SetTitleOffset(1.2);
-  h_mPt[KEY_pT_counts_QA]->DrawCopy("pE");
+  h_mPt[KEY_pT_counts_QA]->DrawCopy("pE same");
 
   TString KEY_pT_inte_QA = Form("Inte_Spec_Centrality_%d_EtaGap_%d_%s_SysErrors_%d",Cent_start,Eta_start,PID[mPID].Data(),Sys_start);
   h_mPt[KEY_pT_inte_QA]->SetMarkerColor(2);
@@ -535,6 +544,7 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
   h_mPt[KEY_pT_inte_QA]->DrawCopy("pE same");
   */
 
+  // Save h_mPt
   TString OutPutFile = Form("./OutPut/AuAu%s/%s/h_pt.root",Energy[mEnergy].Data(),PID[mPID].Data());
   TFile *File_OutPut = new TFile(OutPutFile.Data(),"RECREATE");
   File_OutPut->cd();

@@ -65,3 +65,21 @@ Double_t Gaussion(Double_t *x_val, Double_t *par)
 
   return y;
 }
+
+Double_t PtFitFunc2_mod_x(Double_t* x_val, Double_t* par)
+{
+  Double_t x, y, m0, Temp, Ampl, shift;
+  m0    = par[0];
+  Temp  = par[1];
+  Ampl  = par[2];
+  shift = par[3];
+  Double_t pol0 = par[4];
+  Double_t pol1 = par[5];
+  Double_t pol2 = par[6];
+
+  x = x_val[0];
+  Double_t poly = pol0 + pol1*x + pol2*x*x;
+  y = x*(Ampl*(x-shift)*sqrt((x-shift)*(x-shift)+m0*m0)*TMath::Exp(-(sqrt((x-shift)*(x-shift)+m0*m0)-m0)/Temp)) + poly;
+
+  return y;
+}
