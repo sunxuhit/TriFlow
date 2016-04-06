@@ -774,6 +774,7 @@ Int_t StTriFlowMaker::Make()
 
 		mTriFlowHistoManger->FillQA_before(j,Mass2,dEdx,p*nCharge);
 
+		Float_t scale_nSigma_factor = TriFlow::mSigScaleMap[mPicoEvent->energy()];
 		if(mTriFlowCut->passSigProntonCut(track,scale_nSigma_factor)) // nSigmaProton cut
 		{
 		  if(mTriFlowCorrection->passTrackEtaEast(track,j,1))
