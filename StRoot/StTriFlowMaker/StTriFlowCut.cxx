@@ -199,7 +199,7 @@ bool StTriFlowCut::passPIDCut(StPicoTrack *track)
 
   // nHitsDedx cut
   Int_t nHitsDedx = track->nHitsDedx();
-  if(nHitsDedx < TriFlow::mHitsRatioTPCMin)
+  if(nHitsDedx < TriFlow::mHitsDedxMin)
   {
     return kFALSE;
   }
@@ -248,6 +248,16 @@ bool StTriFlowCut::passSigProntonCut(StPicoTrack* track, Float_t scale_nSigma_fa
 {
   Float_t nSigmaProton = track->nSigmaProton();
   if(fabs(nSigmaProton*scale_nSigma_factor) > TriFlow::mNSigmaProtonMax)
+  {
+    return kFALSE;
+  }
+  return kTRUE;
+}
+
+bool StTriFlowCut::passSigProntonCutSys(StPicoTrack* track, Float_t scale_nSigma_factor, Int_t i_proton)
+{
+  Float_t nSigmaProton = track->nSigmaProton();
+  if(fabs(nSigmaProton*scale_nSigma_factor) > TriFlow::mNSigmaProtonMaxSys[i_proton])
   {
     return kFALSE;
   }
@@ -312,8 +322,35 @@ bool StTriFlowCut::passTrackCut(StPicoTrack *track)
 
   if(!passTrackBasic(track)) return kFALSE;
 
-  // dca cut for flow analysis: 1.0
+  // dca cut for flow analysis: 1.0, 1.5 and 2.0
   if(track->dca() > TriFlow::mDcaTrMax)
+  {
+    return kFALSE;
+  }
+
+  // primary pt and momentum cut: PtMin = 0.15 for 200 GeV, PtMin = 0.2 for BES
+  if(!(track->pMom().perp() > TriFlow::mPrimPtMin[mEnergy] && track->pMom().mag() < TriFlow::mPrimMomMax))
+  {
+    return kFALSE;
+  }
+
+  return kTRUE;
+}
+
+bool StTriFlowCut::passTrackCutSys(StPicoTrack *track, Int_t i_dca, Int_t i_nHitsFit)
+{
+  if(!track) return kFALSE;
+
+  if(!passTrackBasic(track)) return kFALSE;
+
+  // dca cut for flow analysis: 1.0, 1.5 and 2.0
+  if(track->dca() > TriFlow::mDcaTrMaxSys[i_dca])
+  {
+    return kFALSE;
+  }
+
+  // nHitsFit cut: 15, 20
+  if(track->nHitsFit() < TriFlow::mHitsFitTPCMinSys[i_nHitsFit])
   {
     return kFALSE;
   }

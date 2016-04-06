@@ -18,6 +18,7 @@ class StTriFlowCut : public TObject
     bool passTrackBasic(StPicoTrack*);
     bool passTrackEP(StPicoTrack*);
     bool passTrackCut(StPicoTrack*);
+    bool passTrackCutSys(StPicoTrack*,Int_t,Int_t);
     bool passPIDCut(StPicoTrack*);
     bool passSigElectronCut(StPicoTrack*, Float_t);
     bool passSigPionCut(StPicoTrack*, Float_t);

@@ -158,7 +158,7 @@ void StTriFlowHistoManger::InitProton()
 }
 
 //-------------------------------------------------------------------------------------------
-void StTriFlowHistoManger::InitYields()
+void StTriFlowHistoManger::InitYields_nSigPion()
 {
   for(Int_t j = 0; j < 9; j++) // centrality bin
   {
@@ -166,11 +166,23 @@ void StTriFlowHistoManger::InitYields()
     {
       for(Int_t l = TriFlow::EtaGap_start; l < TriFlow::EtaGap_stop; l++) // eta gap bin
       {
-        TString HistName;
-	HistName = Form("Centrality_%d_Charge_%d_EtaGap_%d_Yields_PiK_EP",j,k,l);
+	TString HistName = Form("Centrality_%d_Charge_%d_EtaGap_%d_Yields_PiK_EP",j,k,l);
 	h_mMass2_nSigmaPion_Yields_PiK_EP[j][k][l] = new TH2F(HistName.Data(),HistName.Data(),400,TriFlow::x_low[12],TriFlow::x_up[12],400,TriFlow::y_low[12],TriFlow::y_up[12]);
 	h_mMass2_nSigmaPion_Yields_PiK_EP[j][k][l]->Sumw2();
-	HistName = Form("Centrality_%d_Charge_%d_EtaGap_%d_Yields_Proton_EP",j,k,l);
+      }
+    }
+  }
+}
+
+void StTriFlowHistoManger::InitYields_Proton()
+{
+  for(Int_t j = 0; j < 9; j++) // centrality bin
+  {
+    for(Int_t k = TriFlow::Charge_start; k < TriFlow::Charge_stop; k++) // charge bin
+    {
+      for(Int_t l = TriFlow::EtaGap_start; l < TriFlow::EtaGap_stop; l++) // eta gap bin
+      {
+	TString HistName = Form("Centrality_%d_Charge_%d_EtaGap_%d_Yields_Proton_EP",j,k,l);
 	h_mMass2_Yields_Proton_EP[j][k][l] = new TH1F(HistName.Data(),HistName.Data(),400,-0.3,1.7);
 	h_mMass2_Yields_Proton_EP[j][k][l]->Sumw2();
       }
@@ -479,7 +491,7 @@ void StTriFlowHistoManger::WriteProton()
 
 //-------------------------------------------------------------------------------------------
 
-void StTriFlowHistoManger::WriteYileds()
+void StTriFlowHistoManger::WriteYileds_nSigPion()
 {
   for(Int_t cent = 0; cent < 9; cent++)
   {
@@ -487,13 +499,25 @@ void StTriFlowHistoManger::WriteYileds()
     {
       for(Int_t l = TriFlow::EtaGap_start; l < TriFlow::EtaGap_stop; l++) // eta gap bin
       {
-        h_mMass2_nSigmaPion_Yields_PiK_EP[cent][k][l]->Write();
-	h_mMass2_Yields_Proton_EP[cent][k][l]->Write();
+	h_mMass2_nSigmaPion_Yields_PiK_EP[cent][k][l]->Write();
       }
     }
   }
 }
 
+void StTriFlowHistoManger::WriteYileds_Proton()
+{
+  for(Int_t cent = 0; cent < 9; cent++)
+  {
+    for(Int_t k = TriFlow::Charge_start; k < TriFlow::Charge_stop; k++) // charge bin
+    {
+      for(Int_t l = TriFlow::EtaGap_start; l < TriFlow::EtaGap_stop; l++) // eta gap bin
+      {
+	h_mMass2_Yields_Proton_EP[cent][k][l]->Write();
+      }
+    }
+  }
+}
 //-------------------------------------------------------------------------------------------
 
 void StTriFlowHistoManger::WriteQA()

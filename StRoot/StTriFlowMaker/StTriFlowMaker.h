@@ -51,7 +51,8 @@ class StTriFlowMaker : public StMaker {
     TString mOutPut_ChargedFLow;
     TString mOutPut_M2_nSigPion;
     TString mOutPut_M2_Proton;
-    TString mOutPut_Yields;
+    TString mOutPut_Yields_nSigPion;
+    TString mOutPut_Yields_Proton;
     TString mOutPut_Phi;
     TString mOutPut_Lambda;
     TString mOutPut_AntiLambda;
@@ -63,7 +64,8 @@ class StTriFlowMaker : public StMaker {
     TFile *mFile_ChargedFlow;
     TFile *mFile_M2_nSigPion;
     TFile *mFile_M2_Proton;
-    TFile *mFile_Yields;
+    TFile *mFile_Yields_nSigPion;
+    TFile *mFile_Yields_Proton;
     TFile *mFile_Phi;
     TFile *mFile_Lambda;
     TFile *mFile_AntiLambda;

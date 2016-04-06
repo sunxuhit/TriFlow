@@ -16,7 +16,8 @@ class StTriFlowHistoManger
 
     void InitHist();
     void InitProton();
-    void InitYields();
+    void InitYields_nSigPion();
+    void InitYields_Proton();
     void InitQA_Detector();
 
     void FillHist(Float_t pt, Int_t Cent9, Int_t charge_bin, Int_t eta_gap, Float_t phi_psi2, Float_t Res2, Float_t phi_psi3, Float_t Res3, Float_t New_X, Float_t New_Y, Double_t reweight);
@@ -31,7 +32,8 @@ class StTriFlowHistoManger
 
     void WriteHist();
     void WriteProton();
-    void WriteYileds();
+    void WriteYileds_nSigPion();
+    void WriteYileds_Proton();
     void WriteQA();
     void WriteQA_Detector();
     

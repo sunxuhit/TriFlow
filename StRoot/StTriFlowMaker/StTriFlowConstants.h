@@ -16,9 +16,11 @@ class TriFlow
   // track cut
   static Float_t mDcaEPMax[5]; // 0: 200 GeV, 1: 39 GeV, 2: 27 GeV, 3: 19.6 GeV, 4: 62.4 GeV
   static Float_t mDcaTrMax; // 1.0 for pion, kaon, proton flow calculation
+  static Float_t mDcaTrMaxSys[3]; // 1.0, 1.5 and 2.0 for pion, kaon, proton flow systematic
   static Float_t mDcaTrMax_phi; // 2.0 for phi flow calculation
   static Int_t mHitsDedxMin; // 15
   static Int_t mHitsFitTPCMin; // 15
+  static Int_t mHitsFitTPCMinSys[2]; // 15, 20
   static Int_t mHitsMaxTPCMin; // 0
   static Float_t mHitsRatioTPCMin; // 0.51
   static Float_t mEtaMax; // 1.0
@@ -37,6 +39,7 @@ class TriFlow
   static Float_t mNSigmaPionMax; // 2.5
   static Float_t mNSigmaKaonMax; // 2.5
   static Float_t mNSigmaProtonMax; // 2.5
+  static Float_t mNSigmaProtonMaxSys[3]; // 2.5
   static Float_t mMassPion; // 0.13957
   static Float_t mMassKaon; // 0.49368
   static Float_t mMassProton; // 0.93827

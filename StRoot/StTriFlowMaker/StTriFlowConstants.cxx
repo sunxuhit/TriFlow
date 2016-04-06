@@ -12,10 +12,12 @@ Int_t TriFlow::mMatchedToFMin = 2;
 // track cut
 std::map<float,float> TriFlow::mSigScaleMap = TriFlow::createSigScaleMap();
 Float_t TriFlow::mDcaEPMax[5] = {3.0,1.0,1.0,1.0,1.0}; // for event plane reconstruction: 3.0 for 200GeV, 1.0 for BES
-Float_t TriFlow::mDcaTrMax = 1.0; // for pion, kaon, proton mDcaTrMax = 1.0 for flow;
+Float_t TriFlow::mDcaTrMax = 1.0; // for pion, kaon, proton mDcaTrMax = 1.0 for flow
+Float_t TriFlow::mDcaTrMaxSys[3] = {1.0,1.5,2.0}; // for pion, kaon, proton mDcaTrMax = 1.0 for flow | 1.5 and 2.0 for SysErrors;
 Float_t TriFlow::mDcaTrMax_phi = 2.0; // for phi meson mDcaTrMax = 2.0 to fill a tree and apply an additional cut
 Int_t TriFlow::mHitsDedxMin = 5;
 Int_t TriFlow::mHitsFitTPCMin = 15;
+Int_t TriFlow::mHitsFitTPCMinSys[2] = {15,20};
 Int_t TriFlow::mHitsMaxTPCMin = 0;
 Float_t TriFlow::mHitsRatioTPCMin = 0.51;
 Float_t TriFlow::mEtaMax = 1.0;
@@ -34,6 +36,7 @@ Float_t TriFlow::mNSigmaElectronMax = 2.5;
 Float_t TriFlow::mNSigmaPionMax = 2.5;
 Float_t TriFlow::mNSigmaKaonMax = 2.5;
 Float_t TriFlow::mNSigmaProtonMax = 2.5;
+Float_t TriFlow::mNSigmaProtonMaxSys[3] = {2.5,2.0,1.5};
 Float_t TriFlow::mMassPion = 0.13957;
 Float_t TriFlow::mMassKaon = 0.49368;
 Float_t TriFlow::mMassProton = 0.93827;

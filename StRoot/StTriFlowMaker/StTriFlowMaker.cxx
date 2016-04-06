@@ -67,6 +67,13 @@ StTriFlowMaker::StTriFlowMaker(const char* name, StPicoDstMaker *picoMaker, cons
     mOutPut_M2_nSigPion += "_";
     mOutPut_M2_nSigPion += jobCounter;
     mOutPut_M2_nSigPion += ".root";
+
+    mOutPut_Yields_nSigPion = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_nSigmaPion/Yields/file_%s_Yields_nSigPion_%s_etagap_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::Centrality_01[TriFlow::Centrality_start].Data()); 
+    mOutPut_Yields_nSigPion += TriFlow::EtaGap_start;
+    mOutPut_Yields_nSigPion += TriFlow::EtaGap_stop-1;
+    mOutPut_Yields_nSigPion += "_";
+    mOutPut_Yields_nSigPion += jobCounter;
+    mOutPut_Yields_nSigPion += ".root";
   }
   if(mMode == 4)
   {
@@ -77,12 +84,12 @@ StTriFlowMaker::StTriFlowMaker(const char* name, StPicoDstMaker *picoMaker, cons
     mOutPut_M2_Proton += jobCounter;
     mOutPut_M2_Proton += ".root";
 
-    mOutPut_Yields = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Yields/file_%s_Yields_%s_etagap_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::Centrality_01[TriFlow::Centrality_start].Data()); 
-    mOutPut_Yields += TriFlow::EtaGap_start;
-    mOutPut_Yields += TriFlow::EtaGap_stop-1;
-    mOutPut_Yields += "_";
-    mOutPut_Yields += jobCounter;
-    mOutPut_Yields += ".root";
+    mOutPut_Yields_Proton = Form("/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu%s/Mass2_Proton/Yields/file_%s_Yields_Proton_%s_etagap_",TriFlow::Energy[energy].Data(),TriFlow::Energy[energy].Data(),TriFlow::Centrality_01[TriFlow::Centrality_start].Data()); 
+    mOutPut_Yields_Proton += TriFlow::EtaGap_start;
+    mOutPut_Yields_Proton += TriFlow::EtaGap_stop-1;
+    mOutPut_Yields_Proton += "_";
+    mOutPut_Yields_Proton += jobCounter;
+    mOutPut_Yields_Proton += ".root";
   }
   if(mMode == 5)
   {
@@ -154,6 +161,8 @@ Int_t StTriFlowMaker::Init()
   }
   if(mMode == 3)
   {
+    mFile_Yields_nSigPion = new TFile(mOutPut_Yields_nSigPion.Data(),"RECREATE");
+    mTriFlowHistoManger->InitYields_nSigPion();
     mTriFlowHistoManger->InitHist();
     mTriFlowCorrection->InitReCenterCorrection(mEnergy);
     mTriFlowCorrection->InitShiftCorrection(mEnergy);
@@ -161,8 +170,8 @@ Int_t StTriFlowMaker::Init()
   }
   if(mMode == 4)
   {
-    mFile_Yields = new TFile(mOutPut_Yields.Data(),"RECREATE");
-    mTriFlowHistoManger->InitYields();
+    mFile_Yields_Proton = new TFile(mOutPut_Yields_Proton.Data(),"RECREATE");
+    mTriFlowHistoManger->InitYields_Proton();
     mFile_M2_Proton = new TFile(mOutPut_M2_Proton.Data(),"RECREATE");
     mFile_M2_Proton->cd();
     mTriFlowHistoManger->InitProton();
@@ -257,6 +266,12 @@ Int_t StTriFlowMaker::Finish()
       mTriFlowHistoManger->WriteHist();
       mFile_M2_nSigPion->Close();
     }
+    if(mOutPut_Yields_nSigPion != "")
+    {
+      mFile_Yields_nSigPion->cd();
+      mTriFlowHistoManger->WriteYileds_nSigPion();
+      mFile_Yields_nSigPion->Close();
+    }
   }
   if(mMode == 4)
   {
@@ -267,11 +282,11 @@ Int_t StTriFlowMaker::Finish()
       mTriFlowHistoManger->WriteQA();
       mFile_M2_Proton->Close();
     }
-    if(mOutPut_Yields != "")
+    if(mOutPut_Yields_Proton != "")
     {
-      mFile_Yields->cd();
-      mTriFlowHistoManger->WriteYileds();
-      mFile_Yields->Close();
+      mFile_Yields_Proton->cd();
+      mTriFlowHistoManger->WriteYileds_Proton();
+      mFile_Yields_Proton->Close();
     }
   }
   if(mMode == 5)
@@ -708,6 +723,7 @@ Int_t StTriFlowMaker::Make()
 //		  cout << "psi = " << Psi3_East << endl;
 		  mTriFlowHistoManger->FillHist(pt,cent9,charge_bin,j,phi_Psi2,Res2_EP,phi_Psi3,Res3_EP,New_X,New_Y,reweight);
 		}
+		mTriFlowHistoManger->FillYields_PiK(cent9,charge_bin,j,New_X,New_Y,reweight);
 	      }
 	      mTriFlowHistoManger->FillToFLocal(track);
 	    }
@@ -756,14 +772,6 @@ Int_t StTriFlowMaker::Make()
 		  charge_bin = 1;
 		}
 
-		Float_t nSigmaPion = track->nSigmaPion();
-		Float_t scale_nSigma_factor = TriFlow::mSigScaleMap[mPicoEvent->energy()];
-		Float_t ex_scale_factor = TriFlow::mExScaleMap[mPicoEvent->energy()];
-		mCombPID->setInitValues(pt,nSigmaPion*scale_nSigma_factor,Mass2,ex_scale_factor);
-		Float_t New_X = mCombPID->getNewX();
-		Float_t New_Y = mCombPID->getNewY();
-
-		mTriFlowHistoManger->FillYields_PiK(cent9,charge_bin,j,New_X,New_Y,reweight);
 		mTriFlowHistoManger->FillQA_before(j,Mass2,dEdx,p*nCharge);
 
 		if(mTriFlowCut->passSigProntonCut(track,scale_nSigma_factor)) // nSigmaProton cut
