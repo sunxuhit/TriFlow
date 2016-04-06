@@ -24,6 +24,7 @@ class StTriFlowCut : public TObject
     bool passSigPionCut(StPicoTrack*, Float_t);
     bool passSigKaonCut(StPicoTrack*, Float_t);
     bool passSigProntonCut(StPicoTrack*, Float_t);
+    bool passSigProntonCutSys(StPicoTrack*, Float_t, Int_t);
     bool passTrackPhi(StPicoTrack*);
     bool passTrackV0(StPicoTrack*);
     Int_t getMatchedToF();
