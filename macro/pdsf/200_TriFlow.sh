@@ -10,7 +10,8 @@ if [ $# -eq 0 ]
     List="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/run_list/200GeV_"
     suffixlist=".list"
 #    for((counter=1;counter<=8067;counter=counter+1)) # Lambda, anti-Lambda and K0S
-    for((counter=1;counter<=2067;counter=counter+1)) # substep
+#    for((counter=1;counter<=2017;counter=counter+1)) # pion, kaon and proton
+    for((counter=1024;counter<=1042;counter=counter+1)) # pion, kaon and proton
     do
       cp ./run.csh ./run$Name$counter.csh
 
@@ -22,9 +23,9 @@ if [ $# -eq 0 ]
 #      echo -n 1',' >> run$Name$counter.csh  # ReCenter ShiftPar mode
 #      echo -n 2',' >> run$Name$counter.csh  # Charged Flow mode
 #      echo -n 3',' >> run$Name$counter.csh  # Pion and Kaon mode
-#      echo -n 4',' >> run$Name$counter.csh  # Proton and Yields mode
+      echo -n 4',' >> run$Name$counter.csh  # Proton mode
 #      echo -n 5',' >> run$Name$counter.csh  # Phi mode
-      echo -n 6',' >> run$Name$counter.csh  # Lambda mode
+#      echo -n 6',' >> run$Name$counter.csh  # Lambda mode
 #      echo -n 7',' >> run$Name$counter.csh  # anti-Lambda mode
 #      echo -n 8',' >> run$Name$counter.csh  # K0S mode
 ###############################mode###################################
