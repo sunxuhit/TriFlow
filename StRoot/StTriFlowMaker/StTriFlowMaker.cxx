@@ -163,10 +163,11 @@ Int_t StTriFlowMaker::Init()
   {
     mFile_Yields_nSigPion = new TFile(mOutPut_Yields_nSigPion.Data(),"RECREATE");
     mTriFlowHistoManger->InitYields_nSigPion();
+    mFile_M2_nSigPion = new TFile(mOutPut_M2_nSigPion.Data(),"RECREATE");
+    mFile_M2_nSigPion->cd();
     mTriFlowHistoManger->InitHist();
     mTriFlowCorrection->InitReCenterCorrection(mEnergy);
     mTriFlowCorrection->InitShiftCorrection(mEnergy);
-    mFile_M2_nSigPion = new TFile(mOutPut_M2_nSigPion.Data(),"RECREATE");
   }
   if(mMode == 4)
   {
@@ -749,55 +750,67 @@ Int_t StTriFlowMaker::Make()
 	  Float_t Psi3_West = mTriFlowCorrection->calShiftAngle3West_EP(runIndex,cent9,vz_sign,j);
 	  Float_t Res3_EP = mTriFlowCorrection->getResolution3_EP(cent9,j);
 
-	  for(Int_t i = 0; i < nTracks; i++) // track loop
+	  Int_t i_cut = 0;
+
+	  for(Int_t i_dca = 0; i_dca < 3; i_dca++)
 	  {
-	    StPicoTrack *track = (StPicoTrack*)mPicoDst->track(i);
-
-	    if(mTriFlowCut->passTrackCut(track)) // track cut
+	    for(Int_t i_nHitsFit = 0; i_nHitsFit < 2; i_nHitsFit++)
 	    {
-	      if(mTriFlowCut->passPIDCut(track))
+	      for(Int_t i_proton = 0; i_proton < 3; i_proton++)
 	      {
-		Float_t pt = track->pMom().perp();
-		Float_t p = track->pMom().mag();
-		Float_t Mass2 = mTriFlowCut->getMass2(track);
-		Float_t dEdx = track->dEdx();
-		Int_t nCharge = track->charge();
-		Int_t charge_bin;
-		if(nCharge > 0)
+		for(Int_t i = 0; i < nTracks; i++) // track loop
 		{
-		  charge_bin = 0;
-		}
-		if(nCharge < 0)
-		{
-		  charge_bin = 1;
-		}
+		  StPicoTrack *track = (StPicoTrack*)mPicoDst->track(i);
 
-		mTriFlowHistoManger->FillQA_before(j,Mass2,dEdx,p*nCharge);
+		  if(mTriFlowCut->passTrackCutSys(track,i_dca,i_nHitsFit)) // track cut
+		  {
+		    if(mTriFlowCut->passPIDCut(track))
+		    {
+		      Float_t pt = track->pMom().perp();
+		      Float_t p = track->pMom().mag();
+		      Float_t Mass2 = mTriFlowCut->getMass2(track);
+		      Float_t dEdx = track->dEdx();
+		      Int_t nCharge = track->charge();
+		      Int_t charge_bin;
+		      if(nCharge > 0)
+		      {
+			charge_bin = 0;
+		      }
+		      if(nCharge < 0)
+		      {
+			charge_bin = 1;
+		      }
 
-		Float_t scale_nSigma_factor = TriFlow::mSigScaleMap[mPicoEvent->energy()];
-		if(mTriFlowCut->passSigProntonCut(track,scale_nSigma_factor)) // nSigmaProton cut
-		{
-		  if(mTriFlowCorrection->passTrackEtaEast(track,j,1))
-		  {
-		    Float_t phi_East = track->pMom().phi();
-		    Float_t phi_Psi2 = phi_East - Psi2_West;
-		    Float_t phi_Psi3 = phi_East - Psi3_West;
-		    //		  cout << "phi = " << phi_East << endl;
-		    //		  cout << "psi = " << Psi3_West << endl;
-		    mTriFlowHistoManger->FillProton(pt,cent9,charge_bin,j,phi_Psi2,Res2_EP,phi_Psi3,Res3_EP,Mass2,reweight);
+		      mTriFlowHistoManger->FillQA_before(j,Mass2,dEdx,p*nCharge);
+
+		      Float_t scale_nSigma_factor = TriFlow::mSigScaleMap[mPicoEvent->energy()];
+		      if(mTriFlowCut->passSigProntonCutSys(track,scale_nSigma_factor,i_proton)) // nSigmaProton cut
+		      {
+			if(mTriFlowCorrection->passTrackEtaEast(track,j,1))
+			{
+			  Float_t phi_East = track->pMom().phi();
+			  Float_t phi_Psi2 = phi_East - Psi2_West;
+			  Float_t phi_Psi3 = phi_East - Psi3_West;
+			  //		  cout << "phi = " << phi_East << endl;
+			  //		  cout << "psi = " << Psi3_West << endl;
+			  mTriFlowHistoManger->FillProton(pt,cent9,charge_bin,j,phi_Psi2,Res2_EP,phi_Psi3,Res3_EP,Mass2,reweight,i_cut);
+			}
+			if(mTriFlowCorrection->passTrackEtaWest(track,j,1))
+			{
+			  Float_t phi_West = track->pMom().phi();
+			  Float_t phi_Psi2 = phi_West - Psi2_East;
+			  Float_t phi_Psi3 = phi_West - Psi3_East;
+			  //		  cout << "phi = " << phi_West << endl;
+			  //		  cout << "psi = " << Psi3_East << endl;
+			  mTriFlowHistoManger->FillProton(pt,cent9,charge_bin,j,phi_Psi2,Res2_EP,phi_Psi3,Res3_EP,Mass2,reweight,i_cut);
+			}
+			mTriFlowHistoManger->FillQA_after(j,Mass2,dEdx,p*nCharge);
+			mTriFlowHistoManger->FillYields_Proton(cent9,charge_bin,j,Mass2,reweight,i_cut);
+		      }
+		    }
 		  }
-		  if(mTriFlowCorrection->passTrackEtaWest(track,j,1))
-		  {
-		    Float_t phi_West = track->pMom().phi();
-		    Float_t phi_Psi2 = phi_West - Psi2_East;
-		    Float_t phi_Psi3 = phi_West - Psi3_East;
-		    //		  cout << "phi = " << phi_West << endl;
-		    //		  cout << "psi = " << Psi3_East << endl;
-		    mTriFlowHistoManger->FillProton(pt,cent9,charge_bin,j,phi_Psi2,Res2_EP,phi_Psi3,Res3_EP,Mass2,reweight);
-		  }
-		  mTriFlowHistoManger->FillQA_after(j,Mass2,dEdx,p*nCharge);
-		  mTriFlowHistoManger->FillYields_Proton(cent9,charge_bin,j,Mass2,reweight);
 		}
+		i_cut++;
 	      }
 	    }
 	  }
