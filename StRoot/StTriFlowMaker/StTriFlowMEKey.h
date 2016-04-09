@@ -18,7 +18,7 @@ class MEKey
 
     MEKey() {}
     MEKey(Int_t i, Int_t j, Int_t k, Int_t l, Int_t m) : Centrality(i), vertex(j), EventPlane(k), Event_depth(l), charge(m) {}
-    virtual ~MEKey{/* */};
+    virtual ~MEKey() {/* */};
 
     bool operator<(const MEKey &r) const
     { // "r == right"

@@ -15,7 +15,7 @@ class StTriFlowCorrection : public TObject
 {
   public:
     StTriFlowCorrection(Int_t energy);
-    ~StTriFlowCorrection();
+    virtual ~StTriFlowCorrection();
 
 
     // ReCenter Correction

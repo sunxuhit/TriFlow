@@ -43,6 +43,7 @@ StTriFlowCorrection::StTriFlowCorrection(Int_t energy)
 
 StTriFlowCorrection::~StTriFlowCorrection()
 {
+  /* */
 }
 
 //---------------------------------------------------------------------------------
