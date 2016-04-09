@@ -62,6 +62,6 @@ class PIDKey
     ClassDef(PIDKey, 1)
 };
 
-typedef std::map<PIDKey, TH2F*> TH2FMap;
+// typedef std::map<PIDKey, TH2F*> TH2FMap;
 
 #endif
