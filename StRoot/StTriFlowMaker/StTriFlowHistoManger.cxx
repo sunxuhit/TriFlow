@@ -574,7 +574,7 @@ void StTriFlowHistoManger::WriteYileds_Proton()
       {
 	for(Int_t i_cut = 0; i_cut < 18; i_cut++)
 	{
-	  TString KEY_Proton_Yield = Form("Centrality_%d_Charge_%d_EtaGap_%d_Yields_Proton_SysError_%d",j,k,l,i_cut);
+	  TString KEY_Proton_Yield = Form("Centrality_%d_Charge_%d_EtaGap_%d_Yields_Proton_SysError_%d",cent,k,l,i_cut);
 	  h_mMass2_Yields_Proton_EP[KEY_Proton_Yield]->Write();
 	}
       }
