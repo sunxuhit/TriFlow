@@ -81,8 +81,8 @@ Double_t TriFlow::Psi3_up[5]  = {-3.0*TMath::Pi()/3.0,-1.0*TMath::Pi()/3.0, 1.0*
 Int_t TriFlow::pt_total = 16;
 
 Int_t TriFlow::Centrality_total = 4;
-Int_t TriFlow::Centrality_start = 3;
-Int_t TriFlow::Centrality_stop  = 4;
+Int_t TriFlow::Centrality_start = 0;
+Int_t TriFlow::Centrality_stop  = 1;
 
 Int_t TriFlow::EtaGap_total = 4;
 Int_t TriFlow::EtaGap_start = 0;
