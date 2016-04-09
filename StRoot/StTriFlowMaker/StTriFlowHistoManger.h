@@ -17,7 +17,7 @@ class StTriFlowHistoManger
 {
   public:
     StTriFlowHistoManger(Int_t energy);
-    ~StTriFlowHistoManger();
+    virtual ~StTriFlowHistoManger();
 
     void InitHist();
     void InitProton();
