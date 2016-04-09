@@ -5,7 +5,7 @@ date
 
 if [ $# -eq 0 ]
   then
-    Name="_200GeV_Lambda_SE_"
+    Name="_200GeV_Proton_"
     suffix=".root"
     List="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/run_list/200GeV_"
     suffixlist=".list"
