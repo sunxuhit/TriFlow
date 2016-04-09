@@ -8,9 +8,11 @@ StTriFlow2ndVertexFinder::StTriFlow2ndVertexFinder()
 {
 }
 
+/*
 StTriFlow2ndVertexFinder::~StTriFlow2ndVertexFinder()
 {
 }
+*/
 //------------------------------------------------------------------------------------------------------------------
 // Alex's Secondary Vertex Finder
 Int_t StTriFlow2ndVertexFinder::fDCA_Helix_Estimate(StPhysicalHelixD helixA, StPhysicalHelixD helixB, Float_t &pathA, Float_t &pathB, Float_t &dcaAB)

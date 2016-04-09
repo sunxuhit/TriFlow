@@ -12,7 +12,7 @@ class StTriFlowProManger
 {
   public:
     StTriFlowProManger();
-    ~StTriFlowProManger();
+    virtual ~StTriFlowProManger();
 
     // ReCenter Correction
     void InitReCenter();

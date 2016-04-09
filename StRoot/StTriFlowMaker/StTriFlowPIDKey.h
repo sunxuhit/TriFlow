@@ -16,6 +16,7 @@ class PIDKey
 
     PIDKey() {}
     PIDKey(Int_t i, Int_t j, Int_t k, Int_t l, Int_t m) : Centrality(i), charge(j), eta_gap(k), eta_pos_neg(l), pt(m) {}
+    virtual ~PIDKey{/* */};
 
     bool operator<(const PIDKey &r) const
     { // "r == right"

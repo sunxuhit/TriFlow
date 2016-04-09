@@ -12,7 +12,7 @@ class StTriFlowCut : public TObject
 {
   public:
     StTriFlowCut(Int_t energy);
-    ~StTriFlowCut();
+    virtual ~StTriFlowCut();
 
     bool passEventCut(StPicoDst*);
     bool passTrackBasic(StPicoTrack*);

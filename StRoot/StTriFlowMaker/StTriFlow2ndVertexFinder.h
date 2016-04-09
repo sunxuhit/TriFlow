@@ -9,7 +9,7 @@ class StTriFlow2ndVertexFinder
 {
   public:
     StTriFlow2ndVertexFinder();
-    ~StTriFlow2ndVertexFinder();
+    virtual ~StTriFlow2ndVertexFinder();
 
     void Find2ndVertex(StPhysicalHelixD,StPhysicalHelixD,StThreeVectorF,Float_t,Float_t,TLorentzVector &,TLorentzVector &,Float_t &,Float_t &, StThreeVectorF &, Float_t &,Int_t);
 

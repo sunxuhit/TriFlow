@@ -24,7 +24,7 @@ class StTriFlowV0
 {
   public:
     StTriFlowV0(Int_t energy);
-    ~StTriFlowV0();
+    virtual ~StTriFlowV0();
 
     void InitPhi();
     void InitLambda();

@@ -25,6 +25,7 @@ StTriFlowCut::StTriFlowCut(Int_t energy)
 
 StTriFlowCut::~StTriFlowCut()
 {
+  /* */
 }
 
 //---------------------------------------------------------------------------------
