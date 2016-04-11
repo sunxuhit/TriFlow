@@ -51,9 +51,9 @@ class StTriFlowHistoManger
     // 5 = systematic errors
 //    TH2F *h_mMass2_nSigmaPion2_EP[16][4][2][4][7];
 //    TH2F *h_mMass2_nSigmaPion3_EP[16][4][2][4][7];
-    TH2FMap h_mMass2_nSigmaPion2_EP;
+//    TH2FMap h_mMass2_nSigmaPion2_EP;
     TH2FMap h_mMass2_nSigmaPion3_EP;
-    TH1FMap h_mMass2_Proton2_EP;
+//    TH1FMap h_mMass2_Proton2_EP;
     TH1FMap h_mMass2_Proton3_EP;
 
     TH2F *h_mToFYLocal_Mass2;
