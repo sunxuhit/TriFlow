@@ -677,56 +677,65 @@ Int_t StTriFlowMaker::Make()
 	  Float_t Psi3_West = mTriFlowCorrection->calShiftAngle3West_EP(runIndex,cent9,vz_sign,j);
 	  Float_t Res3_EP = mTriFlowCorrection->getResolution3_EP(cent9,j);
 
-	  for(Int_t i = 0; i < nTracks; i++) // track loop
+	  Int_t i_cut = 0;
+
+	  for(Int_t i_dca = 0; i_dca < 3; i_dca++)
 	  {
-	    StPicoTrack *track = (StPicoTrack*)mPicoDst->track(i);
-
-	    if(mTriFlowCut->passTrackCut(track)) // track cut
+	    for(Int_t i_nHitsFit = 0; i_nHitsFit < 2; i_nHitsFit++)
 	    {
-	      if(mTriFlowCut->passPIDCut(track))
+	      for(Int_t i = 0; i < nTracks; i++) // track loop
 	      {
-		Float_t pt = track->pMom().perp();
-		Float_t Mass2 = mTriFlowCut->getMass2(track);
-		Float_t nSigmaPion = track->nSigmaPion();
-		Float_t scale_nSigma_factor = TriFlow::mSigScaleMap[mPicoEvent->energy()];
-		Int_t nCharge = track->charge();
-		Int_t charge_bin;
-		if(nCharge > 0)
-		{
-		  charge_bin = 0;
-		}
-		if(nCharge < 0)
-		{
-		  charge_bin = 1;
-		}
+		StPicoTrack *track = (StPicoTrack*)mPicoDst->track(i);
 
-		Float_t ex_scale_factor = TriFlow::mExScaleMap[mPicoEvent->energy()];
-		mCombPID->setInitValues(pt,nSigmaPion*scale_nSigma_factor,Mass2,ex_scale_factor);
-		Float_t New_X = mCombPID->getNewX();
-		Float_t New_Y = mCombPID->getNewY();
+		if(mTriFlowCut->passTrackCutSys(track,i_dca,i_nHitsFit)) // track cut
+		{
+		  if(mTriFlowCut->passPIDCut(track))
+		  {
+		    Float_t pt = track->pMom().perp();
+		    Float_t Mass2 = mTriFlowCut->getMass2(track);
+		    Float_t nSigmaPion = track->nSigmaPion();
+		    Float_t scale_nSigma_factor = TriFlow::mSigScaleMap[mPicoEvent->energy()];
+		    Int_t nCharge = track->charge();
+		    Int_t charge_bin;
+		    if(nCharge > 0)
+		    {
+		      charge_bin = 0;
+		    }
+		    if(nCharge < 0)
+		    {
+		      charge_bin = 1;
+		    }
 
-		// Fill Histogram
-		if(mTriFlowCorrection->passTrackEtaEast(track,j,1))
-		{
-		  Float_t phi_East = track->pMom().phi();
-		  Float_t phi_Psi2 = phi_East - Psi2_West;
-		  Float_t phi_Psi3 = phi_East - Psi3_West;
-//		  cout << "phi = " << phi_East << endl;
-//		  cout << "psi = " << Psi3_West << endl;
-		  mTriFlowHistoManger->FillHist(pt,cent9,charge_bin,j,phi_Psi2,Res2_EP,phi_Psi3,Res3_EP,New_X,New_Y,reweight);
+		    Float_t ex_scale_factor = TriFlow::mExScaleMap[mPicoEvent->energy()];
+		    mCombPID->setInitValues(pt,nSigmaPion*scale_nSigma_factor,Mass2,ex_scale_factor);
+		    Float_t New_X = mCombPID->getNewX();
+		    Float_t New_Y = mCombPID->getNewY();
+
+		    // Fill Histogram
+		    if(mTriFlowCorrection->passTrackEtaEast(track,j,1))
+		    {
+		      Float_t phi_East = track->pMom().phi();
+		      Float_t phi_Psi2 = phi_East - Psi2_West;
+		      Float_t phi_Psi3 = phi_East - Psi3_West;
+		      //		  cout << "phi = " << phi_East << endl;
+		      //		  cout << "psi = " << Psi3_West << endl;
+		      mTriFlowHistoManger->FillHist(pt,cent9,charge_bin,j,phi_Psi2,Res2_EP,phi_Psi3,Res3_EP,New_X,New_Y,reweight,i_cut);
+		    }
+		    if(mTriFlowCorrection->passTrackEtaWest(track,j,1))
+		    {
+		      Float_t phi_West = track->pMom().phi();
+		      Float_t phi_Psi2 = phi_West - Psi2_East;
+		      Float_t phi_Psi3 = phi_West - Psi3_East;
+		      //		  cout << "phi = " << phi_West << endl;
+		      //		  cout << "psi = " << Psi3_East << endl;
+		      mTriFlowHistoManger->FillHist(pt,cent9,charge_bin,j,phi_Psi2,Res2_EP,phi_Psi3,Res3_EP,New_X,New_Y,reweight,i_cut);
+		    }
+		    mTriFlowHistoManger->FillYields_PiK(cent9,charge_bin,j,New_X,New_Y,reweight,i_cut);
+		  }
+		  mTriFlowHistoManger->FillToFLocal(track);
 		}
-		if(mTriFlowCorrection->passTrackEtaWest(track,j,1))
-		{
-		  Float_t phi_West = track->pMom().phi();
-		  Float_t phi_Psi2 = phi_West - Psi2_East;
-		  Float_t phi_Psi3 = phi_West - Psi3_East;
-//		  cout << "phi = " << phi_West << endl;
-//		  cout << "psi = " << Psi3_East << endl;
-		  mTriFlowHistoManger->FillHist(pt,cent9,charge_bin,j,phi_Psi2,Res2_EP,phi_Psi3,Res3_EP,New_X,New_Y,reweight);
-		}
-		mTriFlowHistoManger->FillYields_PiK(cent9,charge_bin,j,New_X,New_Y,reweight);
 	      }
-	      mTriFlowHistoManger->FillToFLocal(track);
+	      i_cut++;
 	    }
 	  }
 	}
