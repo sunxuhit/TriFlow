@@ -41,9 +41,9 @@ void StTriFlowHistoManger::InitHist()
 	    for(Int_t i_cut = 0; i_cut < 6; i_cut++)
 	    {
 	      TString KEY_PiK;
-//	      KEY_PiK = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_phi_Psi_%d_2nd_PiK_SysError_%d",i,j,k,l,m,i_cut);
-//	      h_mMass2_nSigmaPion2_EP[KEY_PiK] = new TH2F(KEY_PiK.Data(),KEY_PiK.Data(),200,TriFlow::x_low[i],TriFlow::x_up[i],200,TriFlow::y_low[i],TriFlow::y_up[i]);
-//	      h_mMass2_nSigmaPion2_EP[KEY_PiK]->Sumw2();
+	      KEY_PiK = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_phi_Psi_%d_2nd_PiK_SysError_%d",i,j,k,l,m,i_cut);
+	      h_mMass2_nSigmaPion2_EP[KEY_PiK] = new TH2F(KEY_PiK.Data(),KEY_PiK.Data(),200,TriFlow::x_low[i],TriFlow::x_up[i],200,TriFlow::y_low[i],TriFlow::y_up[i]);
+	      h_mMass2_nSigmaPion2_EP[KEY_PiK]->Sumw2();
 	      //	    cout << HistName.Data() << endl;
 	      KEY_PiK = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_phi_Psi_%d_3rd_PiK_SysError_%d",i,j,k,l,m,i_cut);
 	      h_mMass2_nSigmaPion3_EP[KEY_PiK] = new TH2F(KEY_PiK.Data(),KEY_PiK.Data(),200,TriFlow::x_low[i],TriFlow::x_up[i],200,TriFlow::y_low[i],TriFlow::y_up[i]);
@@ -69,12 +69,12 @@ void StTriFlowHistoManger::InitHist()
 	  {
 	    TString KEY_PiK_Spec;
 
-//	    KEY_PiK_Spec = Form("Spectra_pt_%d_low_Centrality_%d_Charge_%d_EtaGap_%d_PiK_2nd_SysError_%d",i,j,k,l,i_cut);
-//	    h_pt_spectra2_pik[KEY_PiK_Spec] = new TH2F(KEY_PiK_Spec.Data(),KEY_PiK_Spec.Data(),200,TriFlow::x_low[i],TriFlow::x_up[i],200,TriFlow::y_low[i],TriFlow::y_up[i]);
-//	    h_pt_spectra2_pik[KEY_PiK_Spec]->Sumw2();
-//	    KEY_PiK_Spec = Form("Spectra_pt_%d_high_Centrality_%d_Charge_%d_EtaGap_%d_PiK_2nd_SysError_%d",i,j,k,l,i_cut);
-//	    h_pt_spectra2_pik[KEY_PiK_Spec] = new TH2F(KEY_PiK_Spec.Data(),KEY_PiK_Spec.Data(),200,TriFlow::x_low[i],TriFlow::x_up[i],200,TriFlow::y_low[i],TriFlow::y_up[i]);
-//	    h_pt_spectra2_pik[KEY_PiK_Spec]->Sumw2();
+	    KEY_PiK_Spec = Form("Spectra_pt_%d_low_Centrality_%d_Charge_%d_EtaGap_%d_PiK_2nd_SysError_%d",i,j,k,l,i_cut);
+	    h_pt_spectra2_pik[KEY_PiK_Spec] = new TH2F(KEY_PiK_Spec.Data(),KEY_PiK_Spec.Data(),200,TriFlow::x_low[i],TriFlow::x_up[i],200,TriFlow::y_low[i],TriFlow::y_up[i]);
+	    h_pt_spectra2_pik[KEY_PiK_Spec]->Sumw2();
+	    KEY_PiK_Spec = Form("Spectra_pt_%d_high_Centrality_%d_Charge_%d_EtaGap_%d_PiK_2nd_SysError_%d",i,j,k,l,i_cut);
+	    h_pt_spectra2_pik[KEY_PiK_Spec] = new TH2F(KEY_PiK_Spec.Data(),KEY_PiK_Spec.Data(),200,TriFlow::x_low[i],TriFlow::x_up[i],200,TriFlow::y_low[i],TriFlow::y_up[i]);
+	    h_pt_spectra2_pik[KEY_PiK_Spec]->Sumw2();
 
 	    KEY_PiK_Spec = Form("Spectra_pt_%d_low_Centrality_%d_Charge_%d_EtaGap_%d_PiK_3rd_SysError_%d",i,j,k,l,i_cut);
 	    h_pt_spectra3_pik[KEY_PiK_Spec] = new TH2F(KEY_PiK_Spec.Data(),KEY_PiK_Spec.Data(),200,TriFlow::x_low[i],TriFlow::x_up[i],200,TriFlow::y_low[i],TriFlow::y_up[i]);
@@ -234,7 +234,6 @@ void StTriFlowHistoManger::InitQA_Detector()
 
 void StTriFlowHistoManger::FillHist(Float_t pt, Int_t Cent9, Int_t charge_bin, Int_t eta_gap, Float_t phi_psi2, Float_t Res2, Float_t phi_psi3, Float_t Res3, Float_t New_X, Float_t New_Y, Double_t reweight, Int_t i_cut)
 {
-  /*
   if(Res2 > 0.0)
   {
     for(Int_t i = 0; i < TriFlow::pt_total; i++) // pt_bin
@@ -279,7 +278,6 @@ void StTriFlowHistoManger::FillHist(Float_t pt, Int_t Cent9, Int_t charge_bin, I
       }
     }
   }
-  */
 
   if(Res3 > 0.0)
   {
@@ -497,8 +495,8 @@ void StTriFlowHistoManger::WriteHist()
 	    {
 	      TString KEY_PiK;
 
-//	      KEY_PiK = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_phi_Psi_%d_2nd_PiK_SysError_%d",i,j,k,l,m,i_cut);
-//	      h_mMass2_nSigmaPion2_EP[KEY_PiK]->Write();
+	      KEY_PiK = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_phi_Psi_%d_2nd_PiK_SysError_%d",i,j,k,l,m,i_cut);
+	      h_mMass2_nSigmaPion2_EP[KEY_PiK]->Write();
 
 	      KEY_PiK = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_phi_Psi_%d_3rd_PiK_SysError_%d",i,j,k,l,m,i_cut);
 	      h_mMass2_nSigmaPion3_EP[KEY_PiK]->Write();
@@ -521,10 +519,10 @@ void StTriFlowHistoManger::WriteHist()
 	  {
 	    TString KEY_PiK_Spec;
 
-//	    KEY_PiK_Spec = Form("Spectra_pt_%d_low_Centrality_%d_Charge_%d_EtaGap_%d_PiK_2nd_SysError_%d",i,j,k,l,i_cut);
-//	    h_pt_spectra2_pik[KEY_PiK_Spec]->Write();
-//	    KEY_PiK_Spec = Form("Spectra_pt_%d_high_Centrality_%d_Charge_%d_EtaGap_%d_PiK_2nd_SysError_%d",i,j,k,l,i_cut);
-//	    h_pt_spectra2_pik[KEY_PiK_Spec]->Write();
+	    KEY_PiK_Spec = Form("Spectra_pt_%d_low_Centrality_%d_Charge_%d_EtaGap_%d_PiK_2nd_SysError_%d",i,j,k,l,i_cut);
+	    h_pt_spectra2_pik[KEY_PiK_Spec]->Write();
+	    KEY_PiK_Spec = Form("Spectra_pt_%d_high_Centrality_%d_Charge_%d_EtaGap_%d_PiK_2nd_SysError_%d",i,j,k,l,i_cut);
+	    h_pt_spectra2_pik[KEY_PiK_Spec]->Write();
 
 	    KEY_PiK_Spec = Form("Spectra_pt_%d_low_Centrality_%d_Charge_%d_EtaGap_%d_PiK_3rd_SysError_%d",i,j,k,l,i_cut);
 	    h_pt_spectra3_pik[KEY_PiK_Spec]->Write();

@@ -51,7 +51,7 @@ class StTriFlowHistoManger
     // 5 = systematic errors
 //    TH2F *h_mMass2_nSigmaPion2_EP[16][4][2][4][7];
 //    TH2F *h_mMass2_nSigmaPion3_EP[16][4][2][4][7];
-//    TH2FMap h_mMass2_nSigmaPion2_EP;
+    TH2FMap h_mMass2_nSigmaPion2_EP;
     TH2FMap h_mMass2_nSigmaPion3_EP;
     TH1FMap h_mMass2_Proton2_EP;
     TH1FMap h_mMass2_Proton3_EP;
@@ -66,7 +66,7 @@ class StTriFlowHistoManger
     // 3 = eta_gap
 //    TH2F *h_pt_spectra2_pik[16][4][2][4];
 //    TH2F *h_pt_spectra3_pik[16][4][2][4];
-//    TH2FMap h_pt_spectra2_pik;
+    TH2FMap h_pt_spectra2_pik;
     TH2FMap h_pt_spectra3_pik;
     TH1FMap h_pt_spectra2_proton;
     TH1FMap h_pt_spectra3_proton;
