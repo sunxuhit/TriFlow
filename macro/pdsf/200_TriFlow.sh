@@ -10,8 +10,8 @@ if [ $# -eq 0 ]
     List="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/run_list/200GeV_"
     suffixlist=".list"
 #    for((counter=1;counter<=8067;counter=counter+1)) # Lambda, anti-Lambda and K0S
-#    for((counter=1;counter<=2017;counter=counter+1)) # pion, kaon and proton
-    for((counter=1024;counter<=1042;counter=counter+1)) # pion, kaon and proton
+    for((counter=1;counter<=2017;counter=counter+1)) # pion, kaon and proton
+#    for((counter=1024;counter<=1042;counter=counter+1)) # pion, kaon and proton
     do
       cp ./run.csh ./run$Name$counter.csh
 
