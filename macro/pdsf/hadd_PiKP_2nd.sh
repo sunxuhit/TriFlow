@@ -6,7 +6,7 @@ date
 
 if [ $# -eq 0 ]
   then
-    PID=Proton
+    PID=nSigmaPion
     Energy=200GeV
     OutDir="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/Mass2_$PID/merged_file/MERGED_flow_${Energy}_"
     suffix=".root"
@@ -33,7 +33,7 @@ if [ $# -eq 0 ]
       echo " " >> run_hadd_2nd_${PID}_$counter.csh
       echo "echo 'This is the end of hadd\!\!\!'" >> run_hadd_2nd_${PID}_$counter.csh
 
-      qsub -hard -l scratchfree=500,h_cpu=4:00:00,h_vmem=1.8G,projectio=1 -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_2nd_${PID}_$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_2nd_${PID}_$counter.err ./run_hadd_2nd_${PID}_$counter.csh
+      qsub -hard -l scratchfree=500,h_cpu=6:00:00,h_vmem=1.8G,projectio=1 -o /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_2nd_${PID}_$counter.log -e /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Log/hadd/job_2nd_${PID}_$counter.err ./run_hadd_2nd_${PID}_$counter.csh
 
       mv run_hadd_2nd_${PID}_$counter.csh /global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu${Energy}/Script/hadd/
       let "counter=counter+1"
