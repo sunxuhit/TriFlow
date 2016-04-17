@@ -25,7 +25,6 @@ static const Float_t Flow_Order[2] = {2.0,3.0};
 static const Int_t pt_total = 16; // pT loop
 static const Int_t pt_start = 0;
 static const Int_t pt_stop  = 16;
-static const Int_t pt_QA    = 4;
 
 // pt bin
 //                                      0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 ,10 ,11 ,12 ,13 ,14 ,15
@@ -40,6 +39,9 @@ static const Int_t pt_rebin_start[pt_rebin_total] = {0,1,2,3,4,5,6,7,8,9,10,11,1
 static const Int_t pt_rebin_stop[pt_rebin_total]  = {0,1,2,3,4,5,6,7,8,9,10,11,12,14,15};
 static const Int_t pt_rebin_first = 0;
 static const Int_t pt_rebin_last  = 15;
+static const Int_t pt_QA    = 4;
+static const Float_t m2_cut_low[pt_rebin_total] = {0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.65,0.7,0.7,0.75,0.879,0.879,0.879,0.879};
+static const Float_t m2_cut_up[pt_rebin_total]  = {1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.20,1.2,1.2,1.20,1.400,1.400,1.400,1.400};
 
 static const Int_t Cent_total = 4; // Centrality loop
 static const Int_t Cent_start = 0;
@@ -62,6 +64,7 @@ static const Int_t phi_stop  = 7;
 static const Int_t Sys_total = 16; // Systematic loop
 static const Int_t Sys_start = 0;
 static const Int_t Sys_stop  = 16;
+
 
 typedef std::map<TString,TH1F*> TH1FMap;
 typedef std::map<TString,TProfile*> TProMap;
@@ -180,6 +183,8 @@ void ProtonFlow(Int_t mEnergy = 0, Int_t mOrder = 1)
   }
   */
 
+  /*
+  //QA: h_mMass2_total vs rebinned pT and 1d student-t fits
   // integrate over phi and do the student-t fit to get fitting/counting range
   TH1FMap h_mMass2_total;
   vecFMap ParStudent;
@@ -201,6 +206,7 @@ void ProtonFlow(Int_t mEnergy = 0, Int_t mOrder = 1)
 	      else h_mMass2_total[KEY_Proton_total]->Add(h_mMass2[KEY_Proton],1.0);
 	    }
 
+#if 0
 	    // 1d student-t fits for yields
 	    TF1 *f_student = new TF1("f_student",student_t_1d_single,0.5,1.5,4);
 	    f_student->SetParameter(0,7.5);
@@ -219,14 +225,13 @@ void ProtonFlow(Int_t mEnergy = 0, Int_t mOrder = 1)
 	    cout << "i_pt = " << i_pt << ",i_charge = " << i_charge << ", i_sys = " << i_sys << endl;
 	    h_mMass2_total[KEY_Proton_total]->Fit(f_student_2nd,"MRN");
 	    for(Int_t i_par = 0; i_par < 4; i_par++) ParStudent[KEY_Proton_total].push_back(static_cast<Float_t>(f_student_2nd->GetParameter(i_par)));
+#endif
 	  }
 	}
       }
     }
   }
 
-  /*
-  //QA: h_mMass2_total vs rebinned pT and 1d student-t fits
   TCanvas *c_pT_rebin_total = new TCanvas("c_pT_rebin_total","c_pT_rebin_total",10,10,1600,1600);
   c_pT_rebin_total->Divide(4,4);
   for(Int_t i_pt = pt_rebin_first; i_pt < pt_rebin_last; i_pt++)
@@ -250,6 +255,10 @@ void ProtonFlow(Int_t mEnergy = 0, Int_t mOrder = 1)
     h_mMass2_total[KEY_Proton_total_pT_QA]->SetMarkerSize(0.4);
     h_mMass2_total[KEY_Proton_total_pT_QA]->Draw("pE");
 
+    PlotLine(m2_cut_low[i_pt],m2_cut_low[i_pt],0.0,h_mMass2_total[KEY_Proton_total_pT_QA]->GetMaximum()/2.0,4,2,2);
+    PlotLine( m2_cut_up[i_pt], m2_cut_up[i_pt],0.0,h_mMass2_total[KEY_Proton_total_pT_QA]->GetMaximum()/2.0,4,2,2);
+
+#if 0
     TF1 *f_student_QA = new TF1("f_student_QA",student_t_1d_single,0.5,1.5,4);
     f_student_QA->SetParameter(0,ParStudent[KEY_Proton_total_pT_QA][0]);
     f_student_QA->SetParameter(1,ParStudent[KEY_Proton_total_pT_QA][1]);
@@ -259,9 +268,142 @@ void ProtonFlow(Int_t mEnergy = 0, Int_t mOrder = 1)
     f_student_QA->SetLineWidth(2);
     f_student_QA->SetRange(ParStudent[KEY_Proton_total_pT_QA][1],ParStudent[KEY_Proton_total_pT_QA][1]+nSigProton*ParStudent[KEY_Proton_total_pT_QA][2]);
     f_student_QA->Draw("l same");
+#endif
 
     TString pT_range = Form("[%.2f,%.2f]",pt_low[i_pt],pt_up[i_pt]);
     plotTopLegend((char*)pT_range.Data(),0.65,0.7,0.08,1,0.0,42,1);
   }
+  */
+
+  // get counts for all phi bin
+  TH1FMap h_mCounts, h_mRawFlow;
+  vecFMap ParFlow;
+  for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++) // Centrality loop
+  {
+    for(Int_t i_charge = Charge_start; i_charge < Charge_stop; i_charge++) // charge bin
+    {
+      for(Int_t i_eta = Eta_start; i_eta < Eta_stop; i_eta++) // EtaGap loop
+      {
+	for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic loop
+	{
+	  TString KEY_Proton_RawFlow = Form("RawFlow_Centrality_%d_Charge_%d_EtaGap_%d_%s_Proton_SysError_%d",i_cent,i_charge,i_eta,Order[mOrder].Data(),i_sys);
+	  h_mRawFlow[KEY_Proton_RawFlow] = new TH1F(KEY_Proton_RawFlow.Data(),KEY_Proton_RawFlow.Data(),100,-0.05,9.95); // histogram for raw flow
+	  for(Int_t i_pt = pt_rebin_first; i_pt < pt_rebin_last; i_pt++)
+	  {
+	    TString KEY_Proton_Counts = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_%s_Proton_SysError_%d",i_pt,i_cent,i_charge,i_eta,Order[mOrder].Data(),i_sys);
+	    h_mCounts[KEY_Proton_Counts] = new TH1F(KEY_Proton_Counts.Data(),KEY_Proton_Counts.Data(),7,0.0,PI_max[mOrder]); // histogram for counts
+	    for(Int_t i_phi = phi_start; i_phi < phi_stop; i_phi++) // phi loop
+	    {
+	      TString KEY_Proton = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_phi_Psi_%d_%s_Proton_SysError_%d",i_pt,i_cent,i_charge,i_eta,i_phi,Order[mOrder].Data(),i_sys);
+	      Int_t proton_start = h_mMass2[KEY_Proton]->FindBin(m2_cut_low[i_pt]+10e-4);
+	      Int_t proton_stop  = h_mMass2[KEY_Proton]->FindBin(m2_cut_up[i_pt]-10e-4);
+	      Float_t counts_proton = 0.0;
+	      Float_t errors_proton = 0.0;
+	      for(Int_t i_bin = proton_start; i_bin < proton_stop; i_bin++)
+	      {
+		counts_proton += h_mMass2[KEY_Proton]->GetBinContent(i_bin);
+		errors_proton += h_mMass2[KEY_Proton]->GetBinError(i_bin)*h_mMass2[KEY_Proton]->GetBinError(i_bin);
+	      }
+	      Float_t bin_center = PI_max[mOrder]/14.0+i_phi*PI_max[mOrder]/7.0;
+	      Int_t bin_counts = h_mCounts[KEY_Proton_Counts]->FindBin(bin_center);
+	      h_mCounts[KEY_Proton_Counts]->SetBinContent(bin_counts,counts_proton);
+	      h_mCounts[KEY_Proton_Counts]->SetBinError(bin_counts,TMath::Sqrt(errors_proton));
+	    }
+
+	    TF1 *f_flow = new TF1("f_flow",flow,0.0,PI_max[mOrder],3); // flow fit
+	    f_flow->SetParameter(0,1000);
+	    f_flow->SetParameter(1,0.2);
+	    f_flow->FixParameter(2,Flow_Order[mOrder]);
+	    h_mCounts[KEY_Proton_Counts]->Fit(f_flow,"NQM");
+	    ParFlow[KEY_Proton_Counts].clear();
+	    ParFlow[KEY_Proton_Counts].push_back(static_cast<Float_t>(f_flow->GetParameter(0)));
+	    ParFlow[KEY_Proton_Counts].push_back(static_cast<Float_t>(f_flow->GetParameter(1)));
+	    ParFlow[KEY_Proton_Counts].push_back(static_cast<Float_t>(f_flow->GetParameter(2)));
+
+	    Float_t pt_mean = (pt_low[i_pt]+pt_up[i_pt])/2.0;
+	    h_mRawFlow[KEY_Proton_RawFlow]->SetBinContent(h_mRawFlow[KEY_Proton_RawFlow]->FindBin(pt_mean),f_flow->GetParameter(1));
+	    h_mRawFlow[KEY_Proton_RawFlow]->SetBinError(h_mRawFlow[KEY_Proton_RawFlow]->FindBin(pt_mean),f_flow->GetParError(1));
+	  }
+	}
+      }
+    }
+  }
+
+  /*
+  // QA plots: counts vs phi-Psi
+  TCanvas *c_Counts = new TCanvas("c_Counts","c_Counts",10,10,900,900);
+  c_Counts->Divide(3,3);
+  for(Int_t i_phi = phi_start; i_phi < phi_stop; i_phi++)
+  {
+    c_Counts->cd(i_phi+1);
+    c_Counts->cd(i_phi+1)->SetLeftMargin(0.15);
+    c_Counts->cd(i_phi+1)->SetBottomMargin(0.15);
+    c_Counts->cd(i_phi+1)->SetTicks(1,1);
+    c_Counts->cd(i_phi+1)->SetGrid(0,0);
+    TString KEY_Proton_QA = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_phi_Psi_%d_%s_Proton_SysError_%d",pt_QA,Cent_start,Charge_start,Eta_start,i_phi,Order[mOrder].Data(),Sys_start);
+    h_mMass2[KEY_Proton_QA]->SetStats(0);
+    h_mMass2[KEY_Proton_QA]->SetTitle("");
+    h_mMass2[KEY_Proton_QA]->GetXaxis()->SetTitle("m^{2} ((GeV/c^{2})^{2})");
+    h_mMass2[KEY_Proton_QA]->GetXaxis()->CenterTitle();
+    h_mMass2[KEY_Proton_QA]->GetXaxis()->SetTitleSize(0.06);
+    h_mMass2[KEY_Proton_QA]->GetYaxis()->SetTitle("Counts/Resolution");
+    h_mMass2[KEY_Proton_QA]->GetYaxis()->CenterTitle();
+    h_mMass2[KEY_Proton_QA]->GetYaxis()->SetTitleSize(0.06);
+    h_mMass2[KEY_Proton_QA]->Draw("PE");
+    PlotLine(m2_cut_low[pt_QA],m2_cut_low[pt_QA],0.0,h_mMass2[KEY_Proton_QA]->GetMaximum()/2.0,4,2,2);
+    PlotLine( m2_cut_up[pt_QA], m2_cut_up[pt_QA],0.0,h_mMass2[KEY_Proton_QA]->GetMaximum()/2.0,4,2,2);
+  }
+
+  c_Counts->cd(8); // h_mCounts
+  c_Counts->cd(8)->SetLeftMargin(0.15);
+  c_Counts->cd(8)->SetBottomMargin(0.15);
+  c_Counts->cd(8)->SetTicks(1,1);
+  c_Counts->cd(8)->SetGrid(0,0);
+  TString KEY_Proton_Counts_QA = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_%s_Proton_SysError_%d",pt_QA,Cent_start,Charge_start,Eta_start,Order[mOrder].Data(),Sys_start);
+  h_mCounts[KEY_Proton_Counts_QA]->SetStats(0);
+  h_mCounts[KEY_Proton_Counts_QA]->SetTitle("Counts/Resolution vs. #phi-#Psi_{3}");
+  h_mCounts[KEY_Proton_Counts_QA]->GetXaxis()->SetTitle("#phi-#Psi_{3}");
+  h_mCounts[KEY_Proton_Counts_QA]->GetXaxis()->CenterTitle();
+  h_mCounts[KEY_Proton_Counts_QA]->GetXaxis()->SetTitleSize(0.06);
+  h_mCounts[KEY_Proton_Counts_QA]->GetYaxis()->SetTitle("Counts/Resolution");
+  h_mCounts[KEY_Proton_Counts_QA]->GetYaxis()->CenterTitle();
+  h_mCounts[KEY_Proton_Counts_QA]->GetYaxis()->SetTitleSize(0.06);
+  h_mCounts[KEY_Proton_Counts_QA]->SetMarkerStyle(24);
+  h_mCounts[KEY_Proton_Counts_QA]->SetMarkerSize(0.5);
+  h_mCounts[KEY_Proton_Counts_QA]->SetMarkerColor(kGray+3);
+  h_mCounts[KEY_Proton_Counts_QA]->SetLineColor(1);
+  h_mCounts[KEY_Proton_Counts_QA]->DrawCopy("PE");
+
+  TF1 *f_flow_QA = new TF1("f_flow_QA",flow,0.0,PI_max[mOrder],3);
+  f_flow_QA->FixParameter(0,ParFlow[KEY_Proton_Counts_QA][0]);
+  f_flow_QA->FixParameter(1,ParFlow[KEY_Proton_Counts_QA][1]);
+  f_flow_QA->FixParameter(2,ParFlow[KEY_Proton_Counts_QA][2]);
+  f_flow_QA->SetLineColor(2);
+  f_flow_QA->Draw("l same");
+
+  TString pT_range_QA = Form("[%.2f,%.2f]",pt_low_raw[pt_QA],pt_up_raw[pt_QA]);
+  plotTopLegend((char*)pT_range_QA.Data(),0.5,0.7,0.08,1,0.0,42,1);
+
+  c_Counts->cd(9); // h_mCounts
+  c_Counts->cd(9)->SetLeftMargin(0.15);
+  c_Counts->cd(9)->SetBottomMargin(0.15);
+  c_Counts->cd(9)->SetTicks(1,1);
+  c_Counts->cd(9)->SetGrid(0,0);
+  TString KEY_Proton_RawFlow_QA = Form("RawFlow_Centrality_%d_Charge_%d_EtaGap_%d_%s_Proton_SysError_%d",Cent_start,Charge_start,Eta_start,Order[mOrder].Data(),Sys_start);
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->SetStats(0);
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->SetTitle("raw v_{3} vs. p_{T}");
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->GetXaxis()->CenterTitle();
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->GetXaxis()->SetTitleSize(0.06);
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->GetYaxis()->SetTitle("raw v_{3}");
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->GetYaxis()->CenterTitle();
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->GetYaxis()->SetTitleSize(0.06);
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->SetMarkerStyle(24);
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->SetMarkerSize(0.5);
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->SetMarkerColor(kGray+3);
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->SetLineColor(1);
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->GetXaxis()->SetRangeUser(-0.05,3.4);
+  h_mRawFlow[KEY_Proton_RawFlow_QA]->DrawCopy("PE");
+  PlotLine(-0.05,3.4,0.0,0.0,1,2,2);
   */
 }
