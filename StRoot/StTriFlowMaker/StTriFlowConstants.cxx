@@ -86,7 +86,7 @@ Int_t TriFlow::Centrality_stop  = 1;
 
 Int_t TriFlow::EtaGap_total = 4;
 Int_t TriFlow::EtaGap_start = 0;
-Int_t TriFlow::EtaGap_stop  = 1;
+Int_t TriFlow::EtaGap_stop  = 4;
 
 Int_t TriFlow::Charge_total = 2;
 Int_t TriFlow::Charge_start = 0;

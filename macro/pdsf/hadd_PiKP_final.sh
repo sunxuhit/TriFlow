@@ -6,7 +6,7 @@ date
 
 if [ $# -eq 0 ]
   then
-    PID=nSigmaPion
+    PID=Proton
     Energy=200GeV
     OutDir="/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu$Energy/Mass2_$PID/merged_file/Flow_${Energy}"
     suffix=".root"

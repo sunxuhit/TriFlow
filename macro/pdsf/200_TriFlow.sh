@@ -5,7 +5,7 @@ date
 
 if [ $# -eq 0 ]
   then
-    Name="_200GeV_PiK_"
+    Name="_200GeV_Proton_"
     suffix=".root"
     List="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/run_list/200GeV_"
     suffixlist=".list"
@@ -22,8 +22,8 @@ if [ $# -eq 0 ]
 #      echo -n 0',' >> run$Name$counter.csh  # fill ReCenterPar mode
 #      echo -n 1',' >> run$Name$counter.csh  # ReCenter ShiftPar mode
 #      echo -n 2',' >> run$Name$counter.csh  # Charged Flow mode
-      echo -n 3',' >> run$Name$counter.csh  # Pion and Kaon mode
-#      echo -n 4',' >> run$Name$counter.csh  # Proton mode
+#      echo -n 3',' >> run$Name$counter.csh  # Pion and Kaon mode
+      echo -n 4',' >> run$Name$counter.csh  # Proton mode
 #      echo -n 5',' >> run$Name$counter.csh  # Phi mode
 #      echo -n 6',' >> run$Name$counter.csh  # Lambda mode
 #      echo -n 7',' >> run$Name$counter.csh  # anti-Lambda mode

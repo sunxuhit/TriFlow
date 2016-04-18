@@ -7,7 +7,7 @@ class StPicoDstMaker;
 
 
 StChain *chain;
-void TriFlow(const Char_t *inputFile="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/run_list/200GeV_511.list", const Int_t jobCounter = 511, const Int_t Mode = 3, const Int_t energy = 0, const Int_t flag_ME = 0)
+void TriFlow(const Char_t *inputFile="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu200GeV/List/run_list/200GeV_511.list", const Int_t jobCounter = 511, const Int_t Mode = 4, const Int_t energy = 0, const Int_t flag_ME = 0)
 //void TriFlow(const Char_t *inputFile="/global/project/projectdirs/starprod/rnc/xusun/OutPut/AuAu39GeV/List/run_list/39GeV_511.list", const Int_t jobCounter = 511, const Int_t Mode = 7, const Int_t energy = 1)
 {
 // Mode: 0 for re-center correction, 1 for shift correction, 2 for charged hadron, 3 for pion and kaon, 4 for proton, 5 for phi meson, 6 for Lambda, 7 for antiLambda, 8 for K0S (on progress)
