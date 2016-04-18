@@ -42,6 +42,8 @@ static const Int_t pt_rebin_last  = 15;
 static const Int_t pt_QA    = 4;
 static const Float_t m2_cut_low[pt_rebin_total] = {0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.65,0.7,0.7,0.75,0.879,0.879,0.879,0.879};
 static const Float_t m2_cut_up[pt_rebin_total]  = {1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.20,1.2,1.2,1.20,1.400,1.400,1.400,1.400};
+static const Float_t m2_yield_low  = 0.6;
+static const Float_t m2_yield_high = 1.2;
 
 static const Int_t Cent_total = 4; // Centrality loop
 static const Int_t Cent_start = 0;
@@ -61,9 +63,9 @@ static const Int_t phi_total = 7; // phi loop
 static const Int_t phi_start = 0;
 static const Int_t phi_stop  = 7;
 
-static const Int_t Sys_total = 16; // Systematic loop
+static const Int_t Sys_total = 18; // Systematic loop
 static const Int_t Sys_start = 0;
-static const Int_t Sys_stop  = 16;
+static const Int_t Sys_stop  = 18;
 
 
 typedef std::map<TString,TH1F*> TH1FMap;
@@ -75,8 +77,8 @@ void ProtonFlow(Int_t mEnergy = 0, Int_t mOrder = 1)
 {
   TGaxis::SetMaxDigits(4);
 
-  TString InPutFile = Form("./Data/AuAu%s/Proton/Flow_%s.root",Energy[mEnergy].Data(),Energy[mEnergy].Data());
-  TFile *File_Flow = TFile::Open(InPutFile.Data());
+  TString InPutFile_Flow = Form("./Data/AuAu%s/Proton/Flow_%s.root",Energy[mEnergy].Data(),Energy[mEnergy].Data());
+  TFile *File_Flow = TFile::Open(InPutFile_Flow.Data());
 
   // read in  histogram for flow calculation
   TH1FMap h_mMass2_raw;
@@ -406,4 +408,119 @@ void ProtonFlow(Int_t mEnergy = 0, Int_t mOrder = 1)
   h_mRawFlow[KEY_Proton_RawFlow_QA]->DrawCopy("PE");
   PlotLine(-0.05,3.4,0.0,0.0,1,2,2);
   */
+
+  // resolution correction
+  // read in yields of protons
+  TString InPutFile_Yield = Form("./Data/AuAu%s/Proton/Yield_%s.root",Energy[mEnergy].Data(),Energy[mEnergy].Data());
+  TFile *File_Yield = TFile::Open(InPutFile_Yield.Data());
+
+  TH1FMap h_mMass2_Yields;
+  vecFMap Yields_Counts;
+  for(Int_t i_cent = 0; i_cent < 9; i_cent++) // centrality bin
+  {
+    for(Int_t i_charge = Charge_start; i_charge < Charge_stop; i_charge++) // charge bin
+    {
+      for(Int_t i_eta = Eta_start; i_eta < Eta_stop; i_eta++) // eta gap bin
+      {
+	for(Int_t i_sys = 0; i_sys < 18; i_sys++)
+	{
+	  TString KEY_Proton_Yield = Form("Centrality_%d_Charge_%d_EtaGap_%d_Yields_Proton_SysError_%d",i_cent,i_charge,i_eta,i_sys);
+	  h_mMass2_Yields[KEY_Proton_Yield] = (TH1F*)File_Yield->Get(KEY_Proton_Yield.Data());
+	  Int_t yields_start = h_mMass2_Yields[KEY_Proton_Yield]->FindBin(m2_yield_low);
+	  Int_t yields_stop  = h_mMass2_Yields[KEY_Proton_Yield]->FindBin(m2_yield_high);
+	  Float_t counts = 0.0;
+	  Float_t errors = 0.0;
+	  for(Int_t i_bin = yields_start; i_bin < yields_stop; i_bin++)
+	  {
+	    counts += h_mMass2_Yields[KEY_Proton_Yield]->GetBinContent(i_bin);
+	    errors += h_mMass2_Yields[KEY_Proton_Yield]->GetBinError(i_bin)*h_mMass2_Yields[KEY_Proton_Yield]->GetBinError(i_bin);
+	  }
+	  Yields_Counts[KEY_Proton_Yield].clear();
+	  Yields_Counts[KEY_Proton_Yield].push_back(static_cast<Float_t>(counts));
+	  Yields_Counts[KEY_Proton_Yield].push_back(static_cast<Float_t>(TMath::Sqrt(errors)));
+	}
+      }
+    }
+  }
+
+  /*
+  // QA: h_mMass2_Yields vs Centrality
+  TCanvas *c_Yields = new TCanvas("c_Yields","c_Yields",10,10,900,900);
+  c_Yields->Divide(3,3);
+  for(Int_t i_cent = 0; i_cent < 9; i_cent++)
+  {
+    c_Yields->cd(i_cent+1);
+    c_Yields->cd(i_cent+1)->SetLeftMargin(0.15);
+    c_Yields->cd(i_cent+1)->SetBottomMargin(0.15);
+    c_Yields->cd(i_cent+1)->SetTicks(1,1);
+    c_Yields->cd(i_cent+1)->SetGrid(0,0);
+    TString KEY_Proton_Yield_QA = Form("Centrality_%d_Charge_%d_EtaGap_%d_Yields_Proton_SysError_%d",i_cent,Charge_start,Eta_start,Sys_start);
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->SetStats(0);
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->SetTitle("");
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->GetXaxis()->SetTitle("m^{2} ((GeV/c^{2})^{2})");
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->GetXaxis()->CenterTitle();
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->GetXaxis()->SetTitleSize(0.06);
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->GetYaxis()->SetTitle("Counts");
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->GetYaxis()->CenterTitle();
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->GetYaxis()->SetTitleSize(0.06);
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->SetMarkerStyle(24);
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->SetMarkerSize(0.5);
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->SetMarkerColor(kGray+3);
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->SetLineColor(1);
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->Draw("pE");
+
+    KEY_Proton_Yield_QA = Form("Centrality_%d_Charge_%d_EtaGap_%d_Yields_Proton_SysError_%d",i_cent,Charge_start+1,Eta_start,Sys_start);
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->SetMarkerStyle(24);
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->SetMarkerSize(0.5);
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->SetMarkerColor(2);
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->SetLineColor(1);
+    h_mMass2_Yields[KEY_Proton_Yield_QA]->Draw("pE same");
+
+    PlotLine( m2_yield_low, m2_yield_low,0.0,h_mMass2_Yields[KEY_Proton_Yield_QA]->GetMaximum()/2.0,4,2,2);
+    PlotLine(m2_yield_high,m2_yield_high,0.0,h_mMass2_Yields[KEY_Proton_Yield_QA]->GetMaximum()/2.0,4,2,2);
+  }
+  */
+
+  // calculate final resolution correction factors and correct flow
+  TString InPutFile_Res = Form("./Data/AuAu%s/file_%s_Resolution.root",Energy[mEnergy].Data(),Energy[mEnergy].Data());
+  TFile *File_Res = TFile::Open(InPutFile_Res.Data());
+  TString Res_Order[2] = {"Res2","Res3"};
+  TProMap p_mRes;
+  vecFMap ResValue;
+  for(Int_t i_eta = Eta_start; i_eta < Eta_stop; i_eta++) // eta_gap loop
+  {
+    TString KEY_eta = Form("%s_EtaGap_%d_EP",Res_Order[mOrder].Data(),i_eta);
+    p_mRes[KEY_eta] = (TProfile*)File_Res->Get(KEY_eta.Data()); // read in resolution file
+    for(Int_t i_charge = Charge_start; i_charge < Charge_stop; i_charge++) // charge bin
+    {
+      for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic errors loop
+      {
+	for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++) // centrality bin loop
+	{
+	  Float_t yields_total = 0.0;
+	  for(Int_t cent = cent_low[i_cent]; cent <= cent_up[i_cent]; cent++) // calculate resolution and total yields in selected centrality bin
+	  {
+	    if(p_mRes[KEY_eta]->GetBinContent(cent+1) > 0) 
+	    {
+	      TString KEY_Proton_Yield = Form("Centrality_%d_Charge_%d_EtaGap_%d_Yields_Proton_SysError_%d",cent,i_charge,i_eta,i_sys);
+	      ResValue[KEY_Proton_Yield].push_back(static_cast<Float_t>(TMath::Sqrt(p_mRes[KEY_eta]->GetBinContent(cent+1))));
+	      yields_total += Yields_Counts[KEY_Proton_Yield][0];
+	    }
+	  }
+
+	  TString KEY_ResCorr = Form("Res_%s_Centrality_%d_Charge_%d_EtaGap_%d_SysErrors_%d",Order[mOrder].Data(),i_cent,i_charge,i_eta,i_sys); // KEY for final resolution correction factor
+	  Float_t mean_res = 0.0;
+	  for(Int_t cent = cent_low[i_cent]; cent <= cent_up[i_cent]; cent++) // calculate final resolution correction factor <1/R(centrality)>
+	  {
+	    TString KEY_Proton_Yield = Form("Centrality_%d_Charge_%d_EtaGap_%d_Yields_Proton_SysError_%d",cent,i_charge,i_eta,i_sys);
+	    mean_res += Yields_Counts[KEY_Proton_Yield][0]/(ResValue[KEY_Proton_Yield][0]*yields_total);
+	  }
+	  cout << "i_eta = " << i_eta << ", i_charge = " << i_charge << ", i_sys = " << i_sys << ", centrality_bin = " << i_cent << ", mean_res = " << mean_res << endl;
+
+	  TString KEY_Proton_RawFlow = Form("RawFlow_Centrality_%d_Charge_%d_EtaGap_%d_%s_Proton_SysError_%d",i_cent,i_charge,i_eta,Order[mOrder].Data(),i_sys);
+	  h_mRawFlow[KEY_Proton_RawFlow]->Scale(mean_res);
+	}
+      }
+    }
+  }
 }
