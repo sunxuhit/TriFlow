@@ -321,7 +321,7 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
     */
   }
 
-  // calculate total yields for each centrality bin via gaussian and breit wigner fits
+  // calculate total yields for each pT bin via gaussian and breit wigner fits
   vecFMap ParYield;
   vecFMap yields_count, yields_inte;
   for(Int_t i_pt = pt_start; i_pt < pt_stop; i_pt++) // pt loop
