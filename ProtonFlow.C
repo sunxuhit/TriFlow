@@ -67,7 +67,6 @@ static const Int_t Sys_total = 18; // Systematic loop
 static const Int_t Sys_start = 0;
 static const Int_t Sys_stop  = 18;
 
-
 typedef std::map<TString,TH1F*> TH1FMap;
 typedef std::map<TString,TProfile*> TProMap;
 typedef std::map<TString,TGraphAsymmErrors*> TGraMap;
@@ -508,14 +507,13 @@ void ProtonFlow(Int_t mEnergy = 0, Int_t mOrder = 1)
 	    }
 	  }
 
-	  TString KEY_ResCorr = Form("Res_%s_Centrality_%d_Charge_%d_EtaGap_%d_SysErrors_%d",Order[mOrder].Data(),i_cent,i_charge,i_eta,i_sys); // KEY for final resolution correction factor
 	  Float_t mean_res = 0.0;
 	  for(Int_t cent = cent_low[i_cent]; cent <= cent_up[i_cent]; cent++) // calculate final resolution correction factor <1/R(centrality)>
 	  {
 	    TString KEY_Proton_Yield = Form("Centrality_%d_Charge_%d_EtaGap_%d_Yields_Proton_SysError_%d",cent,i_charge,i_eta,i_sys);
 	    mean_res += Yields_Counts[KEY_Proton_Yield][0]/(ResValue[KEY_Proton_Yield][0]*yields_total);
 	  }
-	  cout << "i_eta = " << i_eta << ", i_charge = " << i_charge << ", i_sys = " << i_sys << ", centrality_bin = " << i_cent << ", mean_res = " << mean_res << endl;
+//	  cout << "i_eta = " << i_eta << ", i_charge = " << i_charge << ", i_sys = " << i_sys << ", centrality_bin = " << i_cent << ", mean_res = " << mean_res << endl;
 
 	  TString KEY_Proton_RawFlow = Form("RawFlow_Centrality_%d_Charge_%d_EtaGap_%d_%s_Proton_SysError_%d",i_cent,i_charge,i_eta,Order[mOrder].Data(),i_sys);
 	  h_mRawFlow[KEY_Proton_RawFlow]->Scale(mean_res);
@@ -523,4 +521,161 @@ void ProtonFlow(Int_t mEnergy = 0, Int_t mOrder = 1)
       }
     }
   }
+
+  // read in pT spectra
+  TString InPutFile_Pt = Form("./OutPut/AuAu%s/Proton/h_pt_%s.root",Energy[mEnergy].Data(),Order[mOrder].Data());
+  TFile *File_Spec = TFile::Open(InPutFile_Pt.Data());
+  TH1FMap h_mPt;
+  for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++) // centrality bin
+  {
+    for(Int_t i_charge = Charge_start; i_charge < Charge_stop; i_charge++) // charge bin
+    {
+      for(Int_t i_eta = Eta_start; i_eta < Eta_stop; i_eta++) // eta gap bin
+      {
+	for(Int_t i_sys = 0; i_sys < 18; i_sys++)
+	{
+	  TString KEY_Proton_pT = Form("Spec_Centrality_%d_Charge_%d_EtaGap_%d_Proton_%s_SysErrors_%d",i_cent,i_charge,i_eta,Order[mOrder].Data(),i_sys);
+	  h_mPt[KEY_Proton_pT] = (TH1F*)File_Spec->Get(KEY_Proton_pT.Data());
+	}
+      }
+    }
+  }
+
+  // mean pT calculations
+  Float_t pt_low_spec[32], pt_up_spec[32], pt_width[32], pt_center[32];
+  for(Int_t i_pt = pt_start; i_pt < pt_stop; i_pt++)
+  {
+    pt_low_spec[2*i_pt] = pt_low_raw[i_pt];
+    pt_up_spec[2*i_pt]  = 0.5*(pt_low_raw[i_pt]+pt_up_raw[i_pt]);
+    pt_width[2*i_pt]    = pt_up_spec[2*i_pt]-pt_low_spec[2*i_pt];
+    pt_center[2*i_pt]   = 0.5*(pt_up_spec[2*i_pt]+pt_low_spec[2*i_pt]);
+
+    pt_low_spec[2*i_pt+1] = 0.5*(pt_low_raw[i_pt]+pt_up_raw[i_pt]);
+    pt_up_spec[2*i_pt+1]  = pt_up_raw[i_pt];
+    pt_width[2*i_pt+1]    = pt_up_spec[2*i_pt+1]-pt_low_spec[2*i_pt+1];
+    pt_center[2*i_pt+1]   = 0.5*(pt_up_spec[2*i_pt+1]+pt_low_spec[2*i_pt+1]);
+  }
+
+  vecFMap mean_pt; // mean pt with systematic errors
+  for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++) // Centrality loop
+  {
+    for(Int_t i_charge = Charge_start; i_charge < Charge_stop; i_charge++) // charge bin
+    {
+      for(Int_t i_eta = Eta_start; i_eta < Eta_stop; i_eta++) // EtaGap loop
+      {
+	for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic loop
+	{
+	  TString KEY_Proton_RawFlow = Form("RawFlow_Centrality_%d_Charge_%d_EtaGap_%d_%s_Proton_SysError_%d",i_cent,i_charge,i_eta,Order[mOrder].Data(),i_sys);
+	  mean_pt[KEY_Proton_RawFlow].clear();
+	  for(Int_t i_pt = pt_rebin_first; i_pt < pt_rebin_last; i_pt++) // loop over rebinned pT
+	  {
+//	    cout << "i_pt = " << i_pt << endl;
+	    Float_t mean_pt_counts = 0.0;
+	    Float_t spec_counts    = 0.0;
+	    for(Int_t i_pt_raw = pt_rebin_start[i_pt]; i_pt_raw <= pt_rebin_stop[i_pt]; i_pt_raw++) // loop over raw pT bin
+	    {
+//	      cout << "i_pt_raw = " << i_pt_raw << endl;
+	      for(Int_t i_pt_spec = 2*i_pt_raw; i_pt_spec <= 2*i_pt_raw+1; i_pt_spec++)
+	      {
+//		cout << "i_pt_spec = " << i_pt_spec << endl;
+		TString KEY_Proton_pT = Form("Spec_Centrality_%d_Charge_%d_EtaGap_%d_Proton_%s_SysErrors_%d",i_cent,i_charge,i_eta,Order[mOrder].Data(),i_sys);
+		mean_pt_counts += pt_center[i_pt_spec]*h_mPt[KEY_Proton_pT]->GetBinContent(i_pt_spec+1)*pt_width[i_pt_spec];
+		spec_counts    += h_mPt[KEY_Proton_pT]->GetBinContent(i_pt_spec+1)*pt_width[i_pt_spec];
+
+	      }
+	    }
+	    mean_pt[KEY_Proton_RawFlow].push_back(static_cast<Float_t>(mean_pt_counts/spec_counts));
+	  }
+	}
+      }
+    }
+  }
+
+  // set final pt and flow to one TGraphAsymmErrors
+  TGraMap g_mFlow;
+  for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++) // Centrality loop
+  {
+    for(Int_t i_charge = Charge_start; i_charge < Charge_stop; i_charge++) // charge bin
+    {
+      for(Int_t i_eta = Eta_start; i_eta < Eta_stop; i_eta++) // EtaGap loop
+      {
+	for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic loop
+	{
+	  TString KEY_Proton_RawFlow = Form("RawFlow_Centrality_%d_Charge_%d_EtaGap_%d_%s_Proton_SysError_%d",i_cent,i_charge,i_eta,Order[mOrder].Data(),i_sys);
+	  g_mFlow[KEY_Proton_RawFlow] = new TGraphAsymmErrors();
+	  for(Int_t i_pt = pt_rebin_first; i_pt < pt_rebin_last; i_pt++) // loop over rebinned pT
+	  {
+	    Float_t pt_mean = (pt_low[i_pt]+pt_up[i_pt])/2.0;
+
+	    Float_t content = h_mRawFlow[KEY_Proton_RawFlow]->GetBinContent(h_mRawFlow[KEY_Proton_RawFlow]->FindBin(pt_mean)); // bin counting
+	    Float_t error   = h_mRawFlow[KEY_Proton_RawFlow]->GetBinError(h_mRawFlow[KEY_Proton_RawFlow]->FindBin(pt_mean));
+	    g_mFlow[KEY_Proton_RawFlow]->SetPoint(i_pt,mean_pt[KEY_Proton_RawFlow][i_pt],content);
+	    g_mFlow[KEY_Proton_RawFlow]->SetPointError(i_pt,0.0,0.0,error,error);
+	    TString Name = Form("Flow_%s_Proton_Centrality_%d_Charge_%d_EtaGap_%d_SysError_%d",Order[mOrder].Data(),i_cent,i_charge,i_eta,i_sys);
+	    g_mFlow[KEY_Proton_RawFlow]->SetName(Name.Data());
+	  }
+	}
+      }
+    }
+  }
+
+  // QA flow vs. pt for gaussian fits and breit wigner fits with TGraphAsymmErrors
+  TCanvas *c_flow = new TCanvas("c_flow","c_flow",10,10,800,800);
+  c_flow->SetLeftMargin(0.15);
+  c_flow->SetBottomMargin(0.15);
+  c_flow->SetTicks(1,1);
+  c_flow->SetGrid(0,0);
+  TH1F *h_play = new TH1F("h_play","h_play",100,0.0,4.0);
+  for(Int_t i_bin = 0; i_bin < 100; i_bin++)
+  {
+    h_play->SetBinContent(i_bin+1,-10.0);
+    h_play->SetBinError(i_bin+1,1.0);
+  }
+  h_play->SetTitle("");
+  h_play->SetStats(0);
+  h_play->GetXaxis()->SetRangeUser(0.0,4.0);
+  h_play->GetXaxis()->SetNdivisions(505,'N');
+  h_play->GetXaxis()->SetLabelSize(0.03);
+  h_play->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+  h_play->GetXaxis()->SetTitleSize(0.05);
+  h_play->GetXaxis()->SetTitleOffset(1.2);
+  h_play->GetXaxis()->CenterTitle();
+
+  h_play->GetYaxis()->SetRangeUser(-0.01,0.20);
+  h_play->GetYaxis()->SetNdivisions(505,'N');
+  h_play->GetYaxis()->SetTitle("v_{3}");
+  h_play->GetYaxis()->SetTitleSize(0.05);
+  h_play->GetYaxis()->SetLabelSize(0.03);
+  h_play->GetYaxis()->CenterTitle();
+  h_play->DrawCopy("pE");
+  PlotLine(0.0,4.0,0.0,0.0,1,2,2);
+  for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic loop
+  {
+    TString KEY_Proton_RawFlow = Form("RawFlow_Centrality_%d_Charge_%d_EtaGap_%d_%s_Proton_SysError_%d",Cent_start,Charge_start,Eta_start,Order[mOrder].Data(),i_sys);
+    g_mFlow[KEY_Proton_RawFlow]->SetMarkerStyle(24);
+    g_mFlow[KEY_Proton_RawFlow]->SetMarkerColor(4);
+    g_mFlow[KEY_Proton_RawFlow]->Draw("PE same");
+  }
+
+  TString OutPutFile = Form("./OutPut/AuAu%s/Proton/flow_%s.root",Energy[mEnergy].Data(),Order[mOrder].Data());
+  TFile *File_OutPut = new TFile(OutPutFile.Data(),"RECREATE");
+  File_OutPut->cd();
+  for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++) // Centrality loop
+  {
+    for(Int_t i_charge = Charge_start; i_charge < Charge_stop; i_charge++) // charge bin
+    {
+      for(Int_t i_eta = Eta_start; i_eta < Eta_stop; i_eta++) // EtaGap loop
+      {
+	for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic loop
+	{
+	  TString KEY_Proton_RawFlow = Form("RawFlow_Centrality_%d_Charge_%d_EtaGap_%d_%s_Proton_SysError_%d",i_cent,i_charge,i_eta,Order[mOrder].Data(),i_sys);
+	  g_mFlow[KEY_Proton_RawFlow]->SetMarkerStyle(24);
+	  g_mFlow[KEY_Proton_RawFlow]->SetMarkerColor(4);
+	  g_mFlow[KEY_Proton_RawFlow]->Write();
+	}
+      }
+    }
+  }
+  h_play->Write();
+  File_OutPut->Close();
 }
