@@ -1179,7 +1179,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	  Float_t bw_error   = h_mRawFlow[KEY_RawFlow_BW_Save]->GetBinError(h_mRawFlow[KEY_RawFlow_BW_Save]->FindBin(pt_mean));
 	  g_mFlow[KEY_RawFlow_BW_Save]->SetPoint(i_pt,pt_mean,bw_content);
 	  g_mFlow[KEY_RawFlow_BW_Save]->SetPointError(i_pt,0.0,0.0,bw_error,bw_error);
-	  TString Name_bw = Form("Flow_%s_%s_Centrality_%d_EtaGap_%d_SysErrors_%d_Gaus",Order[mOrder].Data(),PID[mPID].Data(),i_cent,i_eta,i_sys); // gaussian fits
+	  TString Name_bw = Form("Flow_%s_%s_Centrality_%d_EtaGap_%d_SysErrors_%d_BW",Order[mOrder].Data(),PID[mPID].Data(),i_cent,i_eta,i_sys); // gaussian fits
 	  g_mFlow[KEY_RawFlow_BW_Save]->SetName(Name_bw.Data());
 	}
       }
