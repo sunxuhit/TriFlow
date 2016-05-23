@@ -4,3 +4,4 @@
 *.d
 Data/
 OutPut/
+*.log
