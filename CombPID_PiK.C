@@ -42,7 +42,7 @@ static const Int_t pt_rebin_start[pt_rebin_total] = {0,1,2,3,4,5,6,7,8,9,10,11,1
 static const Int_t pt_rebin_stop[pt_rebin_total]  = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
 static const Int_t pt_rebin_first = 0;
 static const Int_t pt_rebin_last  = 16;
-static const Int_t pt_QA    = 5;
+static const Int_t pt_QA    = 13;
 
 // x and y range
 static const Float_t x_low[pt_total] = {-0.4, -0.6,-0.6, -0.6,-0.6,-0.6,-0.6,-0.8,-0.8,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0};
@@ -63,12 +63,14 @@ static const Int_t phi_start = 0;
 static const Int_t phi_stop  = 7;
 
 static const Int_t Sys_total = 6;
-static const Int_t Sys_start = 2;
-static const Int_t Sys_stop  = 3;
+static const Int_t Sys_start = 0;
+static const Int_t Sys_stop  = 6;
 
 // Initial parameters 200 GeV
-Float_t order_pion[pt_total]   = {3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,2.5,3.00,2.50,3.0,2.50,3.0};
-Float_t order_proton[pt_total] = {3.0,3.0,3.0,3.0,3.0,2.5,2.5,3.0,3.0,3.0,2.5,2.55,2.55,3.0,2.55,3.0};
+Float_t order_pion[pt_total]   = {3.0,3.0,3.0,3.0,3.0,2.55,2.55,3.0,3.0,3.0,2.5,3.00,2.55,3.00,3.00,3.0}; // positive
+Float_t order_proton[pt_total] = {3.0,3.0,3.0,3.0,3.0,2.50,2.55,3.0,3.0,3.0,2.5,2.55,2.55,2.55,2.50,3.0};
+//Float_t order_pion[pt_total]   = {3.0,3.0,3.0,3.0,3.0,2.50,2.55,3.0,3.0,3.0,2.5,3.00,2.55,3.00,2.55,3.0}; //negative 
+//Float_t order_proton[pt_total] = {3.0,3.0,3.0,3.0,3.0,3.00,2.55,3.0,3.0,3.0,2.5,2.55,2.55,2.55,2.50,3.0};
 // pion
 Float_t x_pi[pt_total] = {0.0025,-0.0025,-0.0025,-0.0025,-0.0025,-0.0075,-0.0125,-0.005,-0.005,-0.00625,0.00875,0.02375,0.0283,0.0344,0.0649,0.1135};
 Float_t y_pi[pt_total] = {0.0005,0.00125,0.00125,-0.00025,0.002,0.00825,0.01075,0.02175,0.02825,0.03137,0.02625,0.03375,0.0114,0.0236,0.0236,0.0825};
@@ -83,8 +85,9 @@ Float_t width_k[pt_total] = {0.008031,0.01045,0.01612,0.02472,0.03588,0.04931,0.
 // proton
 Float_t x_p[pt_total] = {0.8625, 0.8625,  0.8675,  0.8625,0.8525, 0.8305, 0.8025, 0.7750, 0.7450, 0.7213, 0.7287, 0.7620, 0.7794, 0.8343, 0.9565, 0.8955};
 Float_t y_p[pt_total] = {0.0375,0.02075,-0.01125,-0.05975,-0.126,-0.2033,-0.2862,-0.3553,-0.4268,-0.4614,-0.5062,-0.5587,-0.5015,-0.5071,-0.4981,-0.5295};
-//  Float_t width_p_x[pt_total] = {0.03359,0.03034,0.03311,0.04130,0.05238,0.06557,0.08030,0.09742,0.11610,0.1384,0.158,0.1984,0.3567,0.3567,0.3567,0.3567};
-Float_t width_p_x[pt_total] = {0.03359,0.03034,0.03311,0.04130,0.05238,0.07200,0.08030,0.09100,0.11610,0.1384,0.158,0.1984,0.3567,0.3567,0.36,0.3567};
+//Float_t width_p_x[pt_total] = {0.03359,0.03034,0.03311,0.04130,0.05238,0.06557,0.08030,0.09742,0.11610,0.1384,0.158,0.1984,0.3567,0.3567,0.3567,0.3567};
+Float_t width_p_x[pt_total] = {0.03359,0.03034,0.03311,0.04130,0.05238,0.07000,0.08030,0.09100,0.11610,0.1384,0.158,0.1984,0.3567,0.3567,0.36,0.3567}; // positive
+//Float_t width_p_x[pt_total] = {0.03359,0.03034,0.03311,0.04130,0.05238,0.07200,0.08030,0.09100,0.11610,0.1384,0.158,0.1984,0.3567,0.3567,0.36,0.3567}; negative
 Float_t width_p_y[pt_total] = {0.01217,0.02191,0.03077,0.04085,0.05326,0.06540,0.07996,0.09776,0.11900,0.1419,0.169,0.2052,0.3111,0.3111,0.32,0.3111};
 Float_t nu_p[pt_total] = {8.975,9.936,7.798,6.460,5.970,5.905,6.109,6.991,8.212,10.58,20.,47.92,49.,50.2,55,50.2};
 
@@ -97,7 +100,7 @@ typedef std::map<TString,std::vector<Float_t>> vecFMap;
 // mEnergy: 0 for 200GeV, 1 for 39GeV
 // mCharge: 0 for positive, 1 for negative 
 // mOrder:  0 for elliptic flow, 1 for triangular flow 
-void CombPID_PiK(Int_t mMode = 0, Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mOrder = 1)
+void CombPID_PiK(Int_t mMode = 1, Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mOrder = 1)
 {
   TGaxis::SetMaxDigits(4);
 
