@@ -42,7 +42,7 @@ static const Int_t pt_rebin_start[pt_rebin_total] = {0,1,2,3,4,5,6,7,8,9,10,11,1
 static const Int_t pt_rebin_stop[pt_rebin_total]  = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
 static const Int_t pt_rebin_first = 0;
 static const Int_t pt_rebin_last  = 16;
-static const Int_t pt_QA    = 13;
+static const Int_t pt_QA    = 7;
 
 // x and y range
 static const Float_t x_low[pt_total] = {-0.4, -0.6,-0.6, -0.6,-0.6,-0.6,-0.6,-0.8,-0.8,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0};
@@ -63,14 +63,14 @@ static const Int_t phi_start = 0;
 static const Int_t phi_stop  = 7;
 
 static const Int_t Sys_total = 6;
-static const Int_t Sys_start = 0;
-static const Int_t Sys_stop  = 6;
+static const Int_t Sys_start = 4;
+static const Int_t Sys_stop  = 5;
 
 // Initial parameters 200 GeV
-Float_t order_pion[pt_total]   = {3.0,3.0,3.0,3.0,3.0,2.55,2.55,3.0,3.0,3.0,2.5,3.00,2.55,3.00,3.00,3.0}; // positive
-Float_t order_proton[pt_total] = {3.0,3.0,3.0,3.0,3.0,2.50,2.55,3.0,3.0,3.0,2.5,2.55,2.55,2.55,2.50,3.0};
-//Float_t order_pion[pt_total]   = {3.0,3.0,3.0,3.0,3.0,2.50,2.55,3.0,3.0,3.0,2.5,3.00,2.55,3.00,2.55,3.0}; //negative 
-//Float_t order_proton[pt_total] = {3.0,3.0,3.0,3.0,3.0,3.00,2.55,3.0,3.0,3.0,2.5,2.55,2.55,2.55,2.50,3.0};
+//Float_t order_pion[pt_total]   = {3.0,3.0,3.0,3.0,3.0,2.55,2.55,3.0,3.0,3.0,2.5,3.00,2.55,3.00,3.00,3.0}; // positive
+//Float_t order_proton[pt_total] = {3.0,3.0,3.0,3.0,3.0,2.50,2.55,3.0,3.0,3.0,2.5,2.55,2.55,2.55,2.50,3.0};
+Float_t order_pion[pt_total]   = {3.0,3.0,3.0,3.0,3.0,2.50,2.55,3.0,3.0,3.0,2.5,3.00,2.55,3.00,2.55,3.0}; //negative 
+Float_t order_proton[pt_total] = {3.0,3.0,3.0,3.0,3.0,3.00,2.55,3.0,3.0,3.0,2.5,2.55,2.55,2.55,2.50,3.0};
 // pion
 Float_t x_pi[pt_total] = {0.0025,-0.0025,-0.0025,-0.0025,-0.0025,-0.0075,-0.0125,-0.005,-0.005,-0.00625,0.00875,0.02375,0.0283,0.0344,0.0649,0.1135};
 Float_t y_pi[pt_total] = {0.0005,0.00125,0.00125,-0.00025,0.002,0.00825,0.01075,0.02175,0.02825,0.03137,0.02625,0.03375,0.0114,0.0236,0.0236,0.0825};
@@ -85,12 +85,12 @@ Float_t width_k[pt_total] = {0.008031,0.01045,0.01612,0.02472,0.03588,0.04931,0.
 // proton
 Float_t x_p[pt_total] = {0.8625, 0.8625,  0.8675,  0.8625,0.8525, 0.8305, 0.8025, 0.7750, 0.7450, 0.7213, 0.7287, 0.7620, 0.7794, 0.8343, 0.9565, 0.8955};
 Float_t y_p[pt_total] = {0.0375,0.02075,-0.01125,-0.05975,-0.126,-0.2033,-0.2862,-0.3553,-0.4268,-0.4614,-0.5062,-0.5587,-0.5015,-0.5071,-0.4981,-0.5295};
-//Float_t width_p_x[pt_total] = {0.03359,0.03034,0.03311,0.04130,0.05238,0.06557,0.08030,0.09742,0.11610,0.1384,0.158,0.1984,0.3567,0.3567,0.3567,0.3567};
-Float_t width_p_x[pt_total] = {0.03359,0.03034,0.03311,0.04130,0.05238,0.07000,0.08030,0.09100,0.11610,0.1384,0.158,0.1984,0.3567,0.3567,0.36,0.3567}; // positive
-//Float_t width_p_x[pt_total] = {0.03359,0.03034,0.03311,0.04130,0.05238,0.07200,0.08030,0.09100,0.11610,0.1384,0.158,0.1984,0.3567,0.3567,0.36,0.3567}; negative
+//Float_t width_p_x[pt_total] = {0.03359,0.03034,0.03311,0.04130,0.05238,0.07000,0.08030,0.09100,0.11610,0.1384,0.158,0.1984,0.3567,0.3567,0.36,0.3567}; // positive
+Float_t width_p_x[pt_total] = {0.03359,0.03034,0.03311,0.04130,0.05238,0.07200,0.08030,0.09100,0.11610,0.1384,0.158,0.1984,0.3567,0.3567,0.36,0.3567}; // negative
 Float_t width_p_y[pt_total] = {0.01217,0.02191,0.03077,0.04085,0.05326,0.06540,0.07996,0.09776,0.11900,0.1419,0.169,0.2052,0.3111,0.3111,0.32,0.3111};
 Float_t nu_p[pt_total] = {8.975,9.936,7.798,6.460,5.970,5.905,6.109,6.991,8.212,10.58,20.,47.92,49.,50.2,55,50.2};
 
+typedef std::map<TString,TH1F*> TH1FMap;
 typedef std::map<TString,TH2F*> TH2FMap;
 typedef std::map<TString,TProfile*> TProMap;
 typedef std::map<TString,TGraphAsymmErrors*> TGraMap;
@@ -365,6 +365,7 @@ void CombPID_PiK(Int_t mMode = 1, Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mO
     }
   }
 
+  /*
   // QA plots phi integrated distribution
   TCanvas *c_pT_rebin_total = new TCanvas("c_pT_rebin_total","c_pT_rebin_total",10,10,1600,1600);
   c_pT_rebin_total->Divide(4,4);
@@ -416,4 +417,147 @@ void CombPID_PiK(Int_t mMode = 1, Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mO
     TString pT_range = Form("[%.2f,%.2f]",pt_low[i_pt],pt_up[i_pt]);
     plotTopLegend((char*)pT_range.Data(),0.65,0.7,0.08,1,0.0,42,1);
   }
+  */
+
+  // fit for phi differential bin and subtract proton
+  vecFMap ParStudent; 
+  TH2FMap h_mMass2_sub;
+  for(Int_t i_pt = pt_rebin_first; i_pt < pt_rebin_last; i_pt++) // pt bin
+  {
+    for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++) // centrality bin
+    {
+      for(Int_t i_charge = mCharge; i_charge < mCharge+1; i_charge++) // charge bin
+      {
+	for(Int_t i_eta = Eta_start; i_eta < Eta_stop; i_eta++) // eta gap bin
+	{
+	  for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++)
+	  {
+	    TString KEY_PiK_total = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_%s_PiK_SysError_%d",i_pt,i_cent,i_charge,i_eta,Order[mOrder].Data(),i_sys);
+	    for(Int_t i_phi = phi_start; i_phi < phi_stop; i_phi++) // phi-psi bin
+	    {
+	      TString KEY_PiK = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_phi_Psi_%d_%s_PiK_SysError_%d",i_pt,i_cent,i_charge,i_eta,i_phi,Order[mOrder].Data(),i_sys);
+	      h_mMass2_sub[KEY_PiK] = (TH2F*)h_mMass2[KEY_PiK]->Clone();
+	      if((mMode == 0 && i_pt > 4) || (mMode == 1 && i_pt == pt_QA && i_pt > 4))
+	      {
+		TF2 *f_student = new TF2("f_student",student_t_2d_fit,x_low[i_pt],x_up[i_pt],y_low[i_pt],y_up[i_pt],19);
+		for(Int_t i_par = 0; i_par < 19; i_par++)
+		{
+		  f_student->ReleaseParameter(i_par);
+		  f_student->FixParameter(i_par,ParStudent_total_2nd[KEY_PiK_total][i_par]);
+		  if(i_par == 6 || i_par == 11 || i_par == 18)
+		  {
+		    f_student->ReleaseParameter(i_par);
+		    f_student->SetParameter(i_par,1.0);
+		    f_student->SetParError(i_par,0.0);
+		  }
+		}
+		Float_t pion_max = h_mMass2[KEY_PiK]->GetBinContent(h_mMass2[KEY_PiK]->GetXaxis()->FindBin(ParStudent_total_2nd[KEY_PiK_total][2]),h_mMass2[KEY_PiK]->GetYaxis()->FindBin(ParStudent_total_2nd[KEY_PiK_total][3]));
+		Float_t pion_fit = f_student->Eval(ParStudent_total_2nd[KEY_PiK_total][2],ParStudent_total_2nd[KEY_PiK_total][3]);
+		Float_t pion_Nrom = pion_max/pion_fit;
+
+		Float_t kaon_max = h_mMass2[KEY_PiK]->GetBinContent(h_mMass2[KEY_PiK]->GetXaxis()->FindBin(ParStudent_total_2nd[KEY_PiK_total][7]),h_mMass2[KEY_PiK]->GetYaxis()->FindBin(ParStudent_total_2nd[KEY_PiK_total][8]));
+		Float_t kaon_fit = f_student->Eval(ParStudent_total_2nd[KEY_PiK_total][7],ParStudent_total_2nd[KEY_PiK_total][8]);
+		Float_t kaon_Nrom = kaon_max/kaon_fit;
+
+		Float_t proton_max = h_mMass2[KEY_PiK]->GetBinContent(h_mMass2[KEY_PiK]->GetXaxis()->FindBin(ParStudent_total_2nd[KEY_PiK_total][14]),h_mMass2[KEY_PiK]->GetYaxis()->FindBin(ParStudent_total_2nd[KEY_PiK_total][15]));
+		Float_t proton_fit = f_student->Eval(ParStudent_total_2nd[KEY_PiK_total][14],ParStudent_total_2nd[KEY_PiK_total][15]);
+		Float_t proton_Nrom = proton_max/proton_fit;
+
+		f_student->SetParameter(6,pion_Nrom);
+		f_student->SetParameter(11,kaon_Nrom);
+		f_student->SetParameter(18,proton_Nrom);
+
+		f_student->SetRange(x_pi[i_pt]-order_pion[i_pt]*ParStudent_total_2nd[KEY_PiK_total][4],y_p[i_pt]-order_proton[i_pt]*ParStudent_total_2nd[KEY_PiK_total][17],x_p[i_pt]+order_proton[i_pt]*ParStudent_total_2nd[KEY_PiK_total][16],y_pi[i_pt]+order_pion[i_pt]*ParStudent_total_2nd[KEY_PiK_total][5]);
+		cout << "i_pt = " << i_pt << ", i_charge = " << i_charge << ", i_eta = " << i_eta << ", i_phi = " << i_phi << endl;
+		h_mMass2[KEY_PiK]->Fit(f_student,"MRN");
+		for(Int_t i_par = 0; i_par < 19; i_par++)
+		{
+		  ParStudent[KEY_PiK].push_back(static_cast<Float_t>(f_student->GetParameter(i_par)));
+		}
+
+		TF2 *f_proton = new TF2("f_proton",student_t_2d_single,x_low[i_pt],x_up[i_pt],y_low[i_pt],y_up[i_pt],7);
+		for(Int_t i_par = 0; i_par < 7; i_par++)
+		{
+		  f_proton->ReleaseParameter(i_par);
+		  f_proton->FixParameter(i_par,ParStudent[KEY_PiK][i_par+12]);
+		}
+		h_mMass2_sub[KEY_PiK]->Add(f_proton,-1.0);
+	      }
+	    }
+	  }
+	}
+      }
+    }
+  }
+
+  /*
+  // QA plots phi differential distribution after proton subtraction
+  TCanvas *c_pT_sub = new TCanvas("c_pT_sub","c_pT_sub",10,10,1600,1600);
+  c_pT_sub->Divide(4,4);
+  for(Int_t i_pt = pt_rebin_first; i_pt < pt_rebin_last; i_pt++)
+  {
+    c_pT_sub->cd(pt_rebin_start[i_pt]+1);
+    c_pT_sub->cd(pt_rebin_start[i_pt]+1)->SetLeftMargin(0.15);
+    c_pT_sub->cd(pt_rebin_start[i_pt]+1)->SetBottomMargin(0.15);
+    c_pT_sub->cd(pt_rebin_start[i_pt]+1)->SetTicks(1,1);
+    c_pT_sub->cd(pt_rebin_start[i_pt]+1)->SetGrid(0,0);
+    c_pT_sub->cd(pt_rebin_start[i_pt]+1)->SetLogz();
+    TString KEY_PiK_QA = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_phi_Psi_%d_%s_PiK_SysError_%d",i_pt,Cent_start,mCharge,Eta_start,phi_start,Order[mOrder].Data(),Sys_start);
+    h_mMass2_sub[KEY_PiK_QA]->SetStats(0);
+    h_mMass2_sub[KEY_PiK_QA]->SetTitle("");
+    h_mMass2_sub[KEY_PiK_QA]->GetXaxis()->SetTitle("x(n#sigma_{#pi},m^{2})");
+    h_mMass2_sub[KEY_PiK_QA]->GetXaxis()->CenterTitle();
+    h_mMass2_sub[KEY_PiK_QA]->GetXaxis()->SetTitleSize(0.06);
+    h_mMass2_sub[KEY_PiK_QA]->GetYaxis()->SetTitle("y(n#sigma_{#pi},m^{2})");
+    h_mMass2_sub[KEY_PiK_QA]->GetYaxis()->CenterTitle();
+    h_mMass2_sub[KEY_PiK_QA]->GetYaxis()->SetTitleSize(0.06);
+    h_mMass2_sub[KEY_PiK_QA]->SetMarkerStyle(24);
+    h_mMass2_sub[KEY_PiK_QA]->SetMarkerColor(kGray+3);
+    h_mMass2_sub[KEY_PiK_QA]->SetMarkerSize(0.4);
+    h_mMass2_sub[KEY_PiK_QA]->Draw("colz");
+
+    TString pT_range = Form("[%.2f,%.2f]",pt_low[i_pt],pt_up[i_pt]);
+    plotTopLegend((char*)pT_range.Data(),0.65,0.7,0.08,1,0.0,42,1);
+  }
+  */
+
+  // Save fit parameters and proton subtracted distribution
+  TString OutPutFile = Form("./OutPut/AuAu%s/nSigmaPion/nSigmaPion_Sub_Charge_%d.root",Energy[mEnergy].Data(),mCharge);
+  TFile *File_OutPut = new TFile(OutPutFile.Data(),"RECREATE");
+  File_OutPut->cd();
+  TH1FMap h_ParStudnet_total_1st, h_ParStudnet_total_2nd;
+  for(Int_t i_pt = pt_rebin_first; i_pt < pt_rebin_last; i_pt++) // pt bin
+  {
+    for(Int_t i_cent = Cent_start; i_cent < Cent_stop; i_cent++) // centrality bin
+    {
+      for(Int_t i_charge = mCharge; i_charge < mCharge+1; i_charge++) // charge bin
+      {
+	for(Int_t i_eta = Eta_start; i_eta < Eta_stop; i_eta++) // eta gap bin
+	{
+	  for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++)
+	  {
+	    if((mMode == 0 && i_pt > 4) || (mMode == 1 && i_pt == pt_QA && i_pt > 4))
+	    {
+	      TString KEY_PiK_total = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_%s_PiK_SysError_%d",i_pt,i_cent,i_charge,i_eta,Order[mOrder].Data(),i_sys);
+	      h_ParStudnet_total_1st[KEY_PiK_total] = new TH1F((KEY_PiK_total+"_1st").Data(),(KEY_PiK_total+"_1st").Data(),19,-0.5,18.5);
+	      h_ParStudnet_total_2nd[KEY_PiK_total] = new TH1F((KEY_PiK_total+"_2nd").Data(),(KEY_PiK_total+"_2nd").Data(),19,-0.5,18.5);
+	      for(Int_t i_par = 0; i_par < 19; i_par++)
+	      {
+		h_ParStudnet_total_1st[KEY_PiK_total]->SetBinContent(i_par+1,ParStudent_total_1st[KEY_PiK_total][i_par]);
+		h_ParStudnet_total_2nd[KEY_PiK_total]->SetBinContent(i_par+1,ParStudent_total_2nd[KEY_PiK_total][i_par]);
+	      }
+	      h_ParStudnet_total_1st[KEY_PiK_total]->Write();
+	      h_ParStudnet_total_2nd[KEY_PiK_total]->Write();
+	    }
+	    for(Int_t i_phi = phi_start; i_phi < phi_stop; i_phi++) // phi-psi bin
+	    {
+	      TString KEY_PiK = Form("pt_%d_Centrality_%d_Charge_%d_EtaGap_%d_phi_Psi_%d_%s_PiK_SysError_%d",i_pt,i_cent,i_charge,i_eta,i_phi,Order[mOrder].Data(),i_sys);
+	      h_mMass2_sub[KEY_PiK]->Write();
+	    }
+	  }
+	}
+      }
+    }
+  }
+  File_OutPut->Close();
 }
