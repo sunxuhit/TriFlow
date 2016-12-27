@@ -205,6 +205,8 @@ void StTriFlowV0::clear_phi(Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2)
     mQ2West[cent9][Bin_vz][Bin_Psi2][j].clear();
     mQ3East[cent9][Bin_vz][Bin_Psi2][j].clear();
     mQ3West[cent9][Bin_vz][Bin_Psi2][j].clear();
+    mNumTrackEast[cent9][Bin_vz][Bin_Psi2][j].clear();
+    mNumTrackWest[cent9][Bin_vz][Bin_Psi2][j].clear();
   }
 
   for(Int_t Bin_Event = 0; Bin_Event < TriFlow::Buffer_depth; Bin_Event++)
@@ -276,6 +278,8 @@ void StTriFlowV0::clear_Lambda(Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2)
     mQ2West[cent9][Bin_vz][Bin_Psi2][j].clear();
     mQ3East[cent9][Bin_vz][Bin_Psi2][j].clear();
     mQ3West[cent9][Bin_vz][Bin_Psi2][j].clear();
+    mNumTrackEast[cent9][Bin_vz][Bin_Psi2][j].clear();
+    mNumTrackWest[cent9][Bin_vz][Bin_Psi2][j].clear();
   }
 
   for(Int_t Bin_Event = 0; Bin_Event < TriFlow::Buffer_depth; Bin_Event++)
@@ -337,6 +341,8 @@ void StTriFlowV0::clear_AntiLambda(Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2)
     mQ2West[cent9][Bin_vz][Bin_Psi2][j].clear();
     mQ3East[cent9][Bin_vz][Bin_Psi2][j].clear();
     mQ3West[cent9][Bin_vz][Bin_Psi2][j].clear();
+    mNumTrackEast[cent9][Bin_vz][Bin_Psi2][j].clear();
+    mNumTrackWest[cent9][Bin_vz][Bin_Psi2][j].clear();
   }
 
   for(Int_t Bin_Event = 0; Bin_Event < TriFlow::Buffer_depth; Bin_Event++)
@@ -398,6 +404,8 @@ void StTriFlowV0::clear_K0S(Int_t cent9, Int_t Bin_vz, Int_t Bin_Psi2)
     mQ2West[cent9][Bin_vz][Bin_Psi2][j].clear();
     mQ3East[cent9][Bin_vz][Bin_Psi2][j].clear();
     mQ3West[cent9][Bin_vz][Bin_Psi2][j].clear();
+    mNumTrackEast[cent9][Bin_vz][Bin_Psi2][j].clear();
+    mNumTrackWest[cent9][Bin_vz][Bin_Psi2][j].clear();
   }
 
   for(Int_t Bin_Event = 0; Bin_Event < TriFlow::Buffer_depth; Bin_Event++)
