@@ -17,12 +17,12 @@
 // mEnergy: 0, 200 GeV | 1, 39 GeV
 // mPID: 0, phi | 1, Lambda | 2, anti-Lambda | 3, K0S
 static const TString Energy[2] = {"200GeV","39GeV"};
-static const TString PID[4] = {"Phi","Lambda","antiLambda","K0S"};
+static const TString PID[4] = {"Phi","Lambda","AntiLambda","K0S"};
 static const TString Order[2] = {"2nd","3rd"};
 static const Float_t Norm_Start[4] = {1.04,1.14,1.14,0.41};
 static const Float_t Norm_Stop[4]  = {1.05,1.19,1.19,0.46};
-static const Float_t BW_Start[4] = {0.994,1.0,1.0,1.0};
-static const Float_t BW_Stop[4]  = {1.050,1.0,1.0,1.0};
+static const Float_t BW_Start[4] = {0.994,1.106,1.106,1.0};
+static const Float_t BW_Stop[4]  = {1.050,1.122,1.122,1.0};
 static const Float_t InvMass[4] = {1.019,1.116,1.116,0.498};
 static const Float_t Width[4]   = {0.00426,0.0016,0.0016,0.0016};
 static const Double_t PI_max[2] = {TMath::Pi()/2.0,TMath::Pi()/3.0};
@@ -61,6 +61,10 @@ static const Int_t Sys_stop  = 20;
 typedef std::map<TString,TH1F*> TH1FMap;
 typedef std::map<TString,TProfile*> TProMap;
 typedef std::map<TString,std::vector<Float_t>> vecFMap;
+
+#ifndef _PlotQA_
+#define _PlotQA_ 1
+#endif
 
 void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
 {
@@ -104,7 +108,7 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
     }
   }
 
-  /*
+#if _PlotQA_
   // QA Plots for SE vs. ME
   TString KEY_QA = Form("Spec_pt_%d_low_Centrality_0_EtaGap_0_%s_SE_SysErrors_%d",pt_QA,PID[mPID].Data(),Sys_start);
   h_mSpec_SE[KEY_QA]->DrawCopy("PE");
@@ -115,14 +119,14 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
   h_mSpec_ME[KEY_QA]->SetFillStyle(3002);
   h_mSpec_ME[KEY_QA]->DrawCopy("h same");
 
-  KEY_QA = Form("Spec_pt_%d_low_Centrality_0_EtaGap_0_%s_SM_SysErrors_%d",pt_QA,PID[mPID].Data(),Sys_start);
-  h_mSpec_SM[KEY_QA]->SetLineColor(4);
-  h_mSpec_SM[KEY_QA]->SetFillColor(4);
-  h_mSpec_SM[KEY_QA]->SetFillStyle(3004);
-  h_mSpec_SM[KEY_QA]->DrawCopy("h same");
-  */
+  KEY_QA = Form("Spec_pt_%d_low_Centrality_0_EtaGap_0_%s_SysErrors_%d",pt_QA,PID[mPID].Data(),Sys_start);
+  h_mSpec[KEY_QA]->SetLineColor(4);
+  h_mSpec[KEY_QA]->SetFillColor(4);
+  h_mSpec[KEY_QA]->SetFillStyle(3004);
+  h_mSpec[KEY_QA]->DrawCopy("h same");
+#endif
 
-  /*
+#if _PlotQA_
   // QA Plots for pT bins
   TCanvas *c_pT_low = new TCanvas("c_pT_low","c_pT_low",10,10,1400,1400);
   c_pT_low->Divide(5,5);
@@ -181,7 +185,7 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
     TString pT_range = Form("[%.2f,%.2f]",0.5*(pt_low_raw[i_pt]+pt_up_raw[i_pt]),pt_up_raw[i_pt]);
     plotTopLegend((char*)pT_range.Data(),0.2,0.7,0.08,1,0.0,42,1);
   }
-  */
+#endif
 
   if(mPID == 0) // subtract linear background only needed for phi meson
   {
@@ -231,7 +235,7 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
       }
     }
 
-    /*
+#if _PlotQA_
     // QA plots for Poly+Breit_Wignar fits for phi integrated InvMass
     TCanvas *c_mSpec_sub_low = new TCanvas("c_mSpec_sub_low","c_mSpec_sub_low",10,10,1400,1400);
     c_mSpec_sub_low->Divide(5,5);
@@ -318,7 +322,7 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
       plotTopLegend((char*)pT_range.Data(),0.2,0.7,0.08,1,0.0,42,1);
       PlotLine(0.98,1.05,0.0,0.0,1,2,2);
     }
-    */
+#endif
   }
 
   // calculate total yields for each pT bin via gaussian and breit wigner fits
@@ -339,7 +343,7 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
 	    f_yields_bw->SetParameter(0,InvMass[mPID]);
 	    f_yields_bw->SetParLimits(0,InvMass[mPID]-0.005,InvMass[mPID]+0.005);
 	    f_yields_bw->SetParameter(1,Width[mPID]);
-	    f_yields_bw->SetParameter(2,100);
+	    f_yields_bw->SetParameter(2,h_mSpec[KEY]->GetMaximum());
 	    f_yields_bw->SetRange(BW_Start[mPID],BW_Stop[mPID]);
 	    h_mSpec[KEY]->Fit(f_yields_bw,"MQNR");
 	    ParYield[KEY].clear();
@@ -376,7 +380,7 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
     }
   }
 
-  /*
+#if _PlotQA_
   // QA: different counting method: bin counting vs breit wigner integrating
   TCanvas *c_Yields_low = new TCanvas("c_Yields_low","c_Yields_low",10,10,900,900);
   c_Yields_low->Divide(5,5);
@@ -461,7 +465,7 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
     PlotLine(x1,x1,0,y,4,2,2);
     PlotLine(x2,x2,0,y,4,2,2);
   }
-  */
+#endif
 
   // declare histogram with different pT width
   Float_t pt_low[51], pt_up[51], pt_width[51];
@@ -505,8 +509,7 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
     }
   }
 
-
-  /*
+#if _PlotQA_
   // QA: pt spectra
   TCanvas *c_Pt = new TCanvas("c_Pt","c_Pt",10,10,800,800);
   c_Pt->cd();
@@ -542,7 +545,7 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
   h_mPt[KEY_pT_inte_QA]->SetMarkerStyle(24);
   h_mPt[KEY_pT_inte_QA]->SetMarkerSize(1.0);
   h_mPt[KEY_pT_inte_QA]->DrawCopy("pE same");
-  */
+#endif
 
   // Save h_mPt
   TString OutPutFile = Form("./OutPut/AuAu%s/%s/h_pt.root",Energy[mEnergy].Data(),PID[mPID].Data());

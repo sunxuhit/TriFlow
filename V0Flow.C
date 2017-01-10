@@ -17,13 +17,13 @@
 // mEnergy: 0, 200 GeV | 1, 39 GeV
 // mPID: 0, phi | 1, Lambda | 2, anti-Lambda | 3, K0S
 static const TString Energy[2] = {"200GeV","39GeV"};
-static const TString PID[4] = {"Phi","Lambda","antiLambda","K0S"};
+static const TString PID[4] = {"Phi","Lambda","AntiLambda","K0S"};
 static const TString Order[2] = {"2nd","3rd"};
 static const Float_t Norm_Start[4] = {1.04,1.14,1.14,0.41};
 static const Float_t Norm_Stop[4]  = {1.05,1.19,1.19,0.46};
-static const Float_t BW_Start[4] = {0.994,1.0,1.0,1.0};
-static const Float_t BW_Stop[4]  = {1.050,1.0,1.0,1.0};
-static const Float_t InvMass[4] = {1.019,1.116,1.116,0.498};
+static const Float_t BW_Start[4] = {0.994,1.106,1.106,1.0};
+static const Float_t BW_Stop[4]  = {1.050,1.122,1.124,1.0};
+static const Float_t InvMass[4] = {1.019,1.116,1.115,0.498};
 static const Float_t Width[4]   = {0.00426,0.0016,0.0016,0.0016};
 static const Double_t PI_max[2] = {TMath::Pi()/2.0,TMath::Pi()/3.0};
 static const Float_t nSigV0 = 2.0;
@@ -32,7 +32,7 @@ static const Float_t Flow_Order[2] = {2.0,3.0};
 static const Int_t pt_total = 25; // pT loop
 static const Int_t pt_start = 0;
 static const Int_t pt_stop  = 25;
-static const Int_t pt_QA    = 4;
+static const Int_t pt_QA    = 6;
 
 // pt bin
 //                                       0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 ,10 ,11 ,12 ,13 ,14 ,15 ,16 ,17 ,18 ,19 ,20 ,21 ,22, 23, 24
@@ -82,12 +82,18 @@ typedef std::map<TString,TProfile*> TProMap;
 typedef std::map<TString,TGraphAsymmErrors*> TGraMap;
 typedef std::map<TString,std::vector<Float_t>> vecFMap;
 
+#ifndef _PlotQA_
+#define _PlotQA_ 1
+#endif
+
 void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 {
   TGaxis::SetMaxDigits(4);
 
   TString InPutFile_SE = Form("./Data/AuAu%s/%s/Yields_SE_%s.root",Energy[mEnergy].Data(),PID[mPID].Data(),Energy[mEnergy].Data());
+  cout << "Open SE File: " << InPutFile_SE.Data() << endl;
   TString InPutFile_ME = Form("./Data/AuAu%s/%s/Yields_ME_%s.root",Energy[mEnergy].Data(),PID[mPID].Data(),Energy[mEnergy].Data());
+  cout << "Open ME File: " << InPutFile_ME.Data() << endl;
   TFile *File_SE = TFile::Open(InPutFile_SE.Data());
   TFile *File_ME = TFile::Open(InPutFile_ME.Data());
 
@@ -124,7 +130,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     }
   }
 
-  /*
+#if _PlotQA_
   // QA Plots for SE vs. ME
   TString KEY = Form("pt_%d_Centrality_%d_EtaGap_%d_phi_Psi_3_3rd_%s_SE_SysErrors_%d",pt_QA,Cent_start,Eta_start,PID[mPID].Data(),Sys_start);
   h_mMass_SE[KEY]->DrawCopy("PE");
@@ -140,10 +146,8 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   h_mMass_SM[KEY]->SetFillColor(4);
   h_mMass_SM[KEY]->SetFillStyle(3004);
   h_mMass_SM[KEY]->DrawCopy("h same");
-  */
 
 
-  /*
   // QA Plots for pT bins
   TCanvas *c_pT = new TCanvas("c_pT","c_pT",10,10,1400,1400);
   c_pT->Divide(5,5);
@@ -172,7 +176,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     TString pT_range = Form("[%.2f,%.2f]",pt_low_raw[i_pt],pt_up_raw[i_pt]);
     plotTopLegend((char*)pT_range.Data(),0.2,0.7,0.08,1,0.0,42,1);
   }
-  */
+#endif
   
 
   // pT rebin
@@ -208,7 +212,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     }
   }
   
-  /*
+#if _PlotQA_
   // QA Plots for pT rebins
   TCanvas *c_pT_rebin = new TCanvas("c_pT_rebin","c_pT_rebin",10,10,1400,1400);
   c_pT_rebin->Divide(5,5);
@@ -232,7 +236,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     TString pT_range = Form("[%.2f,%.2f]",pt_low[i_pt],pt_up[i_pt]);
     plotTopLegend((char*)pT_range.Data(),0.2,0.7,0.08,1,0.0,42,1);
   }
-  */
+#endif
 
   if(mPID == 0) // Polynomial fit subtraction is only needed for phi meson
   {
@@ -278,7 +282,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
       }
     }
 
-    /*
+#if _PlotQA_
     // QA plots for Poly+Breit_Wignar fits for phi integrated InvMass
     TCanvas *c_mMass_phi = new TCanvas("c_mMass_phi","c_mMass_phi",10,10,1400,1400);
     c_mMass_phi->Divide(5,5);
@@ -317,7 +321,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
       plotTopLegend((char*)pT_range.Data(),0.2,0.7,0.08,1,0.0,42,1);
       PlotLine(0.98,1.05,0.0,0.0,1,2,2);
     }
-    */
+#endif
 
     // Poly+bw fits for phi differential InvMass
     for(Int_t i_pt = pt_rebin_first; i_pt < pt_rebin_last; i_pt++) // pt loop
@@ -356,7 +360,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
       }
     }
 
-    /*
+#if _PlotQA_
     // QA plots for phi differential InvMass after linear background subtraction
     TCanvas *c_mMass_phi_diff = new TCanvas("c_mMass_phi_diff","c_mMass_phi_diff",10,10,1400,1400);
     c_mMass_phi_diff->Divide(5,5);
@@ -377,7 +381,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
       plotTopLegend((char*)pT_range.Data(),0.2,0.7,0.08,1,0.0,42,1);
       PlotLine(0.98,1.05,0.0,0.0,1,2,2);
     }
-    */
+#endif
   }
 
   TH1FMap h_mMass_total; // phi integrated InvMass after linear background subtraction for bw fits to extract yields 
@@ -400,9 +404,9 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	  }
 	  TF1 *f_bw = new TF1("f_bw",BreitWigner,BW_Start[mPID],BW_Stop[mPID],3);
 	  f_bw->SetParameter(0,InvMass[mPID]);
-	  f_bw->SetParLimits(0,InvMass[mPID]-0.001,InvMass[mPID]+0.001);
+	  f_bw->SetParLimits(0,InvMass[mPID]-0.005,InvMass[mPID]+0.005);
 	  f_bw->SetParameter(1,Width[mPID]);
-	  f_bw->SetParameter(2,1000);
+	  f_bw->SetParameter(2,h_mMass_total[KEY_phi]->GetMaximum());
 	  f_bw->SetRange(BW_Start[mPID],BW_Stop[mPID]);
 	  h_mMass_total[KEY_phi]->Fit(f_bw,"MQNR");
 	  ParBW[KEY_phi].clear();
@@ -414,7 +418,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     }
   }
 
-  /*
+#if _PlotQA_
   // QA: bw fits to phi integrated InvMass
   TCanvas *c_mMass_bw = new TCanvas("c_mMass_bw","c_mMass_bw",10,10,1400,1400);
   c_mMass_bw->Divide(5,5);
@@ -442,7 +446,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     plotTopLegend((char*)pT_range.Data(),0.2,0.7,0.08,1,0.0,42,1);
     PlotLine(0.98,1.05,0.0,0.0,1,2,2);
   }
-  */
+#endif
 
   // calculate counts and errors for phi bin with breit wigner fits with bin counting and integrating
   TH1FMap h_mCounts, h_mRawFlow;
@@ -526,7 +530,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     }
   }
 
-  /*
+#if _PlotQA_
   // QA InvMass vs. phi for gaussian and breit wigner fits
   TString KEY_phi = Form("pt_%d_Centrality_%d_EtaGap_%d_phi_Psi_%d_%s_%s_SM_SysErrors_%d",pt_QA,Cent_start,Eta_start,phi_start,Order[mOrder].Data(),PID[mPID].Data(),Sys_start);
   TCanvas *c_mMass_psi = new TCanvas("c_mMass_psi","c_mMass_psi",10,10,900,900);
@@ -617,9 +621,9 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   leg_temp->AddEntry(h_mCounts[KEY_Gaus],"bin counting","p");
   leg_temp->AddEntry(h_mCounts[KEY_BW],"breit wigner","p");
   leg_temp->Draw("same");
-  */
+#endif
 
-  /*
+#if _PlotQA_
   // QA raw flow vs. pt for gaussian fits and breit wigner fits
   TCanvas *c_raw_flow = new TCanvas("c_raw_flow","c_raw_flow",10,10,800,800);
   c_raw_flow->SetLeftMargin(0.15);
@@ -676,7 +680,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   leg_raw_flow->AddEntry(h_mRawFlow[KEY_RawFlow_BW_QA],"breit wigner","p");
   leg_raw_flow->Draw("same");
 //  c_raw_flow->SaveAs("./raw_flow.eps");
-  */
+#endif
 
   // resolution correction
   // extract yields
@@ -1059,7 +1063,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     }
   }
 
-  /*
+#if _PlotQA_
   // QA: pt spectra
   TCanvas *c_Pt = new TCanvas("c_Pt","c_Pt",10,10,800,800);
   c_Pt->cd();
@@ -1069,22 +1073,22 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   c_Pt->cd()->SetGrid(0,0);
   c_Pt->cd()->SetLogy();
   TString KEY_pT_counts_QA = Form("Count_Spec_Centrality_%d_EtaGap_%d_%s_SysErrors_%d",Cent_start,Eta_start,PID[mPID].Data(),Sys_start);
-  TH1F *h_play = new TH1F("h_play","h_play",110,-1.0,10.0);
+  TH1F *h_pt = new TH1F("h_pt","h_pt",110,-1.0,10.0);
   for(Int_t i_bin = 0; i_bin < 110; i_bin++)
   {
-    h_play->SetBinContent(i_bin+1,-1000.0);
-    h_play->SetBinError(i_bin+1,1.0);
+    h_pt->SetBinContent(i_bin+1,-1000.0);
+    h_pt->SetBinError(i_bin+1,1.0);
   }
-  h_play->SetTitle("");
-  h_play->SetStats(0);
-  h_play->GetXaxis()->SetNdivisions(505,'N');
-  h_play->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-  h_play->GetXaxis()->CenterTitle();
-  h_play->GetYaxis()->SetTitle("dN/dp_{T}");
-  h_play->GetYaxis()->CenterTitle();
-  h_play->GetYaxis()->SetTitleOffset(1.2);
-  h_play->GetYaxis()->SetRangeUser(0.1,2.0*h_mPt[KEY_pT_counts_QA]->GetMaximum());
-  h_play->DrawCopy("pE");
+  h_pt->SetTitle("");
+  h_pt->SetStats(0);
+  h_pt->GetXaxis()->SetNdivisions(505,'N');
+  h_pt->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+  h_pt->GetXaxis()->CenterTitle();
+  h_pt->GetYaxis()->SetTitle("dN/dp_{T}");
+  h_pt->GetYaxis()->CenterTitle();
+  h_pt->GetYaxis()->SetTitleOffset(1.2);
+  h_pt->GetYaxis()->SetRangeUser(0.1,2.0*h_mPt[KEY_pT_counts_QA]->GetMaximum());
+  h_pt->DrawCopy("pE");
   h_mPt[KEY_pT_counts_QA]->SetMarkerStyle(24);
   h_mPt[KEY_pT_counts_QA]->SetMarkerColor(4);
   h_mPt[KEY_pT_counts_QA]->SetMarkerSize(1.0);
@@ -1095,7 +1099,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   h_mPt[KEY_pT_inte_QA]->SetMarkerStyle(24);
   h_mPt[KEY_pT_inte_QA]->SetMarkerSize(1.0);
   h_mPt[KEY_pT_inte_QA]->DrawCopy("pE same");
-  */
+#endif
 
   // pt spectra binning
   Float_t pt_low_spec[50], pt_up_spec[50], pt_width[50], pt_center[50];
