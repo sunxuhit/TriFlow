@@ -63,8 +63,8 @@ static const Int_t phi_start = 0;
 static const Int_t phi_stop  = 7;
 
 static const Int_t Sys_total = 6;
-static const Int_t Sys_start = 4;
-static const Int_t Sys_stop  = 5;
+static const Int_t Sys_start = 0;
+static const Int_t Sys_stop  = 6;
 
 // Initial parameters 200 GeV
 //Float_t order_pion[pt_total]   = {3.0,3.0,3.0,3.0,3.0,2.55,2.55,3.0,3.0,3.0,2.5,3.00,2.55,3.00,3.00,3.0}; // positive
@@ -100,7 +100,7 @@ typedef std::map<TString,std::vector<Float_t>> vecFMap;
 // mEnergy: 0 for 200GeV, 1 for 39GeV
 // mCharge: 0 for positive, 1 for negative 
 // mOrder:  0 for elliptic flow, 1 for triangular flow 
-void CombPID_PiK(Int_t mMode = 1, Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mOrder = 1)
+void CombPID_PiK(Int_t mMode = 0, Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mOrder = 1)
 {
   TGaxis::SetMaxDigits(4);
 
