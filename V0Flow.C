@@ -503,7 +503,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	  Float_t pt_mean = (pt_low[i_pt]+pt_up[i_pt])/2.0;
 
 	  TF1 *f_phi_gaus = new TF1("f_phi_gaus",flow,0.0,PI_max[mOrder],3);
-	  f_phi_gaus->SetParameter(0,0.2);
+	  f_phi_gaus->SetParameter(0,h_mCounts[KEY_Gaus]->GetMaximum());
 	  f_phi_gaus->SetParameter(1,0.2);
 	  f_phi_gaus->FixParameter(2,Flow_Order[mOrder]);
 	  h_mCounts[KEY_Gaus]->Fit(f_phi_gaus,"NQM");
@@ -515,7 +515,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	  h_mRawFlow[KEY_RawFlow_Gaus]->SetBinError(h_mRawFlow[KEY_RawFlow_Gaus]->FindBin(pt_mean),f_phi_gaus->GetParError(1));
 
 	  TF1 *f_phi_bw = new TF1("f_phi_bw",flow,0.0,PI_max[mOrder],3);
-	  f_phi_bw->SetParameter(0,2.0);
+	  f_phi_bw->SetParameter(0,h_mCounts[KEY_BW]->GetMaximum());
 	  f_phi_bw->SetParameter(1,1.0);
 	  f_phi_bw->FixParameter(2,Flow_Order[mOrder]);
 	  h_mCounts[KEY_BW]->Fit(f_phi_bw,"NQM");
