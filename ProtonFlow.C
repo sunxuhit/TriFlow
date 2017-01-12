@@ -312,7 +312,7 @@ void ProtonFlow(Int_t mEnergy = 0, Int_t mOrder = 1)
 	    }
 
 	    TF1 *f_flow = new TF1("f_flow",flow,0.0,PI_max[mOrder],3); // flow fit
-	    f_flow->SetParameter(0,1000);
+	    f_flow->SetParameter(0,h_mCounts[KEY_Proton_Counts]->GetMaximum());
 	    f_flow->SetParameter(1,0.2);
 	    f_flow->FixParameter(2,Flow_Order[mOrder]);
 	    h_mCounts[KEY_Proton_Counts]->Fit(f_flow,"NQM");
