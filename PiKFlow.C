@@ -239,7 +239,7 @@ void PiKFlow(Int_t mEnergy = 0, Int_t mCharge = 0, Int_t mOrder = 1, Int_t mPID 
   c_RawFlow->cd()->SetBottomMargin(0.15);
   c_RawFlow->cd()->SetTicks(1,1);
   c_RawFlow->cd()->SetGrid(0,0);
-  TH1F *h_frame_QA = new TH1F("h_frame_QA","h_frame_QA",100,-0.05,9.95);
+  TH1F *h_frame_QA = new TH1F("h_frame_QA","h_frame_QA",100,-0.5,9.5);
   for(Int_t i_bin = 0; i_bin < 100; ++i_bin)
   {
     h_frame_QA->SetBinContent(i_bin+1,-10);
