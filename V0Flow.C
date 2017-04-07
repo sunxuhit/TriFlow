@@ -19,12 +19,12 @@
 static const TString Energy[2] = {"200GeV","39GeV"};
 static const TString PID[4] = {"Phi","Lambda","AntiLambda","K0S"};
 static const TString Order[2] = {"2nd","3rd"};
-static const Float_t Norm_Start[4] = {1.04,1.14,1.14,0.41};
-static const Float_t Norm_Stop[4]  = {1.05,1.19,1.19,0.46};
-static const Float_t BW_Start[4] = {0.994,1.106,1.106,1.0};
-static const Float_t BW_Stop[4]  = {1.050,1.122,1.124,1.0};
-static const Float_t InvMass[4] = {1.019,1.116,1.115,0.498};
-static const Float_t Width[4]   = {0.00426,0.0016,0.0016,0.0016};
+static const Float_t Norm_Start[4] = {1.04,1.14,1.14,0.56};
+static const Float_t Norm_Stop[4]  = {1.05,1.19,1.19,0.60};
+static const Float_t BW_Start[4] = {0.994,1.106,1.106,0.472};
+static const Float_t BW_Stop[4]  = {1.050,1.122,1.124,0.524};
+static const Float_t InvMass[4] = {1.019,1.116,1.115,0.4976};
+static const Float_t Width[4]   = {0.00426,0.0016,0.0016,0.006};
 static const Double_t PI_max[2] = {TMath::Pi()/2.0,TMath::Pi()/3.0};
 static const Float_t nSigV0 = 2.0;
 static const Float_t Flow_Order[2] = {2.0,3.0};
@@ -111,13 +111,19 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	  for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic loop
 	  {
 	    TString KEY_SE = Form("pt_%d_Centrality_%d_EtaGap_%d_phi_Psi_%d_%s_%s_SE_SysErrors_%d",i_pt,i_cent,i_eta,i_phi,Order[mOrder].Data(),PID[mPID].Data(),i_sys);
-	    h_mMass_SE[KEY_SE] = (TH1F*)File_SE->Get(KEY_SE.Data())->Clone(); 
+	    TString Hist_SE = KEY_SE;
+	    if(mPID == 3) Hist_SE = KEY_SE+"_sub";
+	    // cout << "Hist_SE = " << Hist_SE.Data() << endl;
+	    h_mMass_SE[KEY_SE] = (TH1F*)File_SE->Get(Hist_SE.Data())->Clone(); 
 	    Int_t Norm_bin_start = h_mMass_SE[KEY_SE]->FindBin(Norm_Start[mPID]);
 	    Int_t Norm_bin_stop  = h_mMass_SE[KEY_SE]->FindBin(Norm_Stop[mPID]);
 	    Float_t Inte_SE = h_mMass_SE[KEY_SE]->Integral(Norm_bin_start,Norm_bin_stop);
 
 	    TString KEY_ME = Form("pt_%d_Centrality_%d_EtaGap_%d_phi_Psi_%d_%s_%s_ME_SysErrors_%d",i_pt,i_cent,i_eta,i_phi,Order[mOrder].Data(),PID[mPID].Data(),i_sys);
-	    h_mMass_ME[KEY_ME] = (TH1F*)File_ME->Get(KEY_ME.Data())->Clone(); 
+	    TString Hist_ME = KEY_ME;
+	    if(mPID == 3) Hist_ME = KEY_ME+"_sub";
+	    // cout << "Hist_ME = " << Hist_ME.Data() << endl;
+	    h_mMass_ME[KEY_ME] = (TH1F*)File_ME->Get(Hist_ME.Data())->Clone(); 
 	    Float_t Inte_ME = h_mMass_ME[KEY_ME]->Integral(Norm_bin_start,Norm_bin_stop);
 	    h_mMass_ME[KEY_ME]->Scale(Inte_SE/Inte_ME);
 
@@ -404,7 +410,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	  }
 	  TF1 *f_bw = new TF1("f_bw",BreitWigner,BW_Start[mPID],BW_Stop[mPID],3);
 	  f_bw->SetParameter(0,InvMass[mPID]);
-	  f_bw->SetParLimits(0,InvMass[mPID]-0.005,InvMass[mPID]+0.005);
+	  f_bw->SetParLimits(0,InvMass[mPID]-0.001,InvMass[mPID]+0.001);
 	  f_bw->SetParameter(1,Width[mPID]);
 	  f_bw->SetParameter(2,h_mMass_total[KEY_phi]->GetMaximum());
 	  f_bw->SetRange(BW_Start[mPID],BW_Stop[mPID]);
@@ -491,7 +497,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	    f_bw->FixParameter(1,ParBW[KEY_phi][1]);
 	    f_bw->SetParameter(2,ParBW[KEY_phi][2]/7.0);
 	    f_bw->SetRange(BW_Start[mPID],BW_Stop[mPID]);
-	    h_mMass[KEY]->Fit(f_bw,"NMQR");
+	    h_mMass[KEY]->Fit(f_bw,"MQNR");
 	    Float_t bin_width = h_mMass[KEY]->GetBinWidth(1);
 	    Float_t Inte_start = ParBW[KEY_phi][0]-nSigV0*ParBW[KEY_phi][1]-0.5*bin_width;
 	    Float_t Inte_stop  = ParBW[KEY_phi][0]+nSigV0*ParBW[KEY_phi][1]+0.5*bin_width;
@@ -506,7 +512,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	  f_phi_gaus->SetParameter(0,h_mCounts[KEY_Gaus]->GetMaximum());
 	  f_phi_gaus->SetParameter(1,0.2);
 	  f_phi_gaus->FixParameter(2,Flow_Order[mOrder]);
-	  h_mCounts[KEY_Gaus]->Fit(f_phi_gaus,"NQM");
+	  h_mCounts[KEY_Gaus]->Fit(f_phi_gaus,"MQN");
 	  ParFlow_Gaus[KEY_Gaus].clear();
 	  ParFlow_Gaus[KEY_Gaus].push_back(static_cast<Float_t>(f_phi_gaus->GetParameter(0)));
 	  ParFlow_Gaus[KEY_Gaus].push_back(static_cast<Float_t>(f_phi_gaus->GetParameter(1)));
@@ -516,9 +522,9 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 
 	  TF1 *f_phi_bw = new TF1("f_phi_bw",flow,0.0,PI_max[mOrder],3);
 	  f_phi_bw->SetParameter(0,h_mCounts[KEY_BW]->GetMaximum());
-	  f_phi_bw->SetParameter(1,1.0);
+	  f_phi_bw->SetParameter(1,0.2);
 	  f_phi_bw->FixParameter(2,Flow_Order[mOrder]);
-	  h_mCounts[KEY_BW]->Fit(f_phi_bw,"NQM");
+	  h_mCounts[KEY_BW]->Fit(f_phi_bw,"MQN");
 	  ParFlow_BW[KEY_BW].clear();
 	  ParFlow_BW[KEY_BW].push_back(static_cast<Float_t>(f_phi_bw->GetParameter(0)));
 	  ParFlow_BW[KEY_BW].push_back(static_cast<Float_t>(f_phi_bw->GetParameter(1)));
@@ -692,13 +698,17 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
       for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic loop
       {
 	TString KEY_Yield_SE = Form("Yields_Centrality_%d_EtaGap_%d_%s_SE_SysErrors_%d",i_cent,i_eta,PID[mPID].Data(),i_sys);
-	h_mYield_SE[KEY_Yield_SE] = (TH1F*)File_SE->Get(KEY_Yield_SE.Data())->Clone(); 
+	TString Hist_Yield_SE = KEY_Yield_SE;
+	if(mPID == 3) Hist_Yield_SE = KEY_Yield_SE+"_sub";
+	h_mYield_SE[KEY_Yield_SE] = (TH1F*)File_SE->Get(Hist_Yield_SE.Data())->Clone(); 
 	Int_t Norm_bin_start = h_mYield_SE[KEY_Yield_SE]->FindBin(Norm_Start[mPID]);
 	Int_t Norm_bin_stop  = h_mYield_SE[KEY_Yield_SE]->FindBin(Norm_Stop[mPID]);
 	Float_t Inte_SE = h_mYield_SE[KEY_Yield_SE]->Integral(Norm_bin_start,Norm_bin_stop);
 
 	TString KEY_Yield_ME = Form("Yields_Centrality_%d_EtaGap_%d_%s_ME_SysErrors_%d",i_cent,i_eta,PID[mPID].Data(),i_sys);
-	h_mYield_ME[KEY_Yield_ME] = (TH1F*)File_ME->Get(KEY_Yield_ME.Data())->Clone(); 
+	TString Hist_Yield_ME = KEY_Yield_ME;
+	if(mPID == 3) Hist_Yield_ME = KEY_Yield_ME+"_sub";
+	h_mYield_ME[KEY_Yield_ME] = (TH1F*)File_ME->Get(Hist_Yield_ME.Data())->Clone(); 
 	Float_t Inte_ME = h_mYield_ME[KEY_Yield_ME]->Integral(Norm_bin_start,Norm_bin_stop);
 	h_mYield_ME[KEY_Yield_ME]->Scale(Inte_SE/Inte_ME);
 
@@ -709,7 +719,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     }
   }
 
-  /*
+#if _PlotQA_
   //QA Yields vs Centrality
   TCanvas *c_Yields = new TCanvas("c_Yields","c_Yields",10,10,900,900);
   c_Yields->Divide(3,3);
@@ -731,6 +741,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     h_mYield_SE[KEY_Yield_SE]->GetYaxis()->SetTitle("Counts");
     h_mYield_SE[KEY_Yield_SE]->GetYaxis()->CenterTitle();
     h_mYield_SE[KEY_Yield_SE]->GetYaxis()->SetTitleOffset(1.2);
+    h_mYield_SE[KEY_Yield_SE]->GetYaxis()->SetRangeUser(-0.01*h_mYield_SE[KEY_Yield_SE]->GetMaximum(),1.1*h_mYield_SE[KEY_Yield_SE]->GetMaximum());
     h_mYield_SE[KEY_Yield_SE]->DrawCopy("pE");
 
     TString KEY_Yield_ME = Form("Yields_Centrality_%d_EtaGap_%d_%s_ME_SysErrors_%d",i_cent,Eta_start,PID[mPID].Data(),Sys_start);
@@ -743,7 +754,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     h_mYield[KEY_Yield]->SetFillStyle(3001);
     h_mYield[KEY_Yield]->DrawCopy("h Same");
   }
-  */
+#endif
 
   if(mPID == 0) // Polynomial fit subtraction is only needed for phi meson
   {
@@ -859,7 +870,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	f_yields_bw->SetParameter(0,InvMass[mPID]);
 	f_yields_bw->SetParLimits(0,InvMass[mPID]-0.001,InvMass[mPID]+0.001);
 	f_yields_bw->SetParameter(1,Width[mPID]);
-	f_yields_bw->SetParameter(2,1000);
+	f_yields_bw->SetParameter(2,h_mYield[KEY_Yield]->GetMaximum());
 	f_yields_bw->SetRange(BW_Start[mPID],BW_Stop[mPID]);
 	h_mYield[KEY_Yield]->Fit(f_yields_bw,"MQNR");
 	ParYield_BW[KEY_Yield].clear();
@@ -894,7 +905,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     }
   }
 
-  /*
+#if _PlotQA_
   // QA: different counting method: bin counting vs breit wigner integrating
   TCanvas *c_Yields_counts = new TCanvas("c_Yields_counts","c_Yields_counts",10,10,900,900);
   c_Yields_counts->Divide(3,3);
@@ -937,7 +948,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
     PlotLine(x1,x1,0,y,4,2,2);
     PlotLine(x2,x2,0,y,4,2,2);
   }
-  */
+#endif
 
   // calculate final resolution correction factors and correct flow
   TString InPutFile_Res = Form("./Data/AuAu%s/file_%s_Resolution.root",Energy[mEnergy].Data(),Energy[mEnergy].Data());
@@ -1043,7 +1054,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   leg_flow->AddEntry(h_mRawFlow[KEY_RawFlow_BW],"breit wigner","p");
   leg_flow->Draw("same");
 //  c_flow->SaveAs("./flow.eps");
-  */
+*/
 
   // read in pt spectra
   TString InPutFile_Pt = Form("./OutPut/AuAu%s/%s/h_pt.root",Energy[mEnergy].Data(),PID[mPID].Data());

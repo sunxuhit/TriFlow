@@ -13,11 +13,11 @@
 #include <map>
 #include <vector>
 
-static const TString PID[3] = {"Phi","Lambda","AntiLambda"};
+static const TString PID[4] = {"Phi","Lambda","AntiLambda","K0S"};
 static const TString Energy[2] = {"200GeV","39GeV"};
 static const TString Order[2] = {"2nd","3rd"};
 static const TString Method[2] = {"Gaus","BW"};
-static const TString ParType[3] = {"phi","lambda","antilambda"};
+static const TString ParType[4] = {"phi","lambda","antilambda","k0s"};
 
 static const Int_t Cent_total = 4; 
 static const Int_t Cent_start = 0;
@@ -154,10 +154,11 @@ void calSysError(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
   c_v3_SysError->cd()->SetTicks(1,1);
   c_v3_SysError->cd()->SetGrid(0,0);
   h_frame->Draw("pE");
-  g_mFlow[KEY_Default]->Draw("pE same");
   g_SysErrors->SetMarkerStyle(20);
   g_SysErrors->SetMarkerColor(kGray+2);
+  g_SysErrors->SetFillColor(kYellow);
   g_SysErrors->Draw("pE3 same");
+  g_mFlow[KEY_Default]->Draw("pE same");
 
   TString OutPutFile = Form("./OutPut/AuAu%s/%s/TriFlow_%s_SysError.root",Energy[mEnergy].Data(),PID[mPID].Data(),ParType[mPID].Data());
   cout << "OutPutFile set to: " << OutPutFile.Data() << endl;

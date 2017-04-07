@@ -19,10 +19,10 @@
 static const TString Energy[2] = {"200GeV","39GeV"};
 static const TString PID[4] = {"Phi","Lambda","AntiLambda","K0S"};
 static const TString Order[2] = {"2nd","3rd"};
-static const Float_t Norm_Start[4] = {1.04,1.14,1.14,0.41};
-static const Float_t Norm_Stop[4]  = {1.05,1.19,1.19,0.46};
-static const Float_t BW_Start[4] = {0.994,1.106,1.106,1.0};
-static const Float_t BW_Stop[4]  = {1.050,1.122,1.122,1.0};
+static const Float_t Norm_Start[4] = {1.04,1.14,1.14,0.56};
+static const Float_t Norm_Stop[4]  = {1.05,1.19,1.19,0.60};
+static const Float_t BW_Start[4] = {0.994,1.106,1.106,0.472};
+static const Float_t BW_Stop[4]  = {1.050,1.122,1.122,0.524};
 static const Float_t InvMass[4] = {1.019,1.116,1.116,0.498};
 static const Float_t Width[4]   = {0.00426,0.0016,0.0016,0.0016};
 static const Double_t PI_max[2] = {TMath::Pi()/2.0,TMath::Pi()/3.0};
@@ -89,13 +89,17 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
 	  for(Int_t i_sys = Sys_start; i_sys < Sys_stop; i_sys++) // Systematic loop
 	  {
 	    TString KEY_SE = Form("Spec_pt_%d_%s_Centrality_%d_EtaGap_%d_%s_SE_SysErrors_%d",i_pt,pt_range[i_range].Data(),i_cent,i_eta,PID[mPID].Data(),i_sys);
-	    h_mSpec_SE[KEY_SE] = (TH1F*)File_SE->Get(KEY_SE.Data())->Clone(); 
+	    TString Hist_SE = KEY_SE;
+	    if(mPID == 3) Hist_SE = KEY_SE+"_sub";
+	    h_mSpec_SE[KEY_SE] = (TH1F*)File_SE->Get(Hist_SE.Data())->Clone(); 
 	    Int_t Norm_bin_start = h_mSpec_SE[KEY_SE]->FindBin(Norm_Start[mPID]);
 	    Int_t Norm_bin_stop  = h_mSpec_SE[KEY_SE]->FindBin(Norm_Stop[mPID]);
 	    Float_t Inte_SE = h_mSpec_SE[KEY_SE]->Integral(Norm_bin_start,Norm_bin_stop);
 
 	    TString KEY_ME = Form("Spec_pt_%d_%s_Centrality_%d_EtaGap_%d_%s_ME_SysErrors_%d",i_pt,pt_range[i_range].Data(),i_cent,i_eta,PID[mPID].Data(),i_sys);
-	    h_mSpec_ME[KEY_ME] = (TH1F*)File_ME->Get(KEY_ME.Data())->Clone(); 
+	    TString Hist_ME = KEY_ME;
+	    if(mPID == 3) Hist_ME = KEY_ME+"_sub";
+	    h_mSpec_ME[KEY_ME] = (TH1F*)File_ME->Get(Hist_ME.Data())->Clone(); 
 	    Float_t Inte_ME = h_mSpec_ME[KEY_ME]->Integral(Norm_bin_start,Norm_bin_stop);
 	    h_mSpec_ME[KEY_ME]->Scale(Inte_SE/Inte_ME);
 
