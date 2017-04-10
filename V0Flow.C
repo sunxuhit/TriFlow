@@ -22,8 +22,8 @@ static const TString Order[2] = {"2nd","3rd"};
 static const Float_t Norm_Start[4] = {1.04,1.14,1.14,0.56};
 static const Float_t Norm_Stop[4]  = {1.05,1.19,1.19,0.60};
 static const Float_t BW_Start[4] = {0.994,1.106,1.106,0.472};
-static const Float_t BW_Stop[4]  = {1.050,1.122,1.124,0.524};
-static const Float_t InvMass[4] = {1.019,1.116,1.115,0.4976};
+static const Float_t BW_Stop[4]  = {1.050,1.122,1.122,0.524};
+static const Float_t InvMass[4] = {1.019,1.116,1.116,0.4976};
 static const Float_t Width[4]   = {0.00426,0.0016,0.0016,0.006};
 static const Double_t PI_max[2] = {TMath::Pi()/2.0,TMath::Pi()/3.0};
 static const Float_t nSigV0 = 2.0;
@@ -278,7 +278,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	    f_bw->SetParameter(4,0.5);
 	    f_bw->SetRange(BW_Start[mPID],BW_Stop[mPID]);
 	    ParFit_phi[KEY_phi].clear();
-	    h_mMass_phi[KEY_phi]->Fit(f_bw,"NQR");
+	    h_mMass_phi[KEY_phi]->Fit(f_bw,"MQNR");
 	    for(Int_t n_par = 0; n_par < 5; n_par++)
 	    {
 	      ParFit_phi[KEY_phi].push_back(static_cast<Float_t>(f_bw->GetParameter(n_par)));
@@ -353,7 +353,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	      f_bw->SetParameter(3,ParFit_phi[KEY_phi][3]);
 	      f_bw->SetParameter(4,ParFit_phi[KEY_phi][4]);
 	      f_bw->SetRange(BW_Start[mPID],BW_Stop[mPID]);
-	      h_mMass[KEY]->Fit(f_bw,"NQR");
+	      h_mMass[KEY]->Fit(f_bw,"MQNR");
 
 	      TF1 *f_poly = new TF1("f_poly",Poly,BW_Start[mPID],BW_Stop[mPID],2);
 	      f_poly->FixParameter(0,f_bw->GetParameter(3));
@@ -783,7 +783,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	  f_bw->SetParameter(4,0.5);
 	  f_bw->SetRange(BW_Start[mPID],BW_Stop[mPID]);
 	  ParYield_SM[KEY_Yield].clear();
-	  h_mYield[KEY_Yield]->Fit(f_bw,"NQR");
+	  h_mYield[KEY_Yield]->Fit(f_bw,"QNR");
 	  for(Int_t n_par = 0; n_par < 5; n_par++)
 	  {
 	    ParYield_SM[KEY_Yield].push_back(static_cast<Float_t>(f_bw->GetParameter(n_par)));
@@ -868,6 +868,7 @@ void V0Flow(Int_t mEnergy = 0, Int_t mPID = 0, Int_t mOrder = 1)
 	TString KEY_Yield = Form("Yields_Centrality_%d_EtaGap_%d_%s_SysErrors_%d",i_cent,i_eta,PID[mPID].Data(),i_sys);
 	TF1 *f_yields_bw = new TF1("f_yields_bw",BreitWigner,BW_Start[mPID],BW_Stop[mPID],3);
 	f_yields_bw->SetParameter(0,InvMass[mPID]);
+	// f_yields_bw->SetParLimits(0,InvMass[mPID]-0.005,InvMass[mPID]+0.005); // for phi-meson
 	f_yields_bw->SetParLimits(0,InvMass[mPID]-0.001,InvMass[mPID]+0.001);
 	f_yields_bw->SetParameter(1,Width[mPID]);
 	f_yields_bw->SetParameter(2,h_mYield[KEY_Yield]->GetMaximum());

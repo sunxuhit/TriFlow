@@ -215,14 +215,14 @@ void V0pT(Int_t mEnergy = 0, Int_t mPID = 0)
 		f_bw->ReleaseParameter(i_par);
 	      }
 	      f_bw->SetParameter(0,InvMass[mPID]);
-	      f_bw->SetParLimits(0,1.014,1.024);
-	      f_bw->SetParameter(1,Width[mPID]);
+	      f_bw->SetParLimits(0,InvMass[mPID]-0.005,InvMass[mPID]+0.005);
+	      f_bw->SetParameter(1,0.0055);
 	      f_bw->SetParameter(2,10000);
 	      f_bw->SetParameter(3,-6000);
 	      f_bw->SetParameter(4,0.5);
 	      f_bw->SetRange(BW_Start[mPID],BW_Stop[mPID]);
 	      ParFit[KEY].clear();
-	      h_mSpec[KEY]->Fit(f_bw,"NQR");
+	      h_mSpec[KEY]->Fit(f_bw,"MQNR");
 	      for(Int_t n_par = 0; n_par < 5; n_par++)
 	      {
 		ParFit[KEY].push_back(static_cast<Float_t>(f_bw->GetParameter(n_par)));
