@@ -1,4 +1,5 @@
-v3 analysis:
+v3 analysis (STAR picoDst only):
+to extract flow signal with systematic errors, please use PiKFlow, ProtonFlow and V0Flow
 
 Copy Code:
 git clone /global/project/projectdirs/starprod/rnc/xusun/gitrepo/Analysis_v3.git ./Analysis_v3 (Recommended, then you can get updates by simply doint git pull origin master:master)
