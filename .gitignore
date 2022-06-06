@@ -1,0 +1,7 @@
+# a comment - this is ignored
+./*.swp
+*.so
+*.d
+Data/
+OutPut/
+*.log
