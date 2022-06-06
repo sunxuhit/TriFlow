@@ -1,0 +1,18 @@
+# a comment - this is ignored
+# ignore share lib
+.sl53_gcc432
+# ignore .consign, *.d, *.so, *.eps, *.swp, all the log file and script in StRoot
+StRoot/**/.consign
+StRoot/**/*.d
+StRoot/**/*.so
+StRoot/**/*.eps
+StRoot/**/*.err
+StRoot/**/*.log
+StRoot/**/*.csh
+StRoot/**/*.swp
+# don't ignore StRoot/CombPiKP/run.csh
+!StRoot/CombPiKP/run.csh
+# ignore log file generate by carver
+*.OU
+*.ER
+# ignore log file and script in CombPiKP
