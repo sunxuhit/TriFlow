@@ -1,0 +1,31 @@
+if you have git installed, please use the following command at your working directory:
+git clone /project/projectdirs/starprod/rnc/xusun/gitrepo/AMPT_v3v2.git
+
+you will get all the codes related with AMPT analysis
+please use: "git pull origin" to get updates.
+
+please do "cons" in AMPT_v3v2 first to compare the code
+Codes related with phi meson analysis are AMPT_v3v2/PhiFlow.C && AMPT_v3v2/StRoot/AMPT_phi/AMPT_phi.h/cxx
+
+>>>>>>>AMPT_v3v2/PhiFlow.C<<<<<<<
+=> macro to run the code
+=> use "root4star -b -q PhiFlow.C\(4,0,0,1,1024,0\)" to run the code
+=> 1st argument: Energy = 0: 7GeV, 1: 11GeV, 2: 19GeV, 3: 27GeV, 4: 39GeV, 5: 62GeV, 6: 200 GeV
+=> 2nd argument: Mode = 0: Default, 1: String Melting
+=> 3rd argument: List Number
+=> 4th argument: StartEvent: default number 1000
+=> 5th argument: StopEvent: default number 10024
+=> 6th argument: Flag_ME = 0: Same Event, 1: Mixed Event
+you can change those arguments accordingly based on your analysis
+
+>>>>>>>AMPT_v3v2/StRoot/AMPT_phi/AMPT_phi.h/cxx<<<<<<<
+=> AMPT_phi::getResolution ==> get resolution based on centrality and order of flow
+=> AMPT_phi::getCentrality ==> get centrality based on refMult
+=> AMPT_phi::FillHist2nd/3rd ==> Fill histograms for different pt/centrality/phi-Psi/ bins ==> should change phi-Psi to cos(theta*) in this analysis
+=> AMPT_phi::clear_phi ==> clear memory
+=> AMPT_phi::Init ==> initialization ==> read in resolution && declare histograms for QA plots, mean pT, and flow && initialize TTree for phi meson analysis
+==> if you don't have your own resolution files, please use files in "/project/projectdirs/starprod/rnc/xusun/OutPut/AMPT_StringMelting/Resolution" accordingly
+==> you can also generate your own resolution and centrality by using "AMPT_v3v2/Resolution.C && AMPT_v3v2/StRoot/AMPT_resolution"
+=> AMPT_phi::Make ==> calculate Q vectors && save Kplus and Kminus for later phi meson reconstruction
+=> AMPT_phi::doPhi ==> reconstruct phi meson with same event and mixed event && fill into histrograms
+=> AMPT_phi::Finish ==> save all the histograms
